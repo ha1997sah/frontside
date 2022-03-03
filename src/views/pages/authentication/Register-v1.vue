@@ -14,7 +14,7 @@
         <b-alert v-if="success" show variant="success">Success Alert</b-alert>
 
         <b-card-text class="mb-2">
-          Make your app management easy and fun!
+                Créer un nouveau compte
         </b-card-text>
 
         <!-- form -->
@@ -107,7 +107,7 @@
 
             <!-- password -->
             <b-form-group
-              label="Password"
+              label="Mot de passe"
               label-for="password"
             >
               <validation-provider
@@ -166,15 +166,15 @@
         </validation-observer>
 
         <b-card-text class="text-center mt-2">
-          <span>Already have an account? </span>
+          <span>Vous avez déja un compte?  </span>
           <b-link :to="{name:'auth-login-v1'}">
-            <span>Sign in instead</span>
+            <span>Connexion</span>
           </b-link>
         </b-card-text>
 
         <div class="divider my-2">
           <div class="divider-text">
-            or
+            ou
           </div>
         </div>
 

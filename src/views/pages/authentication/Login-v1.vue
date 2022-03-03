@@ -15,11 +15,10 @@
 
 
         <b-card-title class="mb-1">
-          Welcome to Vuexy! 👋
+          Bienvenue! 👋
         </b-card-title>
         <b-card-text class="mb-2">
-          Please sign-in to your account and start the adventure
-        </b-card-text>
+         Veuillez vous connecter à votre compte et commencer l’aventure </b-card-text>
 
         <!-- form -->
         <validation-observer
@@ -56,7 +55,7 @@
               <div class="d-flex justify-content-between">
                 <label for="password">Mot de passe</label>
                 <b-link :to="{name:'auth-forgot-password-v1'}">
-                  <small>Forgot Password?</small>
+                  <small>Mot de passe oublié?</small>
                 </b-link>
               </div>
               <validation-provider
@@ -116,7 +115,7 @@
 
         <div class="divider my-2">
           <div class="divider-text">
-            or
+            ou
           </div>
         </div>
 
@@ -235,6 +234,7 @@ export default {
 	
       token: recaptchaToken
         })
+
 		this.$store.dispatch('setToken', response.data.token)
     this.$store.dispatch('setUser', response.data.user)
     this.success=true

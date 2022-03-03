@@ -94,7 +94,7 @@
           md="4"
         >
           <b-form-group
-            label="Username"
+            label="Nom"
             label-for="username"
           >
             <b-form-input
@@ -110,12 +110,12 @@
           md="4"
         >
           <b-form-group
-            label="Name"
+            label="Prénom"
             label-for="full-name"
           >
             <b-form-input
               id="full-name"
-              v-model="userData.name"
+              v-model="userData.Prénom"
             />
           </b-form-group>
         </b-col>
@@ -143,11 +143,11 @@
           md="4"
         >
           <b-form-group
-            label="Status"
+            label="Numéro de téléphone"
             label-for="user-status"
           >
             <v-select
-              v-model="userData.status"
+              v-model="userData.phone"
               :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
               :options="statusOptions"
               :reduce="val => val.value"

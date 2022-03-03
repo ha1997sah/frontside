@@ -12,13 +12,18 @@
             Vuexy
           </h2>
         </b-link>
+                <b-alert v-if="error" show variant="danger">{{error}}</b-alert>
+                <b-alert v-else-if="success" show variant="success">email sent</b-alert>
+
+
+
+
 
         <b-card-title class="mb-1">
-          Forgot Password? 🔒
+          Mot de passe oublié? 🔒
         </b-card-title>
         <b-card-text class="mb-2">
-          Enter your email and we'll send you instructions to reset your password
-        </b-card-text>
+Entrez votre email et nous vous enverrons des instructions pour réinitialiser votre mot de passe        </b-card-text>
 
         <!-- form -->
         <validation-observer ref="simpleRules">
@@ -53,14 +58,13 @@
               type="button"
               @click="sendEmail"
             >
-              Send reset link
-            </b-button>
+            Envoyer le lien de réinitialisation            </b-button>
           </b-form>
         </validation-observer>
 
         <b-card-text class="text-center mt-2">
           <b-link :to="{name:'auth-login-v1'}">
-            <feather-icon icon="ChevronLeftIcon" /> Back to login
+            <feather-icon icon="ChevronLeftIcon" /> Retour au connexion
           </b-link>
         </b-card-text>
 
@@ -74,7 +78,7 @@
 <script>
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import {
-  BButton, BForm, BFormInput, BFormGroup, BCard, BLink, BCardTitle, BCardText, BInputGroup, BInputGroupAppend, BFormCheckbox,
+  BButton, BAlert, BForm, BFormInput, BFormGroup, BCard, BLink, BCardTitle, BCardText, BInputGroup, BInputGroupAppend, BFormCheckbox,
 } from 'bootstrap-vue'
 import VuexyLogo from '@core/layouts/components/Logo.vue'
 import { required, email } from '@validations'
@@ -99,6 +103,7 @@ export default {
     BInputGroup,
     BInputGroupAppend,
     BFormCheckbox,
+    BAlert,
     // validations
     ValidationProvider,
     ValidationObserver,
@@ -109,6 +114,7 @@ export default {
 
       email: '',
       error: null,
+      success:false,
 
       // validation rules
       required,
@@ -131,9 +137,10 @@ export default {
 	async sendEmail () {
       try {
        const response = await authentication.resetPassword ({
-      email: this.email,
+       email: this.email,
 
         })
+      this.success=true
 
       } catch (error) {
         this.error = error.response.data.error

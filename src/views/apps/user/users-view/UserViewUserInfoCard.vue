@@ -22,7 +22,7 @@
               <h4 class="mb-0">
                 {{ userData.name }}
               </h4>
-              <span class="card-text">{{ userData.email }} had</span>
+              <span class="card-text">{{ userData.name }} {{ userData.lastname }} </span>
             </div>
             <div class="d-flex flex-wrap">
               <b-button
@@ -93,10 +93,10 @@
                 icon="UserIcon"
                 class="mr-75"
               />
-              <span class="font-weight-bold">Username</span>
+              <span class="font-weight-bold">Nom</span>
             </th>
             <td class="pb-50">
-              {{ userData.name }}
+              {{ userData.lastname }}
             </td>
           </tr>
           <tr>
@@ -105,7 +105,7 @@
                 icon="CheckIcon"
                 class="mr-75"
               />
-              <span class="font-weight-bold">Status</span>
+              <span class="font-weight-bold">Prénom</span>
             </th>
             <td class="pb-50 text-capitalize">
               {{ userData.name }}
@@ -117,10 +117,10 @@
                 icon="StarIcon"
                 class="mr-75"
               />
-              <span class="font-weight-bold">Role</span>
+              <span class="font-weight-bold">Position</span>
             </th>
             <td class="pb-50 text-capitalize">
-              {{ userData.name }}
+              {{ userData.position }}
             </td>
           </tr>
           <tr>
@@ -129,10 +129,10 @@
                 icon="FlagIcon"
                 class="mr-75"
               />
-              <span class="font-weight-bold">Country</span>
+              <span class="font-weight-bold">Email</span>
             </th>
             <td class="pb-50">
-              {{ userData.name }}
+              {{ userData.email }}
             </td>
           </tr>
           <tr>
@@ -144,7 +144,7 @@
               <span class="font-weight-bold">Contact</span>
             </th>
             <td>
-              {{ userData.name }}
+              {{ userData.phone }}
             </td>
           </tr>
         </table>

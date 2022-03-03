@@ -57,7 +57,6 @@
         </b-col>
       </b-row>
 
-      <invoice-list />
     </template>
 
   </div>

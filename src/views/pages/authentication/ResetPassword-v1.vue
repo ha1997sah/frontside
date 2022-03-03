@@ -12,13 +12,12 @@
             Vuexy
           </h2>
         </b-link>
-
+        <b-alert v-if="success" show variant="success">you are loggedin</b-alert>
         <b-card-title class="mb-1">
-          Reset Password 🔒
+          Réinitialiser le mot de passe 🔒
         </b-card-title>
         <b-card-text class="mb-2">
-          Your new password must be different from previously used passwords
-        </b-card-text>
+         Entrez le nouveau mot de passe        </b-card-text>
 
         <!-- form -->
         <validation-observer ref="simpleRules">
@@ -30,7 +29,7 @@
 
             <!-- password -->
             <b-form-group
-              label="New Password"
+              label="Nouveau mot de passe"
               label-for="reset-password-new"
             >
               <validation-provider
@@ -64,40 +63,6 @@
               </validation-provider>
             </b-form-group>
 
-            <!-- confirm password -->
-            <b-form-group
-              label-for="reset-password-confirm"
-              label="Confirm Password"
-            >
-              <validation-provider
-                #default="{ errors }"
-                name="Confirm Password"
-                rules="required|confirmed:Password"
-              >
-                <b-input-group
-                  class="input-group-merge"
-                  :class="errors.length > 0 ? 'is-invalid':null"
-                >
-                  <b-form-input
-                    id="reset-password-confirm"
-                    v-model="cPassword"
-                    :type="password2FieldType"
-                    class="form-control-merge"
-                    :state="errors.length > 0 ? false:null"
-                    name="reset-password-confirm"
-                    placeholder="············"
-                  />
-                  <b-input-group-append is-text>
-                    <feather-icon
-                      class="cursor-pointer"
-                      :icon="password2ToggleIcon"
-                      @click="togglePassword2Visibility"
-                    />
-                  </b-input-group-append>
-                </b-input-group>
-                <small class="text-danger">{{ errors[0] }}</small>
-              </validation-provider>
-            </b-form-group>
 
             <!-- submit button -->
             <b-button
@@ -106,14 +71,14 @@
               variant="primary"
               @click="confirmReset"
             >
-              Set New Password
+              Valider
             </b-button>
           </b-form>
         </validation-observer>
 
         <p class="text-center mt-2">
           <b-link :to="{name:'auth-login-v1'}">
-            <feather-icon icon="ChevronLeftIcon" /> Back to login
+            <feather-icon icon="ChevronLeftIcon" /> Retour au connexion
           </b-link>
         </p>
 
@@ -128,7 +93,7 @@
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import VuexyLogo from '@core/layouts/components/Logo.vue'
 import {
-  BCard, BCardTitle, BCardText, BForm, BFormGroup, BInputGroup, BInputGroupAppend, BLink, BFormInput, BButton,
+  BCard, BAlert,BCardTitle, BCardText, BForm, BFormGroup, BInputGroup, BInputGroupAppend, BLink, BFormInput, BButton,
 } from 'bootstrap-vue'
 import { required } from '@validations'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
@@ -137,6 +102,7 @@ import authentication from '@/services/authentication.js'
 export default {
   components: {
     VuexyLogo,
+    BAlert,
     BCard,
     BButton,
     BCardTitle,
@@ -152,7 +118,7 @@ export default {
   },
   data() {
     return {
-
+      success:false,
       password: '',
       cPassword: '',
       // validation
@@ -176,7 +142,9 @@ export default {
       try{
        const response = await authentication.confirmResetPassword ({
       password: this.password,
-      })} catch (error) {
+      })
+      this.success=true
+      } catch (error) {
       this.error = error.response.data.error
       }
     },
