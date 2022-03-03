@@ -55,5 +55,13 @@ export default {
           .catch(error => {reject(error), console.log(error.message)})
       })
     },
+    deleteUser(ctx) {
+      return new Promise((resolve, reject) => {
+        authentication
+          .deleteUser()
+          .then(response => resolve(response))
+          .catch(error => {reject(error), console.log(error.message)})
+      })
+    },
   },
 }

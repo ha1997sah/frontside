@@ -265,6 +265,9 @@ import useUsersList from '../users-list/useUsersList'
 import { useInputImageRenderer } from '@core/comp-functions/forms/form-utils'
 import { avatarText } from '@core/utils/filter'
 import vSelect from 'vue-select'
+import { useToast } from 'vue-toastification/composition'
+import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
+
 
 
 export default {
@@ -292,6 +295,8 @@ export default {
     UserEditTabSocial,
   },
   setup() {
+    const toast = useToast()
+
     const { resolveUserRoleVariant } = useUsersList()
 
     const roleOptions = [
@@ -360,7 +365,17 @@ export default {
     const onSubmit = () => {
       store.dispatch('app-user/editUser', userData.value)
         .then(() => {
-          response => { userData.value = response.data.user,console.log(userData)}
+          response => { userData.value = response.data.user}
+             toast({
+            component: ToastificationContent,
+            props: {
+              title: 'user modified',
+              icon: 'AlertTriangleIcon',
+              variant: 'danger',
+            },
+          })
+          
+
         }).catch(error=>console.log(error))
     }
 

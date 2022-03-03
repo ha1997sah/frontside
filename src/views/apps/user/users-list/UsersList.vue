@@ -108,6 +108,38 @@
     
 
         <!-- Column: Actions -->
+           <template #cell(actions)="data">
+          <b-dropdown
+            variant="link"
+            no-caret
+            :right="$store.state.appConfig.isRTL"
+          >
+
+            <template #button-content>
+              <feather-icon
+                icon="MoreVerticalIcon"
+                size="16"
+                class="align-middle text-body"
+              />
+            </template>
+            <b-dropdown-item :to="{ name: 'apps-users-view', params: { id: data.item.id } }">
+              <feather-icon icon="FileTextIcon" />
+              <span class="align-middle ml-50">Details</span>
+            </b-dropdown-item>
+
+            <b-dropdown-item :to="{ name: 'apps-users-edit', params: { id: data.item.id } }">
+              <feather-icon icon="EditIcon" />
+              <span class="align-middle ml-50">Edit</span>
+            </b-dropdown-item>
+
+            <b-dropdown-item>
+              <feather-icon icon="TrashIcon" v-b-modal.modal-1/>
+              <span class="align-middle ml-50" > delete</span>
+
+            
+            </b-dropdown-item>
+          </b-dropdown>
+        </template>
     
       </b-table>
       <div class="mx-2 mb-2">
@@ -155,6 +187,12 @@
 
         </b-row>
       </div>
+       <b-modal id="modal-1" title="BootstrapVue"
+         
+          @ok="handleOk">
+             <p class="my-4">Cette action ne peut pas être annulée!</p>
+           
+             </b-modal>
     </b-card>
   </div>
 </template>
@@ -204,7 +242,7 @@ export default {
     onUnmounted(() => {
       if (store.hasModule(USER_APP_STORE_MODULE_NAME)) store.unregisterModule(USER_APP_STORE_MODULE_NAME)
     })
-
+     
     const isAddNewUserSidebarActive = ref(false)
 
     const roleOptions = [
@@ -252,8 +290,9 @@ export default {
       roleFilter,
       planFilter,
       statusFilter,
+      handleOk,
     } = useUsersList()
-
+  
     return {
 
       // Sidebar
@@ -289,7 +328,10 @@ export default {
       roleFilter,
       planFilter,
       statusFilter,
+      handleOk,
     }
+
+    
   },
 }
 </script>

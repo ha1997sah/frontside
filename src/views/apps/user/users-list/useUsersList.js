@@ -49,6 +49,23 @@ export default function useUsersList() {
   const refetchData = () => {
     refUserListTable.value.refresh()
   }
+  const handleOk= () =>{
+    store.dispatch('app-user/deleteUser')
+      .then(() => {
+          toast({
+            component: ToastificationContent,
+            props: {
+              title: 'user deleted',
+              icon: 'AlertTriangleIcon',
+              variant: 'danger',
+            },
+          })
+        
+        
+
+      }).catch(error=>console.log(error))
+  }
+
 
   watch([currentPage, perPage, searchQuery, roleFilter, planFilter, statusFilter], () => {
     refetchData()
@@ -142,6 +159,7 @@ export default function useUsersList() {
     return 'primary'
   }
 
+
   return {
     fetchUsersTest,
     fetchUsers,
@@ -165,5 +183,7 @@ export default function useUsersList() {
     roleFilter,
     planFilter,
     statusFilter,
+    handleOk,
   }
+
 }

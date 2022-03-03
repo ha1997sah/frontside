@@ -29,6 +29,10 @@ export default {
     },
 
     editUser(credentials){
-        return Api().put("edit/3",credentials)
+        return Api().put("edit/8",credentials)
+    },
+
+    deleteUser(){
+        return Api().delete("delete/8")
     }
 }

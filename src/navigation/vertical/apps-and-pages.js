@@ -10,13 +10,13 @@ export default [
   },
  
   {
-    title: 'Calendrier',
+    title: 'Calendar',
     route: 'apps-calendar',
     icon: 'CalendarIcon',
   },
 
   {
-    title: 'Utilisateur',
+    title: 'User',
     icon: 'UserIcon',
     children: [
       {
