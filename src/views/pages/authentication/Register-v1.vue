@@ -11,8 +11,6 @@
           </h2>
         </b-link>
 
-        <b-alert v-if="success" show variant="success">Success Alert</b-alert>
-
         <b-card-text class="mb-2">
                 Créer un nouveau compte
         </b-card-text>
@@ -224,7 +222,7 @@ import { required, email } from '@validations'
 import { togglePasswordVisibility } from '@core/mixins/ui/forms'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 import authentication from '@/services/authentication.js'
-import axios from 'axios';
+import { password } from '@/@core/utils/validations/validations'
 
 export default {
   components: {
@@ -292,8 +290,29 @@ export default {
 	    	this.$store.dispatch('setToken', response.data.token)
         this.$store.dispatch('setUser', response.data.user)
         this.success=true
+         this.$toast({
+                    component: ToastificationContent,
+                    position: 'top-right',
+                    props: {
+                      title: 'jj',
+                      icon: 'CoffeeIcon',
+                      variant: 'success',
+                      text:`Bienvenue ${response.data.user.name}`
+                    },
+                  })
       } catch (error) {
         this.error = error.response.data.error
+            this.$toast({
+                    component: ToastificationContent,
+                    position: 'top-right',
+                    props: {
+                      title: 'jj',
+                      icon: 'CoffeeIcon',
+                      variant: 'danger',
+                      text: this.error,
+                    },
+                  })
+      
       }
     },
 

@@ -10,10 +10,7 @@
             Vuexy
           </h2>
         </b-link>
-        <b-alert v-if="error" show variant="danger">{{error}}</b-alert>
-        <b-alert v-else-if="success" show variant="success">you are loggedin</b-alert>
-
-
+    
         <b-card-title class="mb-1">
           Bienvenue! 👋
         </b-card-title>
@@ -173,6 +170,8 @@ import { togglePasswordVisibility } from '@core/mixins/ui/forms'
 import { VueRecaptcha } from 'vue-recaptcha';
 import {mapState} from 'vuex'
 import authentication from '@/services/authentication.js'
+import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
+
 
 
 export default {
@@ -238,8 +237,28 @@ export default {
 		this.$store.dispatch('setToken', response.data.token)
     this.$store.dispatch('setUser', response.data.user)
     this.success=true
+       this.$toast({
+                    component: ToastificationContent,
+                    position: 'top-right',
+                    props: {
+                      title: 'jj',
+                      icon: 'CoffeeIcon',
+                      variant: 'success',
+                      text:'Bienvenue' ,
+                    },
+                  })
       } catch (error) {
         this.error = error.response.data.error
+         this.$toast({
+                    component: ToastificationContent,
+                    position: 'top-right',
+                    props: {
+                      title: "hii",
+                      icon: 'CoffeeIcon',
+                      variant: 'danger',
+                      text:this.error
+                    },
+                  })
       }
     },
     onCaptchaExpired() {

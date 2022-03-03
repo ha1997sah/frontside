@@ -57,7 +57,7 @@ export default function useUsersList() {
             props: {
               title: 'user deleted',
               icon: 'AlertTriangleIcon',
-              variant: 'danger',
+              variant: 'success',
             },
           })
         

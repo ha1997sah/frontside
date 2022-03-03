@@ -371,7 +371,7 @@ export default {
             props: {
               title: 'user modified',
               icon: 'AlertTriangleIcon',
-              variant: 'danger',
+              variant: 'success',
             },
           })
           
