@@ -105,8 +105,8 @@ export default {
       if (store.hasModule(USER_APP_STORE_MODULE_NAME)) store.unregisterModule(USER_APP_STORE_MODULE_NAME)
     })
 
-    store.dispatch('app-user/fetchUser', { id: router.currentRoute.params.id })
-      .then(response => { userData.value = response.data })
+    store.dispatch('app-user/fetchUserById', { id: router.currentRoute.params.id })
+      .then(response => { userData.value = response.data.user ,console.log(userData)})
       .catch(error => {
         if (error.response.status === 404) {
           userData.value = undefined

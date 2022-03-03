@@ -10,6 +10,10 @@
             Vuexy
           </h2>
         </b-link>
+        <b-alert v-if="error" show variant="danger">{{error}}</b-alert>
+        <b-alert v-else-if="success" show variant="success">you are loggedin</b-alert>
+
+
         <b-card-title class="mb-1">
           Welcome to Vuexy! 👋
         </b-card-title>
@@ -20,7 +24,6 @@
         <!-- form -->
         <validation-observer
           ref="loginForm"
-          #default="{invalid}"
         >
           <b-form
             class="auth-login-form mt-2"
@@ -39,7 +42,7 @@
                 <b-form-input
                   id="email"
                   v-model="email"
-                  name="login-email"
+                  name="email"
                   :state="errors.length > 0 ? false:null"
                   placeholder="john@example.com"
                   autofocus
@@ -71,7 +74,7 @@
                     :type="passwordFieldType"
                     class="form-control-merge"
                     :state="errors.length > 0 ? false:null"
-                    name="login-password"
+                    name="password"
                     placeholder="Password"
                   />
 
@@ -94,7 +97,7 @@
               variant="primary"
               type="button"
               block
-              @click="login"
+              @click="validateCaptcha"
 
 
             >
@@ -147,7 +150,14 @@
 
       </b-card>
       <!-- /Login v1 -->
+     
     </div>
+ <vue-recaptcha ref="recaptcha"
+     size="invisible"
+     :sitekey="sitekey"
+     @verify="onCaptchaVerified"
+     @expired="onCaptchaExpired"
+      ></vue-recaptcha>
 
   </div>
 
@@ -156,7 +166,7 @@
 <script>
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import {
-  BButton, BForm, BFormInput, BFormGroup, BCard, BLink, BCardTitle, BCardText, BInputGroup, BInputGroupAppend, BFormCheckbox,
+  BButton, BAlert, BForm, BFormInput, BFormGroup, BCard, BLink, BCardTitle, BCardText, BInputGroup, BInputGroupAppend, BFormCheckbox,
 } from 'bootstrap-vue'
 import VuexyLogo from '@core/layouts/components/Logo.vue'
 import { required, email } from '@validations'
@@ -169,6 +179,8 @@ import authentication from '@/services/authentication.js'
 export default {
   components: {
     VuexyLogo,
+    VueRecaptcha,
+    BAlert,
     // BSV
     BCard,
     BLink,
@@ -186,16 +198,17 @@ export default {
     ValidationObserver,
   },
   mixins: [togglePasswordVisibility],
-  data() {
+  data () {
     return {
-
+	  name: '',
+	  lastname: '',
+      position: '',
+	  phone: '',
       email: '',
       password: '',
       error: null,
-
-      // validation rules
-      required,
-      email,
+      success:false,
+      sitekey:'6Lehd4QeAAAAAL1j8s9UYPwymAkIvb0sJVQrbXc0'
     }
   },
   computed: {
@@ -211,47 +224,27 @@ export default {
     },
   },
   methods: {
-	async login () {
-      try {
-       const response = await authentication.login ({
-      email: this.email,
-      password: this.password,
-		  name: this.name,
-		  lastname: this.lastname,
-		  position: this.position,
-		  phone: this.phone,
-        })
-		this.$store.dispatch('setToken', response.data.token)
-        this.$store.dispatch('setUser', response.data.user)
-      } catch (error) {
-        this.error = error.response.data.error
-      }
-    },
-
-
-      validateCaptcha() {
-      this.$ref.recaptcha.execute()
-    },
+  validateCaptcha() {
+     this.$refs.recaptcha.execute()
+      },
     async onCaptchaVerified(recaptchaToken) {
-       try {
-      const response = await authenticaion.login ({
+      try {
+      const response = await authentication.login ({
       email: this.email,
       password: this.password,
-		  name: this.name,
-		  lastname: this.lastname,
-		  position: this.position,
-		  phone: this.phone,
+	
       token: recaptchaToken
         })
-      this.$store.dispatch('setToken', response.data.token)
-      this.$store.dispatch('setUser', response.data.user)
+		this.$store.dispatch('setToken', response.data.token)
+    this.$store.dispatch('setUser', response.data.user)
+    this.success=true
       } catch (error) {
         this.error = error.response.data.error
       }
-  },
-    onCaptchaExpired() {
-      this.$ref.recaptcha.reset()
     },
+    onCaptchaExpired() {
+   this.$refs.recaptcha.reset()
+},
       async navigateToProfile () {
       this.$router.push({
           name: 'App'

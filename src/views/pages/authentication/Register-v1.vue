@@ -11,15 +11,14 @@
           </h2>
         </b-link>
 
-        <b-card-title class="mb-1">
-          Adventure starts here 🚀
-        </b-card-title>
+        <b-alert v-if="success" show variant="success">Success Alert</b-alert>
+
         <b-card-text class="mb-2">
           Make your app management easy and fun!
         </b-card-text>
 
         <!-- form -->
-        <validation-observer ref="registerForm">
+        <validation-observer ref="registerForm" v-slot="{ invalid }">
           <b-form
             class="auth-register-form mt-2"
             @submit.prevent="validationForm"
@@ -32,7 +31,7 @@
               <validation-provider
                 #default="{ errors }"
                 name="name"
-                rules="required"
+                rules="required|min:3"
               >
                 <b-form-input
                   id="name"
@@ -52,7 +51,7 @@
               <validation-provider
                 #default="{ errors }"
                 name="lastname"
-                rules="required"
+                rules="required|min:3"
               >
                 <b-form-input
                   id="lastname"
@@ -73,7 +72,7 @@
               <validation-provider
                 #default="{ errors }"
                 name="phone"
-                rules="required"
+                rules="required|min:8"
               >
                 <b-form-input
                   id="phone"
@@ -157,6 +156,7 @@
             <b-button
               variant="primary"
               block
+              :disabled="invalid"
               type="button"
               @click="register"
             >
@@ -217,7 +217,7 @@ import {mapState} from 'vuex'
 
 import {
   BCard, BLink, BCardTitle, BCardText, BForm,
-  BButton, BFormInput, BFormGroup, BInputGroup, BInputGroupAppend, BFormCheckbox,
+  BButton, BFormInput, BFormGroup, BInputGroup, BInputGroupAppend, BFormCheckbox, BAlert
 } from 'bootstrap-vue'
 import VuexyLogo from '@core/layouts/components/Logo.vue'
 import { required, email } from '@validations'
@@ -229,6 +229,7 @@ import axios from 'axios';
 export default {
   components: {
     VuexyLogo,
+    BAlert,
     // BSV
     BCard,
     BLink,
@@ -255,6 +256,7 @@ export default {
       email: '',
       password: '',
       error: null,
+      success:false,
 
       // validation rules
       required,
@@ -287,8 +289,9 @@ export default {
 		  position: this.position,
 		  phone: this.phone,
         })
-		this.$store.dispatch('setToken', response.data.token)
+	    	this.$store.dispatch('setToken', response.data.token)
         this.$store.dispatch('setUser', response.data.user)
+        this.success=true
       } catch (error) {
         this.error = error.response.data.error
       }

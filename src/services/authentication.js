@@ -18,5 +18,17 @@ export default {
 
     isUniqueEmail(credentials){
         return Api().post('validate/email',credentials)
+    },
+
+    allUsers(){
+        return Api().get('users')
+    },
+
+    findUserById(id){
+        return Api().get(`user/${id}`)
+    },
+
+    editUser(credentials){
+        return Api().put("edit/3",credentials)
     }
 }

@@ -83,6 +83,35 @@ export default function useUsersList() {
         })
       })
   }
+  const fetchUsersTest = (ctx, callback) => {
+    store
+      .dispatch('app-user/fetchUsersTest', {
+        q: searchQuery.value,
+        perPage: perPage.value,
+        page: currentPage.value,
+        sortBy: sortBy.value,
+        sortDesc: isSortDirDesc.value,
+        role: roleFilter.value,
+        plan: planFilter.value,
+        status: statusFilter.value,
+      })
+      .then(response => {
+        const { users, total } = response.data
+
+        callback(users)
+        totalUsers.value = total
+      })
+      .catch(() => {
+        toast({
+          component: ToastificationContent,
+          props: {
+            title: 'Error fetching users list',
+            icon: 'AlertTriangleIcon',
+            variant: 'danger',
+          },
+        })
+      })
+  }
 
   // *===============================================---*
   // *--------- UI ---------------------------------------*
@@ -114,6 +143,7 @@ export default function useUsersList() {
   }
 
   return {
+    fetchUsersTest,
     fetchUsers,
     tableColumns,
     perPage,

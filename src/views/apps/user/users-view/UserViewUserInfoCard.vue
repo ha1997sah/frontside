@@ -12,18 +12,17 @@
         <!-- User Avatar & Action Buttons -->
         <div class="d-flex justify-content-start">
           <b-avatar
-            :src="userData.avatar"
             :text="avatarText(userData.fullName)"
-            :variant="`light-${resolveUserRoleVariant(userData.role)}`"
+            :variant="`light-${resolveUserRoleVariant(userData.fullName)}`"
             size="104px"
             rounded
           />
           <div class="d-flex flex-column ml-1">
             <div class="mb-1">
               <h4 class="mb-0">
-                {{ userData.fullName }}
+                {{ userData.name }}
               </h4>
-              <span class="card-text">{{ userData.email }}</span>
+              <span class="card-text">{{ userData.email }} had</span>
             </div>
             <div class="d-flex flex-wrap">
               <b-button
@@ -97,7 +96,7 @@
               <span class="font-weight-bold">Username</span>
             </th>
             <td class="pb-50">
-              {{ userData.username }}
+              {{ userData.name }}
             </td>
           </tr>
           <tr>
@@ -109,7 +108,7 @@
               <span class="font-weight-bold">Status</span>
             </th>
             <td class="pb-50 text-capitalize">
-              {{ userData.status }}
+              {{ userData.name }}
             </td>
           </tr>
           <tr>
@@ -121,7 +120,7 @@
               <span class="font-weight-bold">Role</span>
             </th>
             <td class="pb-50 text-capitalize">
-              {{ userData.role }}
+              {{ userData.name }}
             </td>
           </tr>
           <tr>
@@ -133,7 +132,7 @@
               <span class="font-weight-bold">Country</span>
             </th>
             <td class="pb-50">
-              {{ userData.country }}
+              {{ userData.name }}
             </td>
           </tr>
           <tr>
@@ -145,7 +144,7 @@
               <span class="font-weight-bold">Contact</span>
             </th>
             <td>
-              {{ userData.contact }}
+              {{ userData.name }}
             </td>
           </tr>
         </table>
