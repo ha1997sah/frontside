@@ -28,11 +28,11 @@ export default {
         return Api().get(`user/${id}`)
     },
 
-    editUser(credentials){
-        return Api().put("edit/8",credentials)
+    editUser(credentials,id){
+        return Api().put(`edit/${id}`,credentials)
     },
 
-    deleteUser(){
-        return Api().delete("delete/8")
+    deleteUser(id){
+        return Api().delete(`delete/${id}`)
     }
 }

@@ -133,7 +133,7 @@
             </b-dropdown-item>
 
             <b-dropdown-item>
-              <feather-icon icon="TrashIcon" v-b-modal.modal-1/>
+              <feather-icon icon="TrashIcon" />
               <span class="align-middle ml-50" > delete</span>
 
             
@@ -187,12 +187,7 @@
 
         </b-row>
       </div>
-       <b-modal id="modal-1" title="BootstrapVue"
-         
-          @ok="handleOk">
-             <p class="my-4">Cette action ne peut pas être annulée!</p>
-           
-             </b-modal>
+    
     </b-card>
   </div>
 </template>
@@ -290,7 +285,6 @@ export default {
       roleFilter,
       planFilter,
       statusFilter,
-      handleOk,
     } = useUsersList()
   
     return {
@@ -328,7 +322,6 @@ export default {
       roleFilter,
       planFilter,
       statusFilter,
-      handleOk,
     }
 
     

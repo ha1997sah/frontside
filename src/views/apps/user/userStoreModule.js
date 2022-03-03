@@ -1,5 +1,6 @@
 import axios from '@axios'
 import authentication from '@/services/authentication.js'
+import router from '@/router'
 
 export default {
   namespaced: true,
@@ -23,10 +24,10 @@ export default {
           .catch(error => reject(error))
       })
     },
-    fetchUserById(ctx, { id }) {
+    fetchUserById(ctx) {
       return new Promise((resolve, reject) => {
         authentication
-          .findUserById(id)
+          .findUserById(router.currentRoute.params.id )
           .then(response => resolve(response))
           .catch(error => reject(error))
       })
@@ -50,15 +51,15 @@ export default {
     editUser(ctx, userData) {
       return new Promise((resolve, reject) => {
         authentication
-          .editUser( userData)
+          .editUser( userData,router.currentRoute.params.id)
           .then(response => resolve(response))
           .catch(error => {reject(error), console.log(error.message)})
       })
     },
-    deleteUser(ctx) {
+    deleteUser(ctx,id) {
       return new Promise((resolve, reject) => {
         authentication
-          .deleteUser()
+          .deleteUser(id)
           .then(response => resolve(response))
           .catch(error => {reject(error), console.log(error.message)})
       })

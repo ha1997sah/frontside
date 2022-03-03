@@ -34,8 +34,9 @@
               <b-button
                 variant="outline-danger"
                 class="ml-1"
+                v-b-modal.modal-1
               >
-                Delete
+                Supprimer
               </b-button>
             </div>
           </div>
@@ -150,6 +151,12 @@
         </table>
       </b-col>
     </b-row>
+    <b-modal id="modal-1" title="BootstrapVue"
+     
+          @ok="handleOk">
+             <p class="my-4">Cette action ne peut pas être annulée!</p>
+  
+             </b-modal>
   </b-card>
 </template>
 
@@ -171,10 +178,12 @@ export default {
     },
   },
   setup() {
-    const { resolveUserRoleVariant } = useUsersList()
+    const { resolveUserRoleVariant,handleOk } = useUsersList()
+  
     return {
       avatarText,
       resolveUserRoleVariant,
+      handleOk,
     }
   },
 }

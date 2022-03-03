@@ -5,6 +5,7 @@ import { title } from '@core/utils/filter'
 // Notification
 import { useToast } from 'vue-toastification/composition'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
+import router from '@/router'
 
 export default function useUsersList() {
   // Use toast
@@ -49,22 +50,32 @@ export default function useUsersList() {
   const refetchData = () => {
     refUserListTable.value.refresh()
   }
+  
   const handleOk= () =>{
-    store.dispatch('app-user/deleteUser')
-      .then(() => {
-          toast({
-            component: ToastificationContent,
-            props: {
-              title: 'user deleted',
-              icon: 'AlertTriangleIcon',
-              variant: 'success',
-            },
-          })
-        
-        
-
-      }).catch(error=>console.log(error))
-  }
+    store.dispatch('app-user/deleteUser',   router.currentRoute.params.id )
+    .then(() => {
+        toast({
+          component: ToastificationContent,
+          props: {
+            title: 'user deleted',
+            icon: 'AlertTriangleIcon',
+            variant: 'success',
+          },
+        })
+    }
+    
+    )
+    
+     .catch(error=>{console.log(error),
+       toast({
+      component: ToastificationContent,
+      props: {
+        title: 'user deleted',
+        icon: 'AlertTriangleIcon',
+        variant: 'danger',
+      },
+    })})
+}
 
 
   watch([currentPage, perPage, searchQuery, roleFilter, planFilter, statusFilter], () => {

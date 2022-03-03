@@ -241,7 +241,7 @@ export default {
                     component: ToastificationContent,
                     position: 'top-right',
                     props: {
-                      title: 'jj',
+                      title: 'titre',
                       icon: 'CoffeeIcon',
                       variant: 'success',
                       text:'Bienvenue' ,
@@ -253,7 +253,7 @@ export default {
                     component: ToastificationContent,
                     position: 'top-right',
                     props: {
-                      title: "hii",
+                      title: "titre",
                       icon: 'CoffeeIcon',
                       variant: 'danger',
                       text:this.error
@@ -264,11 +264,7 @@ export default {
     onCaptchaExpired() {
    this.$refs.recaptcha.reset()
 },
-      async navigateToProfile () {
-      this.$router.push({
-          name: 'App'
-        })
-    } ,
+   
    }, }
 </script>
 

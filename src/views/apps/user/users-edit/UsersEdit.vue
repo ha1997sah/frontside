@@ -44,14 +44,14 @@
         <b-avatar
           ref="previewEl"
           :src="userData.avatar"
-          :text="avatarText(userData.fullName)"
+          :text="avatarText(user.name)"
           :variant="`light-${resolveUserRoleVariant(userData.role)}`"
           size="90px"
           rounded
         />
       </template>
       <h4 class="mb-1">
-        {{ userData.fullName }}
+        {{ user.name }}
       </h4>
       <div class="d-flex flex-wrap">
         <b-button
@@ -64,7 +64,7 @@
             class="d-none"
             @input="inputImageRenderer"
           >
-          <span class="d-none d-sm-inline">Update</span>
+          <span class="d-none d-sm-inline">Modifier</span>
           <feather-icon
             icon="EditIcon"
             class="d-inline d-sm-none"
@@ -74,7 +74,7 @@
           variant="outline-secondary"
           class="ml-1"
         >
-          <span class="d-none d-sm-inline">Remove</span>
+          <span class="d-none d-sm-inline">Supprimer</span>
           <feather-icon
             icon="TrashIcon"
             class="d-inline d-sm-none"
@@ -99,7 +99,7 @@
           >
             <b-form-input
               id="username"
-              v-model="userData.lastname"
+              v-model="user.lastname"
             />
           </b-form-group>
         </b-col>
@@ -115,7 +115,7 @@
           >
             <b-form-input
               id="full-name"
-              v-model="userData.Prénom"
+              v-model="user.name"
             />
           </b-form-group>
         </b-col>
@@ -131,7 +131,7 @@
           >
             <b-form-input
               id="email"
-              v-model="userData.email"
+              v-model="user.email"
               type="email"
             />
           </b-form-group>
@@ -147,7 +147,7 @@
             label-for="user-status"
           >
             <v-select
-              v-model="userData.phone"
+              v-model="user.phone"
               :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
               :options="statusOptions"
               :reduce="val => val.value"
@@ -359,13 +359,15 @@ export default {
       props.userData.avatar = base64
     })
     const userData = ref(null)
+    const user = ref(null)
+
 
     const USER_APP_STORE_MODULE_NAME = 'app-user'
     // Edit user function 
     const onSubmit = () => {
-      store.dispatch('app-user/editUser', userData.value)
+      store.dispatch('app-user/editUser', user.value )
         .then(() => {
-          response => { userData.value = response.data.user}
+          response => { user.value = response.data.user}
              toast({
             component: ToastificationContent,
             props: {
@@ -395,10 +397,18 @@ export default {
           userData.value = undefined
         }
       })
+     store.dispatch('app-user/fetchUserById')
+      .then(response => { user.value = response.data.user })
+      .catch(error => {
+        if (error.response.status === 404) {
+          user.value = undefined
+        }
+      })
 
-    return {
+      return {
       onSubmit,
       userData,
+      user,
       resolveUserRoleVariant,
       avatarText,
       roleOptions,

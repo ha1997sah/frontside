@@ -12,13 +12,6 @@
             Vuexy
           </h2>
         </b-link>
-                <b-alert v-if="error" show variant="danger">{{error}}</b-alert>
-                <b-alert v-else-if="success" show variant="success">email sent</b-alert>
-
-
-
-
-
         <b-card-title class="mb-1">
           Mot de passe oublié? 🔒
         </b-card-title>
@@ -86,6 +79,7 @@ import { togglePasswordVisibility } from '@core/mixins/ui/forms'
 import { VueRecaptcha } from 'vue-recaptcha';
 import {mapState} from 'vuex'
 import authentication from '@/services/authentication.js'
+import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 
 
 export default {
@@ -114,7 +108,6 @@ export default {
 
       email: '',
       error: null,
-      success:false,
 
       // validation rules
       required,
@@ -140,10 +133,29 @@ export default {
        email: this.email,
 
         })
-      this.success=true
-
+           this.$toast({
+                    component: ToastificationContent,
+                    position: 'top-right',
+                    props: {
+                      title: 'titre',
+                      icon: 'CoffeeIcon',
+                      variant: 'success',
+                      text:'Merci de verifier votre email' ,
+                    },
+                  })
       } catch (error) {
         this.error = error.response.data.error
+        
+           this.$toast({
+                    component: ToastificationContent,
+                    position: 'top-right',
+                    props: {
+                      title: 'titre',
+                      icon: 'CoffeeIcon',
+                      variant: 'success',
+                      text:this.error ,
+                    },
+                  })
       }
     },
 
