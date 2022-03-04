@@ -223,6 +223,8 @@ import { togglePasswordVisibility } from '@core/mixins/ui/forms'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 import authentication from '@/services/authentication.js'
 import { password } from '@/@core/utils/validations/validations'
+import { getHomeRouteForLoggedInUser } from '@/auth/utils'
+
 
 export default {
   components: {
@@ -287,19 +289,20 @@ export default {
 		  position: this.position,
 		  phone: this.phone,
         })
-	    	this.$store.dispatch('setToken', response.data.token)
-        this.$store.dispatch('setUser', response.data.user)
-        this.success=true
-         this.$toast({
+     localStorage.setItem("loggedInUser",JSON.stringify(response.data.user))
+     this.$router.replace(getHomeRouteForLoggedInUser("admin"))
+                .then(() => {
+                  this.$toast({
                     component: ToastificationContent,
                     position: 'top-right',
                     props: {
-                      title: 'jj',
+                      title: `Welcome ${response.data.user.name || response.data.user.lastname}`,
                       icon: 'CoffeeIcon',
                       variant: 'success',
-                      text:`Bienvenue ${response.data.user.name}`
+                      text: 'You have successfully logged in as. Now you can start to explore!',
                     },
                   })
+                })
       } catch (error) {
         this.error = error.response.data.error
             this.$toast({
