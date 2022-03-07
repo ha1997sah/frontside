@@ -74,7 +74,7 @@ export default {
           confirmButton: 'btn btn-primary',
         },
         buttonsStyling: false,
-      })
+      }) 
     },
 
     // error

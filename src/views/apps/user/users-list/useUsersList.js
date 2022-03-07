@@ -81,10 +81,40 @@ export default function useUsersList() {
   watch([currentPage, perPage, searchQuery, roleFilter, planFilter, statusFilter], () => {
     refetchData()
   })
+  
 
+  const fetchPendingRequests = (ctx, callback) => {
+    store
+      .dispatch('app-user/fetchPendingRequests', {
+        q: searchQuery.value,
+        perPage: perPage.value,
+        page: currentPage.value,
+        sortBy: sortBy.value,
+        sortDesc: isSortDirDesc.value,
+        role: roleFilter.value,
+        plan: planFilter.value,
+        status: statusFilter.value,
+      })
+      .then(response => {
+        const { users, total } = response.data
+
+        callback(users)
+        totalUsers.value = total
+      })
+      .catch(() => {
+        toast({
+          component: ToastificationContent,
+          props: {
+            title: 'Error fetching users list',
+            icon: 'AlertTriangleIcon',
+            variant: 'danger',
+          },
+        })
+      })
+  }
   const fetchUsers = (ctx, callback) => {
     store
-      .dispatch('app-user/fetchUsers', {
+      .dispatch('app-user/fetchPendingRequests', {
         q: searchQuery.value,
         perPage: perPage.value,
         page: currentPage.value,
@@ -138,8 +168,7 @@ export default function useUsersList() {
             variant: 'danger',
           },
         })
-      })
-  }
+      }) }
 
   // *===============================================---*
   // *--------- UI ---------------------------------------*
@@ -195,6 +224,7 @@ export default function useUsersList() {
     planFilter,
     statusFilter,
     handleOk,
+    fetchPendingRequests,
   }
 
 }

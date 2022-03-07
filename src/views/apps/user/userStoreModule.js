@@ -32,6 +32,14 @@ export default {
           .catch(error => reject(error))
       })
     },
+    fetchPendingRequests(ctx) {
+      return new Promise((resolve, reject) => {
+        authentication
+          .allPendingRequests()
+          .then(response => resolve(response))
+          .catch(error => reject(error))
+      })
+    },
     fetchUser(ctx, { id }) {
       return new Promise((resolve, reject) => {
         axios
@@ -60,6 +68,23 @@ export default {
       return new Promise((resolve, reject) => {
         authentication
           .deleteUser(id)
+          .then(response => resolve(response))
+          .catch(error => {reject(error), console.log(error.message)})
+      })
+    },
+    acceptRegister(ctx) {
+      return new Promise((resolve, reject) => {
+        authentication
+          .acceptRegister(router.currentRoute.params.id)
+          .then(response => resolve(response))
+          .catch(error => {reject(error), console.log(error.message)})
+      })
+    },
+
+    refuseRegister(ctx, userData) {
+      return new Promise((resolve, reject) => {
+        authentication
+          .refuseRegister(router.currentRoute.params.id)
           .then(response => resolve(response))
           .catch(error => {reject(error), console.log(error.message)})
       })

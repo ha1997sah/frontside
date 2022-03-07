@@ -30,36 +30,17 @@
           lg="8"
           md="7"
         >
-          <user-view-user-info-card :user-data="userData" />
+          <accept-or-refuse-user-info-card :user-data="userData" />
         </b-col>
-        <b-col
-          cols="12"
-          md="5"
-          xl="3"
-          lg="4"
-        >
-          <user-view-user-plan-card />
-        </b-col>
+     
       </b-row>
 
-      <b-row>
-        <b-col
-          cols="12"
-          lg="6"
-        >
-        </b-col>
-        <b-col
-          cols="12"
-          lg="6"
-        >
-        </b-col>
-      </b-row>
 
     </template>
 
   </div>
 </template>
-
+ 
 <script>
 import store from '@/store'
 import router from '@/router'
@@ -70,19 +51,17 @@ import {
 import InvoiceList from '@/views/apps/invoice/invoice-list/InvoiceList.vue'
 import userStoreModule from '../userStoreModule'
 import UserViewUserInfoCard from './UserViewUserInfoCard.vue'
-import UserViewUserPlanCard from './UserViewUserPlanCard.vue'
-
+import AcceptOrRefuseUserInfoCard from './AcceptOrRefuseUserInfoCard.vue'
 export default {
   components: {
     BRow,
     BCol,
     BAlert,
     BLink,
- 
+
     // Local Components
     UserViewUserInfoCard,
-    UserViewUserPlanCard,
- 
+    AcceptOrRefuseUserInfoCard,
 
     InvoiceList,
   },

@@ -23,9 +23,19 @@ export default {
     allUsers(){
         return Api().get('users')
     },
-
+    allPendingRequests(){
+        return Api().get('allPendingRequests')
+    },
     findUserById(id){
         return Api().get(`user/${id}`)
+    },
+
+    acceptRegister(id){
+        return Api().post(`acceptRegister/${id}`)
+    },
+
+    refuseRegister(id){
+        return Api().delete(`refuseRegister/${id}`)
     },
 
     editUser(credentials,id){
@@ -34,5 +44,12 @@ export default {
 
     deleteUser(id){
         return Api().delete(`delete/${id}`)
+    },
+
+    // Notifications
+
+    allNotifications() {
+        return Api().get('notifications')
     }
+
 }

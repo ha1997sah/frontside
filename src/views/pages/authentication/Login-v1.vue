@@ -234,7 +234,7 @@ export default {
       token: recaptchaToken
         })
       localStorage.setItem("loggedInUser",JSON.stringify(response.data.user))
-     this.$router.replace(getHomeRouteForLoggedInUser("admin"))
+     this.$router.replace(getHomeRouteForLoggedInUser(response.data.user.role))
                 .then(() => {
                   this.$toast({
                     component: ToastificationContent,

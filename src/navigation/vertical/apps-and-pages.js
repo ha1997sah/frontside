@@ -23,8 +23,13 @@ export default [
         title: 'Tous les utilisateurs',
         route: 'apps-users-list',
       },
+      {
+        title: 'Demandes d\'inscription',
+        route: 'apps-users-requests',
+      },
     
     ],
   },
+
 
 ]

@@ -190,9 +190,19 @@ export default [
     component: () => import('@/views/apps/user/users-list/UsersList.vue'),
   },
   {
+    path: '/apps/users/requests',
+    name: 'apps-users-requests',
+    component: () => import('@/views/apps/user/users-list/PendingUsersList.vue'),
+  },
+  {
     path: '/apps/users/view/:id',
     name: 'apps-users-view',
     component: () => import('@/views/apps/user/users-view/UsersView.vue'),
+  },
+  {
+    path: '/apps/users/AcceptOrRefuse/:id',
+    name: 'apps-users-AcceptOrRefuse',
+    component: () => import('@/views/apps/user/users-view/AcceptOrRefuse.vue'),
   },
   {
     path: '/apps/users/edit/:id',

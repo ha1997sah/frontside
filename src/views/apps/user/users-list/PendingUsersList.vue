@@ -73,7 +73,7 @@
       <b-table
         ref="refUserListTable"
         class="position-relative"
-        :items="fetchUsersTest"
+        :items="fetchPendingRequests"
         responsive
         :fields="tableColumns"
         primary-key="id"
@@ -91,11 +91,11 @@
                 size="32"
                 :text="avatarText(data.item.lastname)"
                 :variant="`light-${resolveUserRoleVariant(data.item.email)}`"
-                :to="{ name: 'apps-users-view', params: { id: data.item.id } }"
+                :to="{ name: 'apps-users-AcceptOrRefuse', params: { id: data.item.id } }"
               />
             </template>
             <b-link
-              :to="{ name: 'apps-users-view', params: { id: data.item.id } }"
+              :to="{ name: 'apps-users-AcceptOrRefuse', params: { id: data.item.id } }"
               class="font-weight-bold d-block text-nowrap"
             >
               {{ data.item.name }}
@@ -122,7 +122,7 @@
                 class="align-middle text-body"
               />
             </template>
-            <b-dropdown-item :to="{ name: 'apps-users-view', params: { id: data.item.id } }">
+            <b-dropdown-item :to="{ name: 'apps-users-AcceptOrRefuse', params: { id: data.item.id } }">
               <feather-icon icon="FileTextIcon" />
               <span class="align-middle ml-50">Details</span>
             </b-dropdown-item>
@@ -253,7 +253,7 @@ export default {
       { label: 'Inactive', value: 'inactive' },
     ]
     const {
-      fetchUsersTest,
+      fetchPendingRequests,
       fetchUsers,
       tableColumns,
       perPage,
@@ -279,7 +279,7 @@ export default {
     return {
       // Sidebar
       isAddNewUserSidebarActive,
-      fetchUsersTest,
+      fetchPendingRequests,
       fetchUsers,
       tableColumns,
       perPage,
