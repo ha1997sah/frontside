@@ -7,7 +7,6 @@
     <template #button-content>
       <div class="d-sm-flex d-none user-nav">
         <p class="user-name font-weight-bolder mb-0">
-          {{ user.name || user.lastname }}
         </p>
         <span class="user-status">{{ userData.role }}</span>
       </div>

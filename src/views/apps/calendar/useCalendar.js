@@ -170,7 +170,7 @@ export default function userCalendar() {
   // addEvent
   // ------------------------------------------------
   const addEvent = eventData => {
-    store.dispatch('calendar/addEvent', { event: eventData }).then(() => {
+    store.dispatch('calendar/addEvent', eventData).then(() => {
       // eslint-disable-next-line no-use-before-define
       refetchEvents()
     })

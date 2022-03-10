@@ -10,27 +10,28 @@ export default [
     },
   },
   {
+    path: '/login1',
+    name: 'auth-login1',
+    component: () => import('@/views/pages/authentication/Login.vue'),
+    meta: {
+      layout: 'full',
+     
+    },
+  },
+  {
     path: '/login',
     name: 'auth-login',
-    component: () => import('@/views/pages/authentication/Login.vue'),
+    component: () => import('@/views/pages/authentication/Login-v1.vue'),
     meta: {
       layout: 'full',
       resource: 'Auth',
       redirectIfLoggedIn: true,
     },
   },
-  {
-    path: '/pages/authentication/login-v1',
-    name: 'auth-login-v1',
-    component: () => import('@/views/pages/authentication/Login-v1.vue'),
-    meta: {
-      layout: 'full',
-    },
-  },
 
   {
-    path: '/register',
-    name: 'auth-register',
+    path: '/pages/authentication/register-v1',
+    name: 'auth-register-v1',
     component: () => import('@/views/pages/authentication/Register.vue'),
     meta: {
       layout: 'full',
@@ -39,11 +40,14 @@ export default [
     },
   },
   {
-    path: '/pages/authentication/register-v1',
-    name: 'auth-register-v1',
+    
+    path: '/register',
+    name: 'auth-register',
     component: () => import('@/views/pages/authentication/Register-v1.vue'),
     meta: {
       layout: 'full',
+      resource: 'Auth',
+      redirectIfLoggedIn: true,
     },
   },
 
@@ -63,15 +67,20 @@ export default [
     component: () => import('@/views/pages/authentication/ForgotPassword-v1.vue'),
     meta: {
       layout: 'full',
+      resource: 'Auth',
+      redirectIfLoggedIn: true,
     },
   },
 
   {
-    path: '/pages/authentication/reset-password-v1',
+    path: '/pages/authentication/reset-password-v1/:id',
     name: 'auth-reset-password-v1',
     component: () => import('@/views/pages/authentication/ResetPassword-v1.vue'),
     meta: {
+
       layout: 'full',
+      resource: 'Auth',
+      redirectIfLoggedIn: true,
     },
   },
 

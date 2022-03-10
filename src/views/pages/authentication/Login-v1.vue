@@ -105,7 +105,7 @@
 
         <b-card-text class="text-center mt-2">
           <span>Nouveau member? </span>
-          <b-link :to="{name:'auth-register-v1'}">
+          <b-link :to="{name:'auth-register'}">
             <span>Créer un compte</span>
           </b-link>
         </b-card-text>
@@ -172,6 +172,8 @@ import {mapState} from 'vuex'
 import authentication from '@/services/authentication.js'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 import { getHomeRouteForLoggedInUser } from '@/auth/utils'
+import useJwt from '@/auth/jwt/useJwt'
+import store from '@/store/index'
 
 
 
@@ -207,7 +209,14 @@ export default {
       password: '',
       error: null,
       success:false,
-      sitekey:'6Lehd4QeAAAAAL1j8s9UYPwymAkIvb0sJVQrbXc0'
+      sitekey:'6Lehd4QeAAAAAL1j8s9UYPwymAkIvb0sJVQrbXc0',
+       ability: [
+        {
+          action: 'manage',
+          subject: 'all',
+        },
+        
+      ],
     }
   },
   computed: {
@@ -233,7 +242,13 @@ export default {
       password: this.password,
       token: recaptchaToken
         })
+       useJwt.setToken(response.data.token)
+      useJwt.setRefreshToken(response.data.refreshToken)
+      localStorage.setItem('userData', JSON.stringify(response.data.user))
+      this.$ability.update(this.ability)
       localStorage.setItem("loggedInUser",JSON.stringify(response.data.user))
+      this.$store.commit('app-ecommerce/UPDATE_CART_ITEMS_COUNT', 5)
+
      this.$router.replace(getHomeRouteForLoggedInUser(response.data.user.role))
                 .then(() => {
                   this.$toast({

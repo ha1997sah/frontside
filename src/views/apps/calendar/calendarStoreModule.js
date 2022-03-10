@@ -1,4 +1,5 @@
 import axios from '@axios'
+import authentication from '@/services/authentication.js'
 
 export default {
   namespaced: true,
@@ -46,10 +47,10 @@ export default {
           .catch(error => reject(error))
       })
     },
-    addEvent(ctx, { event }) {
+    addEvent(ctx, event) {
       return new Promise((resolve, reject) => {
-        axios
-          .post('/apps/calendar/events', { event })
+        authentication
+          .addEvent(event )
           .then(response => resolve(response))
           .catch(error => reject(error))
       })

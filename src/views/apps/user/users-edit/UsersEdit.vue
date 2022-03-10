@@ -197,34 +197,7 @@
     </b-form>
 
     <!-- PERMISSION TABLE -->
-    <b-card
-      no-body
-      class="border mt-1"
-    >
-      <b-card-header class="p-1">
-        <b-card-title class="font-medium-2">
-          <feather-icon
-            icon="LockIcon"
-            size="18"
-          />
-          <span class="align-middle ml-50">Permission</span>
-        </b-card-title>
-      </b-card-header>
-      <b-table
-        striped
-        responsive
-        class="mb-0"
-        :items="permissionsData"
-      >
-        <template #cell(module)="data">
-          {{ data.value }}
-        </template>
-        <template #cell()="data">
-          <b-form-checkbox :checked="data.value" />
-        </template>
-      </b-table>
-    </b-card>
-
+   
     <!-- Action Buttons -->
     <b-button
       variant="primary"
@@ -375,10 +348,10 @@ export default {
               icon: 'AlertTriangleIcon',
               variant: 'success',
             },
-          })
+          }).catch({error:error.message})
           
 
-        }).catch(error=>console.log(error))
+        })
     }
 
 

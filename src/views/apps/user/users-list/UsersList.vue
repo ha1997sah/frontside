@@ -84,13 +84,13 @@
       >
 
         <!-- Column: User -->
-        <template #cell(user)="data">
+        <template #cell(Nom)="data">
           <b-media vertical-align="center">
             <template #aside>
               <b-avatar
                 size="32"
                 :text="avatarText(data.item.lastname)"
-                :variant="`light-${resolveUserRoleVariant(data.item.email)}`"
+                :variant="`light-${resolveUserRoleVariant(data.item.lastname)}`"
                 :to="{ name: 'apps-users-view', params: { id: data.item.id } }"
               />
             </template>
@@ -98,9 +98,21 @@
               :to="{ name: 'apps-users-view', params: { id: data.item.id } }"
               class="font-weight-bold d-block text-nowrap"
             >
+              {{ data.item.lastname }}
+            </b-link>
+            <small class="text-muted">@{{ data.item.lastname }}</small>
+          </b-media>
+        </template>
+
+               <template #cell(Prénom)="data">
+          <b-media vertical-align="center">
+            
+            <b-link
+              :to="{ name: 'apps-users-view', params: { id: data.item.id } }"
+              class="font-weight-bold d-block text-nowrap"
+            >
               {{ data.item.name }}
             </b-link>
-            <small class="text-muted">@{{ data.item.name }}</small>
           </b-media>
         </template>
 
@@ -130,13 +142,6 @@
             <b-dropdown-item :to="{ name: 'apps-users-edit', params: { id: data.item.id } }">
               <feather-icon icon="EditIcon" />
               <span class="align-middle ml-50">Edit</span>
-            </b-dropdown-item>
-
-            <b-dropdown-item>
-              <feather-icon icon="TrashIcon" />
-              <span class="align-middle ml-50" > delete</span>
-
-            
             </b-dropdown-item>
           </b-dropdown>
         </template>

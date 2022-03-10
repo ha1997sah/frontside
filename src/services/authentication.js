@@ -1,10 +1,13 @@
 import Api from '../services/Api.js'
-
+import router from '@/router'
 
 export default {
 
     register(credentials){
         return Api().post('register',credentials)
+    },
+    addAdmin(credentials){
+        return Api().post('addAdmin',credentials)
     },
     login(credentials){
         return Api().post('login',credentials)
@@ -12,8 +15,8 @@ export default {
     resetPassword(credentials){
         return Api().post('reset',credentials)
     },
-    confirmResetPassword(credentials){
-        return Api().post('confirmReset',credentials)
+    confirmResetPassword(credentials,id=router.currentRoute.params.id){
+        return Api().post(`confirmReset/${id}`,credentials)
     },
 
     isUniqueEmail(credentials){
@@ -50,6 +53,16 @@ export default {
 
     allNotifications() {
         return Api().get('notifications')
+    },
+
+    //competitions
+
+    allCompetitions(){
+        return Api().get('allCompetitions')
+    },
+
+    addEvent(credentials){
+        return Api().post('addEvent',credentials)
     }
 
 }

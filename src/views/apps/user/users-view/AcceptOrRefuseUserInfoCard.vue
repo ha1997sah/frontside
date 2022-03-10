@@ -30,7 +30,7 @@
         variant="outline-success"
         @click="acceptRegister"
       >
-        Success
+        Accepeter
       </b-button>
                      <b-button
         v-ripple.400="'rgba(255, 159, 67, 0.15)'"
@@ -119,10 +119,10 @@
                 icon="StarIcon"
                 class="mr-75"
               />
-              <span class="font-weight-bold">Position</span>
+              <span class="font-weight-bold">Role</span>
             </th>
             <td class="pb-50 text-capitalize">
-              {{ userData.position }}
+              {{ userData.role }}
             </td>
           </tr>
           <tr>
@@ -180,25 +180,26 @@ export default {
         refuseRegister() {
       this.$swal({
         title: 'Warning!',
-        text: ' You clicked the button!',
+        text: ' Attention! Cette action ne peut pas être annulée!',
         icon: 'warning',
         customClass: {
           confirmButton: 'btn btn-primary',
+          cancelButton: 'btn btn-primary',
         },
         buttonsStyling: false,
          showCancelButton: true,
   confirmButtonColor: '#3085d6',
   cancelButtonColor: '#d33',
-  confirmButtonText: 'Yes, delete it!',
+  confirmButtonText: 'Oui! Confirmer!',
 }).then((result) => {
   if (result.isConfirmed) {
        store.dispatch('app-user/refuseRegister')
         .then(() => {
           response => { console.log("okkk")}
          this.$swal({
-        title: 'Warning!',
-        text: ' You clicked the button!',
-        icon: 'warning',}
+        title: '!',
+        text: ' Votre action est réussi!',
+        icon: 'success',}
     )
           
 
@@ -210,25 +211,27 @@ export default {
        acceptRegister() {
       this.$swal({
         title: 'Warning!',
-        text: ' You clicked the button!',
+        text: '  Attention! Cette action ne peut pas être annulée!',
         icon: 'warning',
         customClass: {
           confirmButton: 'btn btn-primary',
+          cancelButton: 'btn btn-primary',
+
         },
         buttonsStyling: false,
          showCancelButton: true,
   confirmButtonColor: '#3085d6',
   cancelButtonColor: '#d33',
-  confirmButtonText: 'Yes, delete it!',
+  confirmButtonText: 'Oui, Accepter !',
 }).then((result) => {
   if (result.isConfirmed) {
        store.dispatch('app-user/acceptRegister')
         .then(() => {
           response => { console.log("okkk")}
          this.$swal({
-        title: 'Warning!',
-        text: ' You clicked the button!',
-        icon: 'warning',}
+        title: 'Utilisateur ajouté!',
+        text: ' Votre action est réusi!',
+        icon: 'success',}
     )
           
 

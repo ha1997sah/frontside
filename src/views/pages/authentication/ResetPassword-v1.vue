@@ -12,7 +12,7 @@
             Vuexy
           </h2>
         </b-link>
-        <b-alert v-if="success" show variant="success">you are loggedin</b-alert>
+        <b-alert v-if="success" show variant="success">Opération réussi</b-alert>
         <b-card-title class="mb-1">
           Réinitialiser le mot de passe 🔒
         </b-card-title>
@@ -77,7 +77,7 @@
         </validation-observer>
 
         <p class="text-center mt-2">
-          <b-link :to="{name:'auth-login-v1'}">
+          <b-link :to="{name:'auth-login'}">
             <feather-icon icon="ChevronLeftIcon" /> Retour au connexion
           </b-link>
         </p>
@@ -98,6 +98,7 @@ import {
 import { required } from '@validations'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 import authentication from '@/services/authentication.js'
+import router from '@/router'
 
 export default {
   components: {
@@ -141,7 +142,7 @@ export default {
        async confirmReset() {
       try{
        const response = await authentication.confirmResetPassword ({
-      password: this.password,
+      password: this.password
       })
       this.success=true
       } catch (error) {

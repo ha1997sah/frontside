@@ -165,7 +165,7 @@
 
         <b-card-text class="text-center mt-2">
           <span>Vous avez déja un compte?  </span>
-          <b-link :to="{name:'auth-login-v1'}">
+          <b-link :to="{name:'auth-login'}">
             <span>Connexion</span>
           </b-link>
         </b-card-text>
@@ -289,17 +289,15 @@ export default {
 		  position: this.position,
 		  phone: this.phone,
         })
-     localStorage.setItem("loggedInUser",JSON.stringify(response.data.user))
-     this.$router.replace(getHomeRouteForLoggedInUser("admin"))
                 .then(() => {
                   this.$toast({
                     component: ToastificationContent,
                     position: 'top-right',
                     props: {
-                      title: `Welcome ${response.data.user.name || response.data.user.lastname}`,
+                      title: 'Merci d\'avoir inscrit dans notre site',
                       icon: 'CoffeeIcon',
                       variant: 'success',
-                      text: 'You have successfully logged in as. Now you can start to explore!',
+                      text: 'Votre demande d\'inscription a été bien enregistrer nous traitons votre demande dans le bref délais',
                     },
                   })
                 })

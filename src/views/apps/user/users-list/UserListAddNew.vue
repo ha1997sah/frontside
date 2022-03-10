@@ -42,16 +42,16 @@
           <!-- Full Name -->
           <validation-provider
             #default="validationContext"
-            name="Full Name"
+            name="Nom"
             rules="required"
           >
             <b-form-group
-              label="Full Name"
-              label-for="full-name"
+              label="Nom"
+              label-for="Nom"
             >
               <b-form-input
-                id="full-name"
-                v-model="userData.fullName"
+                id="nom"
+                v-model="userData.lastname"
                 autofocus
                 :state="getValidationState(validationContext)"
                 trim
@@ -67,16 +67,16 @@
           <!-- Username -->
           <validation-provider
             #default="validationContext"
-            name="Username"
-            rules="required|alpha-num"
+            name="Prénom"
+            rules="required"
           >
             <b-form-group
-              label="Username"
-              label-for="username"
+              label="Prénom"
+              label-for="prénom"
             >
               <b-form-input
-                id="username"
-                v-model="userData.username"
+                id="prenom"
+                v-model="userData.name"
                 :state="getValidationState(validationContext)"
                 trim
               />
@@ -110,19 +110,42 @@
             </b-form-group>
           </validation-provider>
 
-          <!-- Company -->
+             <!-- password -->
           <validation-provider
             #default="validationContext"
-            name="Contact"
+            name="Password"
             rules="required"
           >
             <b-form-group
-              label="Contact"
-              label-for="contact"
+              label="Password"
+              label-for="password"
+            >
+              <b-form-input
+                id="password"
+                v-model="userData.password"
+                :state="getValidationState(validationContext)"
+                trim
+              />
+
+              <b-form-invalid-feedback>
+                {{ validationContext.errors[0] }}
+              </b-form-invalid-feedback>
+            </b-form-group>
+          </validation-provider>
+
+          <!-- Company -->
+          <validation-provider
+            #default="validationContext"
+            name="Numéro de téléphone"
+            rules="required"
+          >
+            <b-form-group
+              label="phone"
+              label-for="phone"
             >
               <b-form-input
                 id="contact"
-                v-model="userData.contact"
+                v-model="userData.phone"
                 :state="getValidationState(validationContext)"
                 trim
               />
@@ -133,62 +156,16 @@
             </b-form-group>
           </validation-provider>
 
-          <!-- Company -->
-          <validation-provider
-            #default="validationContext"
-            name="Company"
-            rules="required"
-          >
-            <b-form-group
-              label="Company"
-              label-for="company"
-            >
-              <b-form-input
-                id="company"
-                v-model="userData.company"
-                :state="getValidationState(validationContext)"
-                trim
-              />
-
-              <b-form-invalid-feedback>
-                {{ validationContext.errors[0] }}
-              </b-form-invalid-feedback>
-            </b-form-group>
-          </validation-provider>
-
-          <!-- Country -->
-          <validation-provider
-            #default="validationContext"
-            name="Country"
-            rules="required"
-          >
-            <b-form-group
-              label="Country"
-              label-for="country"
-              :state="getValidationState(validationContext)"
-            >
-              <v-select
-                v-model="userData.country"
-                :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-                :options="countries"
-                :clearable="false"
-                input-id="country"
-              />
-              <b-form-invalid-feedback :state="getValidationState(validationContext)">
-                {{ validationContext.errors[0] }}
-              </b-form-invalid-feedback>
-            </b-form-group>
-          </validation-provider>
 
           <!-- User Role -->
           <validation-provider
             #default="validationContext"
-            name="User Role"
+            name="Role"
             rules="required"
           >
             <b-form-group
-              label="User Role"
-              label-for="user-role"
+              label="Role"
+              label-for="role"
               :state="getValidationState(validationContext)"
             >
               <v-select
@@ -205,31 +182,6 @@
             </b-form-group>
           </validation-provider>
 
-          <!-- Plan -->
-          <validation-provider
-            #default="validationContext"
-            name="Plan"
-            rules="required"
-          >
-            <b-form-group
-              label="Plan"
-              label-for="plan"
-              :state="getValidationState(validationContext)"
-            >
-              <v-select
-                v-model="userData.currentPlan"
-                :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-                :options="planOptions"
-                :reduce="val => val.value"
-                :clearable="false"
-                input-id="plan"
-              />
-              <b-form-invalid-feedback :state="getValidationState(validationContext)">
-                {{ validationContext.errors[0] }}
-              </b-form-invalid-feedback>
-            </b-form-group>
-          </validation-provider>
-
           <!-- Form Actions -->
           <div class="d-flex mt-2">
             <b-button
@@ -238,7 +190,7 @@
               class="mr-2"
               type="submit"
             >
-              Add
+              Ajouter
             </b-button>
             <b-button
               v-ripple.400="'rgba(186, 191, 199, 0.15)'"
@@ -268,8 +220,13 @@ import Ripple from 'vue-ripple-directive'
 import vSelect from 'vue-select'
 import countries from '@/@fake-db/data/other/countries'
 import store from '@/store'
+import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
+import { useToast } from 'vue-toastification/composition'
+
+import authentication from '@/services/authentication.js'
 
 export default {
+
   components: {
     BSidebar,
     BForm,
@@ -310,18 +267,20 @@ export default {
       alphaNum,
       email,
       countries,
+            error:null
+
     }
   },
   setup(props, { emit }) {
+        const toast = useToast()
+
     const blankUserData = {
-      fullName: '',
-      username: '',
+      name: '',
+	    lastname: '',
+	    phone: '',
       email: '',
-      role: null,
-      currentPlan: null,
-      company: '',
-      country: '',
-      contact: '',
+      password: '',
+      role:null,
     }
 
     const userData = ref(JSON.parse(JSON.stringify(blankUserData)))
@@ -332,9 +291,18 @@ export default {
     const onSubmit = () => {
       store.dispatch('app-user/addUser', userData.value)
         .then(() => {
+             toast({
+          component: ToastificationContent,
+          props: {
+            title: 'user deleted',
+            icon: 'AlertTriangleIcon',
+            variant: 'success',
+          },
+        })
+
           emit('refetch-data')
           emit('update:is-add-new-user-sidebar-active', false)
-        })
+        }).catch({error:error.message})
     }
 
     const {
