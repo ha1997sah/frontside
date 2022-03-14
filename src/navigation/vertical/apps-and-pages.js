@@ -1,35 +1,35 @@
 export default [
   {
-    header: 'Apps & Pages',
+    header: 'Gestion',
   },
  
   {
-    title: 'Chat',
-    route: 'apps-chat',
-    icon: 'MessageSquareIcon',
+    title: 'Utilisateurs',
+    route: 'apps-users-list',
+    icon: 'UserIcon',
   },
- 
+
   {
-    title: 'Calendar',
+    title: 'Inscriptions',
+    route: 'apps-users-requests',
+    icon: 'UserCheckIcon',
+  },
+  {
+    title: 'Clubs',
+    route: 'apps-clubs-list',
+    icon: 'OctagonIcon',
+  },
+  {
+    title: 'Fédérations',
+    icon: 'GlobeIcon',
+    route: 'apps-federations-list'
+  },
+  {
+    title: 'Calendrier',
     route: 'apps-calendar',
     icon: 'CalendarIcon',
   },
 
-  {
-    title: 'User',
-    icon: 'UserIcon',
-    children: [
-      {
-        title: 'Tous les utilisateurs',
-        route: 'apps-users-list',
-      },
-      {
-        title: 'Demandes d\'inscription',
-        route: 'apps-users-requests',
-      },
-    
-    ],
-  },
 
 
 ]

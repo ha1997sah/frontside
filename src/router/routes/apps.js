@@ -231,4 +231,44 @@ export default [
     name: 'apps-invoice-edit',
     component: () => import('@/views/apps/invoice/invoice-edit/InvoiceEdit.vue'),
   },
+
+  //club
+  {
+    path: '/apps/clubs/list',
+    name: 'apps-clubs-list',
+    component: () => import('@/views/apps/club/ClubList.vue'),
+  },
+  {
+    path: '/apps/clubs/view/:id',
+    name: 'apps-clubs-view',
+    component: () => import('@/views/apps/club/ClubsView.vue'),
+  },
+  {
+    path: '/apps/clubs/edit/:id',
+    name: 'apps-clubs-edit',
+    component: () => import('@/views/apps/club/ClubsEdit.vue'),
+  },
+
+
+  {
+    path: '/apps/federations/list',
+    name: 'apps-federations-list',
+    component: () => import('@/views/apps/federation/FederationList.vue'),
+  },
+  {
+    path: '/apps/federations/view/:id',
+    name: 'apps-federations-view',
+    component: () => import('@/views/apps/federation/FederationsView.vue'),
+  },
+
+  {
+    path: '/apps/federations/view/:id',
+    name: 'apps-federations-view',
+    component: () => import('@/views/apps/federation/FederationsView.vue'),
+  },
+  {
+    path: '/apps/federations/edit/:id',
+    name: 'apps-federations-edit',
+    component: () => import('@/views/apps/federation/FederationsEdit.vue'),
+  },
 ]

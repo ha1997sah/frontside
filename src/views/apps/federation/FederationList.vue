@@ -1,14 +1,14 @@
 <template>
 
   <div>
-
-    <user-list-add-new
+    <federation-list-add-new
       :is-add-new-user-sidebar-active.sync="isAddNewUserSidebarActive"
       :role-options="roleOptions"
       :plan-options="planOptions"
       @refetch-data="refetchData"
     />
 
+   
     <!-- Filters -->
 <!--     <users-list-filters
       :role-filter.sync="roleFilter"
@@ -62,7 +62,7 @@
                 variant="primary"
                 @click="isAddNewUserSidebarActive = true"
               >
-                <span class="text-nowrap">Ajouter utilisateur</span>
+                <span class="text-nowrap">Ajouter fédération</span>
               </b-button>
             </div>
           </b-col>
@@ -73,7 +73,7 @@
       <b-table
         ref="refUserListTable"
         class="position-relative"
-        :items="fetchUsersTest"
+        :items="fetchFederations"
         responsive
         :fields="tableColumns"
         primary-key="id"
@@ -84,31 +84,30 @@
       >
 
         <!-- Column: User -->
-        <template #cell(Nom)="data">
+        <template #cell(Federation)="data">
           <b-media vertical-align="center">
-            <template #aside>
+              <template #aside>
               <b-avatar
                 size="32"
-                :text="avatarText(data.item.lastname)"
-                :variant="`light-${resolveUserRoleVariant(data.item.lastname)}`"
-                :to="{ name: 'apps-users-view', params: { id: data.item.id } }"
+                :text="avatarText(data.item.name)"
+                :variant="`light-${resolveUserRoleVariant(data.item.name)}`"
+                :to="{ name: 'apps-clubs-view', params: { id: data.item.id } }"
               />
             </template>
             <b-link
-              :to="{ name: 'apps-users-view', params: { id: data.item.id } }"
+              :to="{ name: 'apps-federations-view', params: { id: data.item.id } }"
               class="font-weight-bold d-block text-nowrap"
             >
-              {{ data.item.lastname }}
+              {{ data.item.name }}
             </b-link>
-            <small class="text-muted">@{{ data.item.lastname }}</small>
           </b-media>
         </template>
 
-               <template #cell(Prénom)="data">
+               <template #cell(Pays)="data">
           <b-media vertical-align="center">
             
             <b-link
-              :to="{ name: 'apps-users-view', params: { id: data.item.id } }"
+              :to="{ name: 'apps-federations-view', params: { id: data.item.id } }"
               class="font-weight-bold d-block text-nowrap"
             >
               {{ data.item.name }}
@@ -134,15 +133,11 @@
                 class="align-middle text-body"
               />
             </template>
-            <b-dropdown-item :to="{ name: 'apps-users-view', params: { id: data.item.id } }">
+            <b-dropdown-item :to="{ name: 'apps-federations-view', params: { id: data.item.id } }">
               <feather-icon icon="FileTextIcon" />
               <span class="align-middle ml-50">Détailes</span>
             </b-dropdown-item>
 
-            <b-dropdown-item :to="{ name: 'apps-users-edit', params: { id: data.item.id } }">
-              <feather-icon icon="EditIcon" />
-              <span class="align-middle ml-50">Modifier</span>
-            </b-dropdown-item>
           </b-dropdown>
         </template>
     
@@ -196,7 +191,6 @@
     </b-card>
   </div>
 </template>
-
 <script>
 import {
   BCard, BRow, BCol, BFormInput, BButton, BTable, BMedia, BAvatar, BLink,
@@ -206,14 +200,11 @@ import vSelect from 'vue-select'
 import store from '@/store'
 import { ref, onUnmounted } from '@vue/composition-api'
 import { avatarText } from '@core/utils/filter'
-import UsersListFilters from './UsersListFilters.vue'
-import useUsersList from './useUsersList'
-import userStoreModule from '../userStoreModule'
-import UserListAddNew from './UserListAddNew.vue'
+import useFederationsList from './useFederationsList'
+import federationStoreModule from './federationStoreModule'
+import FederationListAddNew from './FederationListAddNew'
 export default {
   components: {
-    UsersListFilters,
-    UserListAddNew,
     BCard,
     BRow,
     BCol,
@@ -228,16 +219,16 @@ export default {
     BDropdownItem,
     BPagination,
     vSelect,
+    FederationListAddNew,
   },
   setup() {
-    const USER_APP_STORE_MODULE_NAME = 'app-user'
+    const FEDERATION_APP_STORE_MODULE_NAME = 'app-federation'
     // Register module
-    if (!store.hasModule(USER_APP_STORE_MODULE_NAME)) store.registerModule(USER_APP_STORE_MODULE_NAME, userStoreModule)
+    if (!store.hasModule(FEDERATION_APP_STORE_MODULE_NAME)) store.registerModule(FEDERATION_APP_STORE_MODULE_NAME, federationStoreModule)
     // UnRegister on leave
     onUnmounted(() => {
-      if (store.hasModule(USER_APP_STORE_MODULE_NAME)) store.unregisterModule(USER_APP_STORE_MODULE_NAME)
+      if (store.hasModule(FEDERATION_APP_STORE_MODULE_NAME)) store.unregisterModule(FEDERATION_APP_STORE_MODULE_NAME)
     })
-     
     const isAddNewUserSidebarActive = ref(false)
     const roleOptions = [
       { label: 'Admin', value: 'admin' },
@@ -258,8 +249,7 @@ export default {
       { label: 'Inactive', value: 'inactive' },
     ]
     const {
-      fetchUsersTest,
-      fetchUsers,
+     
       tableColumns,
       perPage,
       currentPage,
@@ -279,13 +269,14 @@ export default {
       roleFilter,
       planFilter,
       statusFilter,
-    } = useUsersList()
+      fetchFederations
+    } = useFederationsList()
   
     return {
       // Sidebar
       isAddNewUserSidebarActive,
-      fetchUsersTest,
-      fetchUsers,
+      fetchFederations,
+     
       tableColumns,
       perPage,
       currentPage,

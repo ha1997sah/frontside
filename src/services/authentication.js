@@ -46,8 +46,8 @@ export default {
     },
 
     deleteUser(id){
-        return Api().delete(`delete/${id}`)
-    },
+     return Api().delete(`delete/${id}`)
+    },   
 
     // Notifications
 
@@ -63,6 +63,45 @@ export default {
 
     addEvent(credentials){
         return Api().post('addEvent',credentials)
-    }
+    },
+    allClubs(){
+        return Api().get('allClubs')
+    },
+    addClub(credentials){
+        return Api().post('createClub',credentials)
+    },
 
+    findClubById(id){
+        return Api().get(`club/${id}`)
+    },
+     
+    editClub(credentials,id){
+        return Api().put(`editClub/${id}`,credentials)
+    },
+
+    deleteClub(id){
+        return Api().delete(`deleteClub/${id}`)
+       }, 
+
+    // Federtions
+
+    allFederations(){
+        return Api().get('allFederations')
+    },
+
+    addFederation(credentials){
+        return Api().post('createFederation',credentials)
+    },
+
+    findFederationById(id){
+        return Api().get(`Federation/${id}`)
+    },
+     
+    editFederation(credentials,id){
+        return Api().put(`editFederation/${id}`,credentials)
+    },
+
+    deleteFederation(id){
+        return Api().delete(`deleteFederation/${id}`)
+       }, 
 }

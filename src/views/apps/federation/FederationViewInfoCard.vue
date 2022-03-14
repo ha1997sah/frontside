@@ -12,25 +12,20 @@
         <!-- User Avatar & Action Buttons -->
         <div class="d-flex justify-content-start">
           <b-avatar
-            :text="avatarText(userData.fullName)"
-            :variant="`light-${resolveUserRoleVariant(userData.fullName)}`"
+            :text="avatarText(federationData.fullName)"
+            :variant="`light-${resolveUserRoleVariant(federationData.fullName)}`"
             size="104px"
             rounded
           />
           <div class="d-flex flex-column ml-1">
             <div class="mb-1">
               <h4 class="mb-0">
-                {{ userData.name }}
+                {{ federationData.name }}
               </h4>
-              <span class="card-text">{{ userData.name }} {{ userData.lastname }} </span>
+              <span class="card-text">{{ federationData.name }} {{ federationData.lastname }} </span>
             </div>
             <div class="d-flex flex-wrap">
-              <b-button
-                :to="{ name: 'apps-users-edit', params: { id: userData.id } }"
-                variant="primary"
-              >
-                Edit
-              </b-button>
+              
               <b-button
                 variant="outline-danger"
                 class="ml-1"
@@ -39,35 +34,6 @@
                 Supprimer
               </b-button>
             </div>
-          </div>
-        </div>
-
-        <!-- User Stats -->
-        <div class="d-flex align-items-center mt-2">
-          <div class="d-flex align-items-center mr-2">
-            <b-avatar
-              variant="light-primary"
-              rounded
-            >
-              <feather-icon
-                icon="DollarSignIcon"
-                size="18"
-              />
-            </b-avatar>
-           
-          </div>
-
-          <div class="d-flex align-items-center">
-            <b-avatar
-              variant="light-success"
-              rounded
-            >
-              <feather-icon
-                icon="TrendingUpIcon"
-                size="18"
-              />
-            </b-avatar>
-          
           </div>
         </div>
       </b-col>
@@ -81,37 +47,26 @@
           <tr>
             <th class="pb-50">
               <feather-icon
-                icon="UserIcon"
+                icon="StarIcon"
                 class="mr-75"
               />
-              <span class="font-weight-bold">Nom</span>
+              <span class="font-weight-bold">Adresse</span>
             </th>
-            <td class="pb-50">
-              {{ userData.lastname }}
+            <td class="pb-50 text-capitalize">
+              {{ federationData.adress }}
             </td>
           </tr>
           <tr>
-            <th class="pb-50">
-              <feather-icon
-                icon="CheckIcon"
-                class="mr-75"
-              />
-              <span class="font-weight-bold">Prénom</span>
-            </th>
-            <td class="pb-50 text-capitalize">
-              {{ userData.name }}
-            </td>
-          </tr>
           <tr>
             <th class="pb-50">
               <feather-icon
                 icon="StarIcon"
                 class="mr-75"
               />
-              <span class="font-weight-bold">Position</span>
+              <span class="font-weight-bold">Adresse</span>
             </th>
             <td class="pb-50 text-capitalize">
-              {{ userData.position }}
+              {{ federationData.adress }}
             </td>
           </tr>
           <tr>
@@ -120,10 +75,10 @@
                 icon="FlagIcon"
                 class="mr-75"
               />
-              <span class="font-weight-bold">Email</span>
+              <span class="font-weight-bold">Responsable</span>
             </th>
             <td class="pb-50">
-              {{ userData.email }}
+              {{ federationData.managerFullName }}
             </td>
           </tr>
           <tr>
@@ -135,7 +90,7 @@
               <span class="font-weight-bold">Contact</span>
             </th>
             <td>
-              {{ userData.phone }}
+              {{ federationData.phone }}
             </td>
           </tr>
         </table>
@@ -155,20 +110,20 @@ import {
   BCard, BButton, BAvatar, BRow, BCol,
 } from 'bootstrap-vue'
 import { avatarText } from '@core/utils/filter'
-import useUsersList from '../users-list/useUsersList'
+import useFederationsList from './useFederationsList'
 
 export default {
   components: {
     BCard, BButton, BRow, BCol, BAvatar,
   },
   props: {
-    userData: {
+    federationData: {
       type: Object,
       required: true,
     },
   },
   setup() {
-    const { resolveUserRoleVariant,handleOk } = useUsersList()
+    const { resolveUserRoleVariant,handleOk } = useFederationsList()
   
     return {
       avatarText,

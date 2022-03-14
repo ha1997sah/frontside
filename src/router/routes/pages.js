@@ -10,22 +10,22 @@ export default [
     },
   },
   {
-    path: '/login1',
-    name: 'auth-login1',
-    component: () => import('@/views/pages/authentication/Login.vue'),
-    meta: {
-      layout: 'full',
-     
-    },
-  },
-  {
     path: '/login',
     name: 'auth-login',
-    component: () => import('@/views/pages/authentication/Login-v1.vue'),
+    component: () => import('@/views/pages/authentication/Login.vue'),
     meta: {
       layout: 'full',
       resource: 'Auth',
       redirectIfLoggedIn: true,
+    },
+  },
+  {
+    path: '/login1',
+    name: 'auth-login1',
+    component: () => import('@/views/pages/authentication/Login-v1.vue'),
+    meta: {
+      layout: 'full',
+     
     },
   },
 

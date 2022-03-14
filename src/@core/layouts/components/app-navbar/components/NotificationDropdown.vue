@@ -6,8 +6,7 @@
   >
     <template #button-content>
       <feather-icon
-        badge="6"
-        badge-classes="bg-danger"
+        
         class="text-body"
         icon="BellIcon"
         size="21"
@@ -20,12 +19,12 @@
         <h4 class="notification-title mb-0 mr-auto">
           Notifications
         </h4>
-        <b-badge
+    <!--     <b-badge
           pill
           variant="light-primary"
         >
           6 New
-        </b-badge>
+        </b-badge> -->
       </div>
     </li>
 

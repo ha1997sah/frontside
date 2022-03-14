@@ -12,25 +12,19 @@
         <!-- User Avatar & Action Buttons -->
         <div class="d-flex justify-content-start">
           <b-avatar
-            :text="avatarText(userData.fullName)"
-            :variant="`light-${resolveUserRoleVariant(userData.fullName)}`"
+            :text="avatarText(clubData.name)"
+            :variant="`light-${resolveUserRoleVariant(clubData.name)}`"
             size="104px"
             rounded
           />
           <div class="d-flex flex-column ml-1">
             <div class="mb-1">
               <h4 class="mb-0">
-                {{ userData.name }}
+                {{ clubData.name }}
               </h4>
-              <span class="card-text">{{ userData.name }} {{ userData.lastname }} </span>
+              <span class="card-text">{{ clubData.country }} </span>
             </div>
             <div class="d-flex flex-wrap">
-              <b-button
-                :to="{ name: 'apps-users-edit', params: { id: userData.id } }"
-                variant="primary"
-              >
-                Edit
-              </b-button>
               <b-button
                 variant="outline-danger"
                 class="ml-1"
@@ -39,35 +33,6 @@
                 Supprimer
               </b-button>
             </div>
-          </div>
-        </div>
-
-        <!-- User Stats -->
-        <div class="d-flex align-items-center mt-2">
-          <div class="d-flex align-items-center mr-2">
-            <b-avatar
-              variant="light-primary"
-              rounded
-            >
-              <feather-icon
-                icon="DollarSignIcon"
-                size="18"
-              />
-            </b-avatar>
-           
-          </div>
-
-          <div class="d-flex align-items-center">
-            <b-avatar
-              variant="light-success"
-              rounded
-            >
-              <feather-icon
-                icon="TrendingUpIcon"
-                size="18"
-              />
-            </b-avatar>
-          
           </div>
         </div>
       </b-col>
@@ -81,37 +46,25 @@
           <tr>
             <th class="pb-50">
               <feather-icon
-                icon="UserIcon"
+                icon="StarIcon"
                 class="mr-75"
               />
-              <span class="font-weight-bold">Nom</span>
-            </th>
-            <td class="pb-50">
-              {{ userData.lastname }}
-            </td>
-          </tr>
-          <tr>
-            <th class="pb-50">
-              <feather-icon
-                icon="CheckIcon"
-                class="mr-75"
-              />
-              <span class="font-weight-bold">Prénom</span>
+              <span class="font-weight-bold">Responsable</span>
             </th>
             <td class="pb-50 text-capitalize">
-              {{ userData.name }}
+              {{ clubData.managerfullName }}
             </td>
           </tr>
-          <tr>
+            <tr>
             <th class="pb-50">
               <feather-icon
                 icon="StarIcon"
                 class="mr-75"
               />
-              <span class="font-weight-bold">Position</span>
+              <span class="font-weight-bold">Adresse</span>
             </th>
             <td class="pb-50 text-capitalize">
-              {{ userData.position }}
+              {{ clubData.adress }}
             </td>
           </tr>
           <tr>
@@ -120,10 +73,10 @@
                 icon="FlagIcon"
                 class="mr-75"
               />
-              <span class="font-weight-bold">Email</span>
+              <span class="font-weight-bold">E-mail</span>
             </th>
             <td class="pb-50">
-              {{ userData.email }}
+              {{ clubData.email }}
             </td>
           </tr>
           <tr>
@@ -135,7 +88,7 @@
               <span class="font-weight-bold">Contact</span>
             </th>
             <td>
-              {{ userData.phone }}
+              {{ clubData.phone }}
             </td>
           </tr>
         </table>
@@ -155,20 +108,20 @@ import {
   BCard, BButton, BAvatar, BRow, BCol,
 } from 'bootstrap-vue'
 import { avatarText } from '@core/utils/filter'
-import useUsersList from '../users-list/useUsersList'
+import useClubsList from './useClubsList'
 
 export default {
   components: {
     BCard, BButton, BRow, BCol, BAvatar,
   },
   props: {
-    userData: {
+    clubData: {
       type: Object,
       required: true,
     },
   },
   setup() {
-    const { resolveUserRoleVariant,handleOk } = useUsersList()
+    const { resolveUserRoleVariant,handleOk } = useClubsList()
   
     return {
       avatarText,

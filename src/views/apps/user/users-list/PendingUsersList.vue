@@ -1,23 +1,23 @@
 <template>
 
   <div>
-
+<!-- 
     <user-list-add-new
       :is-add-new-user-sidebar-active.sync="isAddNewUserSidebarActive"
       :role-options="roleOptions"
       :plan-options="planOptions"
       @refetch-data="refetchData"
-    />
+    /> -->
 
     <!-- Filters -->
-    <users-list-filters
+<!--     <users-list-filters
       :role-filter.sync="roleFilter"
       :plan-filter.sync="planFilter"
       :status-filter.sync="statusFilter"
       :role-options="roleOptions"
       :plan-options="planOptions"
       :status-options="statusOptions"
-    />
+    /> -->
 
     <!-- Table Container Card -->
     <b-card
@@ -58,12 +58,12 @@
                 class="d-inline-block mr-1"
                 placeholder="Search..."
               />
-              <b-button
+             <!--  <b-button
                 variant="primary"
                 @click="isAddNewUserSidebarActive = true"
               >
                 <span class="text-nowrap">Add User</span>
-              </b-button>
+              </b-button> -->
             </div>
           </b-col>
         </b-row>

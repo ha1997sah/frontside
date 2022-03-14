@@ -2,13 +2,12 @@
 
   <div>
 
-    <user-list-add-new
+     <club-list-add-new
       :is-add-new-user-sidebar-active.sync="isAddNewUserSidebarActive"
       :role-options="roleOptions"
       :plan-options="planOptions"
       @refetch-data="refetchData"
     />
-
     <!-- Filters -->
 <!--     <users-list-filters
       :role-filter.sync="roleFilter"
@@ -62,7 +61,7 @@
                 variant="primary"
                 @click="isAddNewUserSidebarActive = true"
               >
-                <span class="text-nowrap">Ajouter utilisateur</span>
+                <span class="text-nowrap">Ajouter club</span>
               </b-button>
             </div>
           </b-col>
@@ -73,7 +72,7 @@
       <b-table
         ref="refUserListTable"
         class="position-relative"
-        :items="fetchUsersTest"
+        :items="fetchClubs"
         responsive
         :fields="tableColumns"
         primary-key="id"
@@ -84,31 +83,18 @@
       >
 
         <!-- Column: User -->
-        <template #cell(Nom)="data">
+        <template #cell(Club)="data">
           <b-media vertical-align="center">
             <template #aside>
               <b-avatar
                 size="32"
-                :text="avatarText(data.item.lastname)"
-                :variant="`light-${resolveUserRoleVariant(data.item.lastname)}`"
-                :to="{ name: 'apps-users-view', params: { id: data.item.id } }"
+                :text="avatarText(data.item.name)"
+                :variant="`light-${resolveUserRoleVariant(data.item.name)}`"
+                :to="{ name: 'apps-clubs-view', params: { id: data.item.id } }"
               />
             </template>
             <b-link
-              :to="{ name: 'apps-users-view', params: { id: data.item.id } }"
-              class="font-weight-bold d-block text-nowrap"
-            >
-              {{ data.item.lastname }}
-            </b-link>
-            <small class="text-muted">@{{ data.item.lastname }}</small>
-          </b-media>
-        </template>
-
-               <template #cell(Prénom)="data">
-          <b-media vertical-align="center">
-            
-            <b-link
-              :to="{ name: 'apps-users-view', params: { id: data.item.id } }"
+              :to="{ name: 'apps-clubs-view', params: { id: data.item.id } }"
               class="font-weight-bold d-block text-nowrap"
             >
               {{ data.item.name }}
@@ -116,9 +102,28 @@
           </b-media>
         </template>
 
-        <!-- Column: Role -->
-    
-
+               <template #cell(Pays)="data">
+          <b-media vertical-align="center">
+            
+            <b-link
+              :to="{ name: 'apps-clubs-view', params: { id: data.item.id } }"
+              class="font-weight-bold d-block text-nowrap"
+            >
+              {{ data.item.name }}
+            </b-link>
+          </b-media>
+        </template>
+            <template #cell(Responsable)="data">
+          <b-media vertical-align="center">
+            
+            <b-link
+              :to="{ name: 'apps-clubs-view', params: { id: data.item.id } }"
+              class="font-weight-bold d-block text-nowrap"
+            >
+              {{ data.item.managerfullName }}
+            </b-link>
+          </b-media>
+        </template>
         <!-- Column: Actions -->
            <template #cell(actions)="data">
           <b-dropdown
@@ -126,7 +131,6 @@
             no-caret
             :right="$store.state.appConfig.isRTL"
           >
-
             <template #button-content>
               <feather-icon
                 icon="MoreVerticalIcon"
@@ -134,14 +138,9 @@
                 class="align-middle text-body"
               />
             </template>
-            <b-dropdown-item :to="{ name: 'apps-users-view', params: { id: data.item.id } }">
+            <b-dropdown-item :to="{ name: 'apps-clubs-view', params: { id: data.item.id } }">
               <feather-icon icon="FileTextIcon" />
               <span class="align-middle ml-50">Détailes</span>
-            </b-dropdown-item>
-
-            <b-dropdown-item :to="{ name: 'apps-users-edit', params: { id: data.item.id } }">
-              <feather-icon icon="EditIcon" />
-              <span class="align-middle ml-50">Modifier</span>
             </b-dropdown-item>
           </b-dropdown>
         </template>
@@ -196,7 +195,6 @@
     </b-card>
   </div>
 </template>
-
 <script>
 import {
   BCard, BRow, BCol, BFormInput, BButton, BTable, BMedia, BAvatar, BLink,
@@ -206,14 +204,12 @@ import vSelect from 'vue-select'
 import store from '@/store'
 import { ref, onUnmounted } from '@vue/composition-api'
 import { avatarText } from '@core/utils/filter'
-import UsersListFilters from './UsersListFilters.vue'
-import useUsersList from './useUsersList'
-import userStoreModule from '../userStoreModule'
-import UserListAddNew from './UserListAddNew.vue'
+import useClubsList from './useClubsList'
+import clubStoreModule from './clubStoreModule'
+import ClubListAddNew from './ClubListAddNew.vue'
+
 export default {
   components: {
-    UsersListFilters,
-    UserListAddNew,
     BCard,
     BRow,
     BCol,
@@ -228,16 +224,16 @@ export default {
     BDropdownItem,
     BPagination,
     vSelect,
+    ClubListAddNew,
   },
   setup() {
-    const USER_APP_STORE_MODULE_NAME = 'app-user'
+    const CLUB_APP_STORE_MODULE_NAME = 'app-club'
     // Register module
-    if (!store.hasModule(USER_APP_STORE_MODULE_NAME)) store.registerModule(USER_APP_STORE_MODULE_NAME, userStoreModule)
+    if (!store.hasModule(CLUB_APP_STORE_MODULE_NAME)) store.registerModule(CLUB_APP_STORE_MODULE_NAME, clubStoreModule)
     // UnRegister on leave
     onUnmounted(() => {
-      if (store.hasModule(USER_APP_STORE_MODULE_NAME)) store.unregisterModule(USER_APP_STORE_MODULE_NAME)
+      if (store.hasModule(CLUB_APP_STORE_MODULE_NAME)) store.unregisterModule(CLUB_APP_STORE_MODULE_NAME)
     })
-     
     const isAddNewUserSidebarActive = ref(false)
     const roleOptions = [
       { label: 'Admin', value: 'admin' },
@@ -258,8 +254,8 @@ export default {
       { label: 'Inactive', value: 'inactive' },
     ]
     const {
-      fetchUsersTest,
-      fetchUsers,
+     
+      fetchClubs,
       tableColumns,
       perPage,
       currentPage,
@@ -279,13 +275,13 @@ export default {
       roleFilter,
       planFilter,
       statusFilter,
-    } = useUsersList()
+    } = useClubsList()
   
     return {
       // Sidebar
       isAddNewUserSidebarActive,
-      fetchUsersTest,
-      fetchUsers,
+      fetchClubs,
+     
       tableColumns,
       perPage,
       currentPage,
