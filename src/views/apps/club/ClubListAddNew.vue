@@ -133,7 +133,7 @@
           <validation-provider
             #default="validationContext"
             name="E-mail"
-            rules="required"
+            rules="required|email"
           >
             <b-form-group
               label="E-mail"
@@ -168,6 +168,29 @@
               />
 
               <b-form-invalid-feedback>
+                {{ validationContext.errors[0] }}
+              </b-form-invalid-feedback>
+            </b-form-group>
+          </validation-provider>
+          <!-- User Role -->
+          <validation-provider
+            #default="validationContext"
+            name="Role"
+            rules="required"
+          >
+            <b-form-group
+              label="Fédération"
+              label-for="role"
+              :state="getValidationState(validationContext)"
+            >
+              <v-select
+              v-model="FederationId"
+                :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
+                :options="roleOptions"
+                :clearable="false"
+                input-id="club-fed"
+              />
+              <b-form-invalid-feedback :state="getValidationState(validationContext)">
                 {{ validationContext.errors[0] }}
               </b-form-invalid-feedback>
             </b-form-group>
@@ -259,7 +282,8 @@ export default {
       email,
       location,
       countries,
-      error:null
+      error:null,
+
 
     }
   },
@@ -275,12 +299,14 @@ export default {
       role:null,
       error:null,
     }
+    const FederationId= ref(null)
+
 
     const clubData = ref(JSON.parse(JSON.stringify(blankclubData)))
     const resetclubData = () => {
       clubData.value = JSON.parse(JSON.stringify(blankclubData))
     }
-
+      
     const onSubmit = () => {
       store.dispatch('app-club/addClub', clubData.value)
         .then(() => {
@@ -307,7 +333,6 @@ export default {
     return {
       clubData,
       onSubmit,
-
       refFormObserver,
       getValidationState,
       resetForm,

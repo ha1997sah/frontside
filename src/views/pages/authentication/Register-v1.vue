@@ -61,6 +61,7 @@
                 <small class="text-danger">{{ errors[0] }}</small>
               </validation-provider>
             </b-form-group>
+       
 
             <!-- phone -->
              <b-form-group
@@ -137,18 +138,80 @@
                 <small class="text-danger">{{ errors[0] }}</small>
               </validation-provider>
             </b-form-group>
-
-            <!-- checkbox -->
-            <b-form-group>
-              <b-form-checkbox
-                id="register-privacy-policy"
-                v-model="status"
-                name="checkbox-1"
+             <b-form-group
+              label="Niveau"
+              label-for="niveau"
+            >
+              <validation-provider
+                #default="{ errors }"
+                name="phone"
+                rules="required|min:8"
               >
-                I agree to
-                <b-link>privacy policy & terms</b-link>
-              </b-form-checkbox>
+                <b-form-input
+                  id="phone"
+                  v-model="phone"
+                  :state="errors.length > 0 ? false:null"
+                  name="register-phone"
+                />
+                <small class="text-danger">{{ errors[0] }}</small>
+              </validation-provider>
             </b-form-group>
+             <b-form-group
+              label="Poids"
+              label-for="weight"
+            >
+              <validation-provider
+                #default="{ errors }"
+                name="weight"
+                rules="required"
+              >
+                <b-form-input
+                  id="weight"
+                  v-model="weight"
+                  :state="errors.length > 0 ? false:null"
+                  name="register-weight"
+                />
+                <small class="text-danger">{{ errors[0] }}</small>
+              </validation-provider>
+            </b-form-group>
+             <b-form-group
+              label="Longeur"
+              label-for="height"
+            >
+              <validation-provider
+                #default="{ errors }"
+                name="height"
+                rules="required"
+              >
+                <b-form-input
+                  id="height"
+                  v-model="height"
+                  :state="errors.length > 0 ? false:null"
+                  name="register-height"
+                />
+                <small class="text-danger">{{ errors[0] }}</small>
+              </validation-provider>
+            </b-form-group>
+             <b-form-group
+              label="Ceinture"
+              label-for="belt"
+            >
+              <validation-provider
+                #default="{ errors }"
+                name="belt"
+                rules="required"
+              >
+                <b-form-input
+                  id="belt"
+                  v-model="belt"
+                  :state="errors.length > 0 ? false:null"
+                  name="register-belt"
+                />
+                <small class="text-danger">{{ errors[0] }}</small>
+              </validation-provider>
+            </b-form-group>
+            
+            
 
             <!-- submit button -->
             <b-button
@@ -214,7 +277,7 @@ import { ValidationProvider, ValidationObserver, extend } from 'vee-validate'
 import {mapState} from 'vuex'
 
 import {
-  BCard, BLink, BCardTitle, BCardText, BForm,
+  BCard, BLink, BCardTitle, BCardText, BForm,BFormInvalidFeedback,
   BButton, BFormInput, BFormGroup, BInputGroup, BInputGroupAppend, BFormCheckbox, BAlert
 } from 'bootstrap-vue'
 import VuexyLogo from '@core/layouts/components/Logo.vue'
@@ -224,12 +287,16 @@ import ToastificationContent from '@core/components/toastification/Toastificatio
 import authentication from '@/services/authentication.js'
 import { password } from '@/@core/utils/validations/validations'
 import { getHomeRouteForLoggedInUser } from '@/auth/utils'
-
+import vSelect from 'vue-select'
+import flatPickr from 'vue-flatpickr-component'
 
 export default {
   components: {
     VuexyLogo,
     BAlert,
+    BFormInvalidFeedback,
+    vSelect,
+    flatPickr,
     // BSV
     BCard,
     BLink,
@@ -255,6 +322,11 @@ export default {
 	    phone: '',
       email: '',
       password: '',
+      weight:'',
+      height:'',
+      belt:'',
+      birthDate:'',
+      certification:'',
       error: null,
       success:false,
 
@@ -286,8 +358,10 @@ export default {
       password: this.password,
 		  name: this.name,
 		  lastname: this.lastname,
-		  position: this.position,
 		  phone: this.phone,
+      weight:this.weight,
+      height:this.height,
+      belt:this.belt,
         })
                 .then(() => {
                   this.$toast({

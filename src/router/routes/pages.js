@@ -46,8 +46,7 @@ export default [
     component: () => import('@/views/pages/authentication/Register-v1.vue'),
     meta: {
       layout: 'full',
-      resource: 'Auth',
-      redirectIfLoggedIn: true,
+
     },
   },
 

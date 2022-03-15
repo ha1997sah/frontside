@@ -235,8 +235,9 @@ export default {
       if (store.hasModule(CLUB_APP_STORE_MODULE_NAME)) store.unregisterModule(CLUB_APP_STORE_MODULE_NAME)
     })
     const isAddNewUserSidebarActive = ref(false)
+
     const roleOptions = [
-      { label: 'Admin', value: 'admin' },
+      { label: 'Fédération tunisienne de karaté', value: '1' },
       { label: 'Author', value: 'author' },
       { label: 'Editor', value: 'editor' },
       { label: 'Maintainer', value: 'maintainer' },

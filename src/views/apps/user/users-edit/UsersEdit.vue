@@ -34,7 +34,7 @@
             size="16"
             class="mr-0 mr-sm-50"
           />
-          <span class="d-none d-sm-inline">Modifier votre compte</span>
+          <span class="d-none d-sm-inline">Modifier les informtions </span>
         </template>
           <div>
 
@@ -183,12 +183,59 @@
           md="4"
         >
           <b-form-group
-            label="Company"
-            label-for="company"
+            label="Club"
+            label-for="club"
           >
             <b-form-input
-              id="company"
-              v-model="userData.company"
+              id="club"
+              v-model="user.ClubId"
+            />
+          </b-form-group>
+        </b-col>
+
+      </b-row>
+      <b-row>
+        <b-col
+          cols="12"
+          md="4"
+        >
+          <b-form-group
+            label="Poids"
+            label-for="poids"
+          >
+            <b-form-input
+              id="weight"
+              v-model="user.weight"
+            />
+          </b-form-group>
+        </b-col>
+
+         <b-col
+          cols="12"
+          md="4"
+        >
+          <b-form-group
+            label="Taille"
+            label-for="taille"
+          >
+            <b-form-input
+              id="height"
+              v-model="user.height"
+            />
+          </b-form-group>
+        </b-col>
+
+        <b-col
+          cols="12"
+          md="4"
+        >
+          <b-form-group
+            label="Ceinture"
+            label-for="ceinture"
+          >
+            <b-form-input
+              id="belt"
+              v-model="user.belt"
             />
           </b-form-group>
         </b-col>
@@ -206,14 +253,14 @@
    class="mb-1 mb-sm-0 mr-0 mr-sm-1"
       :block="$store.getters['app/currentBreakPoint'] === 'xs'"
     >
-      Save Changes
+      Modifier
     </b-button>
     <b-button
       variant="outline-secondary"
       type="reset"
       :block="$store.getters['app/currentBreakPoint'] === 'xs'"
     >
-      Reset
+      Effacer
     </b-button>
   </div>
        
@@ -344,7 +391,8 @@ export default {
              toast({
             component: ToastificationContent,
             props: {
-              title: 'user modified',
+              title: 'Operation réussi',
+              text:"les informations ont été modifiées avec succès",
               icon: 'AlertTriangleIcon',
               variant: 'success',
             },

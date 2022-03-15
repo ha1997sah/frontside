@@ -110,12 +110,36 @@
               :to="{ name: 'apps-federations-view', params: { id: data.item.id } }"
               class="font-weight-bold d-block text-nowrap"
             >
-              {{ data.item.name }}
+              {{ data.item.country }}
+            </b-link>
+          </b-media>
+        </template>
+        
+               <template #cell(Contact)="data">
+          <b-media vertical-align="center">
+            
+            <b-link
+              :to="{ name: 'apps-federations-view', params: { id: data.item.id } }"
+              class="font-weight-bold d-block text-nowrap"
+            >
+              {{ data.item.email }}
             </b-link>
           </b-media>
         </template>
 
+
         <!-- Column: Role -->
+           <template #cell(Responsable)="data">
+          <b-media vertical-align="center">
+            
+            <b-link
+              :to="{ name: 'apps-federations-view', params: { id: data.item.id } }"
+              class="font-weight-bold d-block text-nowrap"
+            >
+              {{ data.item.managerfullName }}
+            </b-link>
+          </b-media>
+        </template>
     
 
         <!-- Column: Actions -->

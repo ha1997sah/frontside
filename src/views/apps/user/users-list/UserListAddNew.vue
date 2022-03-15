@@ -171,7 +171,7 @@
               <v-select
                 v-model="userData.role"
                 :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-                :options="roleOptions"
+                :options="fedOptions"
                 :reduce="val => val.value"
                 :clearable="false"
                 input-id="user-role"
@@ -314,7 +314,6 @@ export default {
     return {
       userData,
       onSubmit,
-
       refFormObserver,
       getValidationState,
       resetForm,

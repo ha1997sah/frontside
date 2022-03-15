@@ -333,7 +333,8 @@ export default {
              toast({
             component: ToastificationContent,
             props: {
-              title: 'user modified',
+            title: 'Operation réussi',
+              text:"les informations ont été modifiées avec succès",
               icon: 'AlertTriangleIcon',
               variant: 'success',
             },

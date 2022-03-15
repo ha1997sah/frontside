@@ -17,7 +17,9 @@ export default function useFederationsList() {
   const tableColumns = [
     { key: 'Federation', sortable: true },
     { key: 'Pays', sortable: true },
+    { key: 'Contact', sortable: true },
     { key: 'Responsable', sortable: true },
+
     { key: 'actions' },
   ]
   const perPage = ref(10)

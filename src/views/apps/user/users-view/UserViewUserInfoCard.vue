@@ -6,7 +6,7 @@
       <!-- User Info: Left col -->
       <b-col
         cols="21"
-        xl="6"
+        xl="4"
         class="d-flex justify-content-between flex-column"
       >
         <!-- User Avatar & Action Buttons -->
@@ -25,12 +25,7 @@
               <span class="card-text">{{ userData.name }} {{ userData.lastname }} </span>
             </div>
             <div class="d-flex flex-wrap">
-              <b-button
-                :to="{ name: 'apps-users-edit', params: { id: userData.id } }"
-                variant="primary"
-              >
-                Edit
-              </b-button>
+              
               <b-button
                 variant="outline-danger"
                 class="ml-1"
@@ -75,7 +70,7 @@
       <!-- Right Col: Table -->
       <b-col
         cols="12"
-        xl="6"
+        xl="4"
       >
         <table class="mt-2 mt-xl-0 w-100">
           <tr>
@@ -108,7 +103,7 @@
                 icon="StarIcon"
                 class="mr-75"
               />
-              <span class="font-weight-bold">Position</span>
+              <span class="font-weight-bold">Role</span>
             </th>
             <td class="pb-50 text-capitalize">
               {{ userData.position }}
@@ -138,6 +133,62 @@
               {{ userData.phone }}
             </td>
           </tr>
+        </table>
+      </b-col>
+      <b-col
+        cols="12"
+        xl="4"
+      >
+        <table class="mt-2 mt-xl-0 w-100">
+          <tr>
+            <th class="pb-50">
+              <feather-icon
+                icon="UserIcon"
+                class="mr-75"
+              />
+              <span class="font-weight-bold">Poids</span>
+            </th>
+            <td class="pb-50">
+              {{ userData.weight }}
+            </td>
+          </tr>
+          <tr>
+            <th class="pb-50">
+              <feather-icon
+                icon="CheckIcon"
+                class="mr-75"
+              />
+              <span class="font-weight-bold">Taille</span>
+            </th>
+            <td class="pb-50 text-capitalize">
+              {{ userData.height }}
+            </td>
+          </tr>
+          <tr>
+            <th class="pb-50">
+              <feather-icon
+                icon="AwardIcon"
+                class="mr-75"
+              />
+              <span class="font-weight-bold">Ceinture</span>
+            </th>
+            <td class="pb-50 text-capitalize">
+              {{ userData.belt }}
+            </td>
+          </tr>
+          <tr>
+            <th class="pb-50">
+              <feather-icon
+                icon="FileMinusIcon"
+                class="mr-75"
+              />
+              <span class="font-weight-bold">Certificat Medical</span>
+            </th>
+            <td class="pb-50">
+              {{ userData.medicalCertification }}
+            </td>
+          </tr>
+        
         </table>
       </b-col>
     </b-row>

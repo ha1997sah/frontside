@@ -34,7 +34,7 @@
             size="16"
             class="mr-0 mr-sm-50"
           />
-          <span class="d-none d-sm-inline">Modifier votre compte</span>
+          <span class="d-none d-sm-inline">Modifier les informtions</span>
         </template>
           <div>
 
@@ -50,9 +50,11 @@
           rounded
         />
       </template>
+       <div class="d-flex flex-wrap">
       <h4 class="mb-1">
         {{ clubData.name }}
       </h4>
+      </div>
       <div class="d-flex flex-wrap">
         <b-button
           variant="primary"
@@ -327,7 +329,8 @@ export default {
              toast({
             component: ToastificationContent,
             props: {
-              title: 'user modified',
+              title: 'Operation réussi',
+              text:"les informations ont été modifiées avec succès",
               icon: 'AlertTriangleIcon',
               variant: 'success',
             },
