@@ -34,7 +34,7 @@
             size="16"
             class="mr-0 mr-sm-50"
           />
-          <span class="d-none d-sm-inline">Modifier votre compte</span>
+          <span class="d-none d-sm-inline">Modifier les informations</span>
         </template>
           <div>
 
@@ -94,7 +94,7 @@
           md="4"
         >
           <b-form-group
-            label="Club"
+            label="Fédération"
             label-for="username"
           >
             <b-form-input

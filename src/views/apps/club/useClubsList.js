@@ -56,8 +56,8 @@ export default function useUsersList() {
         toast({
           component: ToastificationContent,
           props: {
-            title: 'user deleted',
-            icon: 'AlertTriangleIcon',
+            title: 'Opération réussi',
+            text:"Le club a été bien supprimé",
             variant: 'success',
           },
         })
@@ -66,7 +66,8 @@ export default function useUsersList() {
        toast({
       component: ToastificationContent,
       props: {
-        title: 'user deleted',
+        title: 'Opération réussi',
+        text:"Le club a été bien enregistré",
         icon: 'AlertTriangleIcon',
         variant: 'danger',
       },

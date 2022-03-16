@@ -91,7 +91,7 @@
                 size="32"
                 :text="avatarText(data.item.name)"
                 :variant="`light-${resolveUserRoleVariant(data.item.name)}`"
-                :to="{ name: 'apps-clubs-view', params: { id: data.item.id } }"
+                :to="{ name: 'apps-federations-view', params: { id: data.item.id } }"
               />
             </template>
             <b-link

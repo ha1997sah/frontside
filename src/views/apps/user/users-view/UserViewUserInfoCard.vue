@@ -176,6 +176,19 @@
               {{ userData.belt }}
             </td>
           </tr>
+
+            <tr>
+            <th class="pb-50">
+              <feather-icon
+                icon="ChevronsUpIcon"
+                class="mr-75"
+              />
+              <span class="font-weight-bold">Niveau</span>
+            </th>
+            <td class="pb-50 text-capitalize">
+              {{ userData.level }}
+            </td>
+          </tr>
           <tr>
             <th class="pb-50">
               <feather-icon

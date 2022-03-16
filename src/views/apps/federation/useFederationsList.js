@@ -58,8 +58,8 @@ export default function useFederationsList() {
         toast({
           component: ToastificationContent,
           props: {
-            title: 'user deleted',
-            icon: 'AlertTriangleIcon',
+            title: 'Opération réussi',
+            text:"La fédération a été bien enregistré",
             variant: 'success',
           },
         })
@@ -68,8 +68,8 @@ export default function useFederationsList() {
        toast({
       component: ToastificationContent,
       props: {
-        title: 'user deleted',
-        icon: 'AlertTriangleIcon',
+        title: 'Opération réussi',
+        text:"La fédération a été bien enregistré",
         variant: 'danger',
       },
     })})

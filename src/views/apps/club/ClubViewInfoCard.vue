@@ -46,7 +46,7 @@
           <tr>
             <th class="pb-50">
               <feather-icon
-                icon="StarIcon"
+                icon="UserIcon"
                 class="mr-75"
               />
               <span class="font-weight-bold">Responsable</span>
@@ -58,7 +58,7 @@
             <tr>
             <th class="pb-50">
               <feather-icon
-                icon="StarIcon"
+                icon="GlobeIcon"
                 class="mr-75"
               />
               <span class="font-weight-bold">Adresse</span>
@@ -70,7 +70,7 @@
           <tr>
             <th class="pb-50">
               <feather-icon
-                icon="FlagIcon"
+                icon="MessageSquareIcon"
                 class="mr-75"
               />
               <span class="font-weight-bold">E-mail</span>

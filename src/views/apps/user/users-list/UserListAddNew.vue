@@ -15,7 +15,7 @@
       <!-- Header -->
       <div class="d-flex justify-content-between align-items-center content-sidebar-header px-2 py-1">
         <h5 class="mb-0">
-          Add New User
+          Add un nouveau utilisateur
         </h5>
 
         <feather-icon
@@ -171,7 +171,7 @@
               <v-select
                 v-model="userData.role"
                 :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-                :options="fedOptions"
+                :options="roleOptions"
                 :reduce="val => val.value"
                 :clearable="false"
                 input-id="user-role"
@@ -294,7 +294,7 @@ export default {
              toast({
           component: ToastificationContent,
           props: {
-            title: 'user deleted',
+            title: 'Opération Réussi',
             icon: 'AlertTriangleIcon',
             variant: 'success',
           },

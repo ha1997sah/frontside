@@ -43,7 +43,7 @@
       <template #aside>
         <b-avatar
           ref="previewEl"
-          :src="userData.avatar"
+          :src="userData.image"
           :text="avatarText(user.name)"
           :variant="`light-${resolveUserRoleVariant(userData.role)}`"
           size="90px"
@@ -412,7 +412,7 @@ export default {
     })
 
     store.dispatch('app-user/fetchUser', { id: router.currentRoute.params.id })
-      .then(response => { userData.value = response.data })
+      .then(response => { userData.value = response.data ,userData.value.image=`http://localhost:3001/${response.data.image}`})
       .catch(error => {
         if (error.response.status === 404) {
           userData.value = undefined

@@ -100,7 +100,6 @@
             >
               {{ data.item.lastname }}
             </b-link>
-            <small class="text-muted">@{{ data.item.lastname }}</small>
           </b-media>
         </template>
 

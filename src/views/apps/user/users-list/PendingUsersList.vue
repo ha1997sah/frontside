@@ -92,23 +92,22 @@
                 size="32"
                 :text="avatarText(data.item.lastname)"
                 :variant="`light-${resolveUserRoleVariant(data.item.lastname)}`"
-                :to="{ name: 'apps-users-view', params: { id: data.item.id } }"
+                :to="{ name: 'apps-users-AcceptOrRefuse', params: { id: data.item.id } }"
               />
             </template>
             <b-link
-              :to="{ name: 'apps-users-view', params: { id: data.item.id } }"
+              :to="{ name: 'apps-users-AcceptOrRefuse', params: { id: data.item.id } }"
               class="font-weight-bold d-block text-nowrap"
             >
               {{ data.item.lastname }}
             </b-link>
-            <small class="text-muted">@{{ data.item.lastname }}</small>
           </b-media>
         </template>
               <template #cell(Prénom)="data">
           <b-media vertical-align="center">
             
             <b-link
-              :to="{ name: 'apps-users-view', params: { id: data.item.id } }"
+              :to="{ name: 'apps-users-AcceptOrRefuse', params: { id: data.item.id } }"
               class="font-weight-bold d-block text-nowrap"
             >
               {{ data.item.name }}

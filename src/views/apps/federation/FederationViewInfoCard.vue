@@ -12,8 +12,8 @@
         <!-- User Avatar & Action Buttons -->
         <div class="d-flex justify-content-start">
           <b-avatar
-            :text="avatarText(federationData.fullName)"
-            :variant="`light-${resolveUserRoleVariant(federationData.fullName)}`"
+            :text="avatarText(federationData.name)"
+            :variant="`light-${resolveUserRoleVariant(federationData.name)}`"
             size="104px"
             rounded
           />
@@ -22,10 +22,9 @@
               <h4 class="mb-0">
                 {{ federationData.name }}
               </h4>
-              <span class="card-text">{{ federationData.name }} {{ federationData.lastname }} </span>
+              <span class="card-text">{{ federationData.country }} </span>
             </div>
             <div class="d-flex flex-wrap">
-              
               <b-button
                 variant="outline-danger"
                 class="ml-1"
@@ -47,38 +46,37 @@
           <tr>
             <th class="pb-50">
               <feather-icon
-                icon="StarIcon"
-                class="mr-75"
-              />
-              <span class="font-weight-bold">Adresse</span>
-            </th>
-            <td class="pb-50 text-capitalize">
-              {{ federationData.adress }}
-            </td>
-          </tr>
-          <tr>
-          <tr>
-            <th class="pb-50">
-              <feather-icon
-                icon="StarIcon"
-                class="mr-75"
-              />
-              <span class="font-weight-bold">Adresse</span>
-            </th>
-            <td class="pb-50 text-capitalize">
-              {{ federationData.adress }}
-            </td>
-          </tr>
-          <tr>
-            <th class="pb-50">
-              <feather-icon
-                icon="FlagIcon"
+                icon="UserIcon"
                 class="mr-75"
               />
               <span class="font-weight-bold">Responsable</span>
             </th>
+            <td class="pb-50 text-capitalize">
+              {{ federationData.managerfullName }}
+            </td>
+          </tr>
+            <tr>
+            <th class="pb-50">
+              <feather-icon
+                icon="GlobeIcon"
+                class="mr-75"
+              />
+              <span class="font-weight-bold">Adresse</span>
+            </th>
+            <td class="pb-50 text-capitalize">
+              {{ federationData.adress }}
+            </td>
+          </tr>
+          <tr>
+            <th class="pb-50">
+              <feather-icon
+                icon="MessageSquareIcon"
+                class="mr-75"
+              />
+              <span class="font-weight-bold">E-mail</span>
+            </th>
             <td class="pb-50">
-              {{ federationData.managerFullName }}
+              {{ federationData.email }}
             </td>
           </tr>
           <tr>
@@ -104,7 +102,6 @@
              </b-modal>
   </b-card>
 </template>
-
 <script>
 import {
   BCard, BButton, BAvatar, BRow, BCol,

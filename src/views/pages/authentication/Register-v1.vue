@@ -19,7 +19,7 @@
         <validation-observer ref="registerForm" v-slot="{ invalid }">
           <b-form
             class="auth-register-form mt-2"
-            @submit.prevent="validationForm"
+            @submit.prevent="validationForm" enctype="multipart/form-data"
           >
             <!-- name -->
             <b-form-group
@@ -78,7 +78,6 @@
                   v-model="phone"
                   :state="errors.length > 0 ? false:null"
                   name="register-phone"
-                  placeholder="johndoe"
                 />
                 <small class="text-danger">{{ errors[0] }}</small>
               </validation-provider>
@@ -138,24 +137,7 @@
                 <small class="text-danger">{{ errors[0] }}</small>
               </validation-provider>
             </b-form-group>
-             <b-form-group
-              label="Niveau"
-              label-for="niveau"
-            >
-              <validation-provider
-                #default="{ errors }"
-                name="phone"
-                rules="required|min:8"
-              >
-                <b-form-input
-                  id="phone"
-                  v-model="phone"
-                  :state="errors.length > 0 ? false:null"
-                  name="register-phone"
-                />
-                <small class="text-danger">{{ errors[0] }}</small>
-              </validation-provider>
-            </b-form-group>
+            
              <b-form-group
               label="Poids"
               label-for="weight"
@@ -210,7 +192,15 @@
                 <small class="text-danger">{{ errors[0] }}</small>
               </validation-provider>
             </b-form-group>
-            
+            <b-form-group>
+                <b-form-file
+                v-model="file"
+               placeholder="Choose a file or drop it here..."
+                 drop-placeholder="Drop file here..."
+                 ref="file"
+                 @change="selectFile"
+                   />
+             </b-form-group>
             
 
             <!-- submit button -->
@@ -277,7 +267,7 @@ import { ValidationProvider, ValidationObserver, extend } from 'vee-validate'
 import {mapState} from 'vuex'
 
 import {
-  BCard, BLink, BCardTitle, BCardText, BForm,BFormInvalidFeedback,
+  BCard, BLink,BFormFile, BCardTitle, BCardText, BForm,BFormInvalidFeedback,
   BButton, BFormInput, BFormGroup, BInputGroup, BInputGroupAppend, BFormCheckbox, BAlert
 } from 'bootstrap-vue'
 import VuexyLogo from '@core/layouts/components/Logo.vue'
@@ -303,6 +293,7 @@ export default {
     BCardTitle,
     BCardText,
     BForm,
+    BFormFile,
     BButton,
     BFormInput,
     BFormGroup,
@@ -327,6 +318,7 @@ export default {
       belt:'',
       birthDate:'',
       certification:'',
+      medicalCertificate:'',
       error: null,
       success:false,
 
@@ -351,18 +343,18 @@ export default {
     });
   },
   methods: {
+    selectFile() {
+      this.medicalCertificate=this.$refs.file
+    },
 	async register () {
       try {
-       const response = await authentication.register ({
-      email: this.email,
-      password: this.password,
-		  name: this.name,
-		  lastname: this.lastname,
-		  phone: this.phone,
-      weight:this.weight,
-      height:this.height,
-      belt:this.belt,
-        })
+        const formData = new FormData();
+        formData.append('medicalCertificate',this.file)
+        formData.append('email',this.email)
+        formData.append('password',this.password)
+        formData.append('name',this.name)
+        formData.append('phone',this.phone)
+       const response = await authentication.register(formData)
                 .then(() => {
                   this.$toast({
                     component: ToastificationContent,
@@ -381,7 +373,7 @@ export default {
                     component: ToastificationContent,
                     position: 'top-right',
                     props: {
-                      title: 'jj',
+                      title: this.error,
                       icon: 'CoffeeIcon',
                       variant: 'danger',
                       text: this.error,
