@@ -43,7 +43,6 @@
           <validation-provider
             #default="validationContext"
             name="Club"
-            rules="required"
           >
             <b-form-group
               label="Nom Club"
@@ -67,7 +66,6 @@
           <validation-provider
             #default="validationContext"
             name="Pays"
-            rules="required"
           >
             <b-form-group
               label="Pays"
@@ -89,7 +87,6 @@
              <validation-provider
             #default="validationContext"
             name="Adresse"
-            rules="required"
           >
             <b-form-group
               label="Adresse"
@@ -111,7 +108,6 @@
             <validation-provider
             #default="validationContext"
             name="Nom Responsable"
-            rules="required"
           >
             <b-form-group
               label="Nom Responsable"
@@ -133,7 +129,6 @@
           <validation-provider
             #default="validationContext"
             name="E-mail"
-            rules="required|email"
           >
             <b-form-group
               label="E-mail"
@@ -154,7 +149,6 @@
           <validation-provider
             #default="validationContext"
             name="Numéro de téléphone"
-            rules="required"
           >
             <b-form-group
               label="Numéro de téléphone"
@@ -176,7 +170,6 @@
           <validation-provider
             #default="validationContext"
             name="Role"
-            rules="required"
           >
             <b-form-group
               label="Fédération"
@@ -184,7 +177,7 @@
               :state="getValidationState(validationContext)"
             >
               <v-select
-              v-model="FederationId"
+              v-model="clubData.selectedItem"
                 :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
                 :options="roleOptions"
                 :clearable="false"
@@ -299,8 +292,6 @@ export default {
       role:null,
       error:null,
     }
-    const FederationId= ref(null)
-
 
     const clubData = ref(JSON.parse(JSON.stringify(blankclubData)))
     const resetclubData = () => {
@@ -308,9 +299,14 @@ export default {
     }
       
     const onSubmit = () => {
-      store.dispatch('app-club/addClub', clubData.value)
+      store.dispatch('app-club/addClub', {
+        name:clubData.value.name,
+        FederationId:clubData.value.selectedItem.value
+
+      })
         .then(() => {
-             toast({
+          console.log( clubData.value.FederationId)
+            toast({
           component: ToastificationContent,
           props: {
             title: 'user deleted',

@@ -191,12 +191,15 @@
             </th>
             <td class="pb-50">
               {{ userData.medicalCertification }}
+
+         <b-button @click="openPdf"> Voir le certificat</b-button>
             </td>
           </tr>
         
         </table>
       </b-col>
     </b-row>
+                   
     <b-modal id="modal-1" title="BootstrapVue"
      
           @ok="handleOk">
@@ -215,16 +218,26 @@ import useUsersList from '../users-list/useUsersList'
 import BCardCode from '@core/components/b-card-code/BCardCode.vue'
 import Ripple from 'vue-ripple-directive'
 import store from '@/store'
+import pdf from 'vue-pdf'
+
 
 
 export default {
   components: {
-    BCard, BButton, BRow, BCol, BAvatar,BCardCode, BCardText,
+    BCard, BButton, BRow, BCol, BAvatar,BCardCode, BCardText,pdf,
   },
+  data(){
+    return {    
+      pdfFile:"http://localhost:3001/2022-03-16T12-59-25.180Zcertificate.pdf"} 
+ },
    directives: {
     Ripple,
   },
+  
   methods: {
+    openPdf () {
+   window.open("http://localhost:3001/2022-03-16T12-59-25.180Zcertificate.pdf");
+},
         refuseRegister() {
       this.$swal({
         title: 'Attention!',

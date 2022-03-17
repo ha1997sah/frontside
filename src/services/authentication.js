@@ -104,4 +104,10 @@ export default {
     deleteFederation(id){
         return Api().delete(`deleteFederation/${id}`)
        }, 
+       clubUnderFed(id){
+         return Api().get(`clubUnderFed/${id}`)
+       },
+       usersUnderClub(id){
+        return Api().get(`usersUnderClub/${id}`)
+      }
 }

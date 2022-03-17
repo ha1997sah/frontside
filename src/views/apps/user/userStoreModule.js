@@ -16,6 +16,14 @@ export default {
           .catch(error => reject(error))
       })
     },
+    fetchUsersUnderClub(ctx, queryParams) {
+      return new Promise((resolve, reject) => {
+        authentication
+          .usersUnderClub(router.currentRoute.params.id )
+          .then(response => resolve(response))
+          .catch(error => reject(error))
+      })
+    },
     fetchUsers(ctx, queryParams) {
       return new Promise((resolve, reject) => {
         axios

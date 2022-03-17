@@ -34,10 +34,11 @@
         </b-col>
      
       </b-row>  
-      <b-row>
-        <federations-edit/>
-        </b-row>    
-      
+    
+
+       <b-row>
+        <club-list/>
+      </b-row>
     </template>
 
   </div>
@@ -55,6 +56,7 @@ import federationStoreModule from './federationStoreModule'
 import FederationViewInfoCard from './FederationViewInfoCard.vue'
 import FederationViewPlanCard from './FederationViewPlanCard.vue'
 import FederationsEdit from './FederationsEdit.vue'
+import ClubList from './ClubList.vue'
 export default {
   components: {
     BRow,
@@ -65,6 +67,7 @@ export default {
     // Local Componentss
     FederationViewInfoCard,
     FederationViewPlanCard,
+    ClubList,
  
 
     InvoiceList,
@@ -72,6 +75,7 @@ export default {
   },
   setup() {
     const federationData = ref(null)
+    const clubs = ref(null)
 
     const FEDERATION_APP_STORE_MODULE_NAME = 'app-federation'
 
@@ -84,7 +88,7 @@ export default {
     })
 
     store.dispatch('app-federation/fetchFederationById', { id: router.currentRoute.params.id })
-      .then(response => { federationData.value = response.data.fed ,console.log(response.data)})
+      .then(response => { federationData.value = response.data.fed ,clubs.value=response.data.fed.Clubs,console.log(clubs)})
       .catch(error => {
         if (error.response.status === 404) {
           federationData.value = undefined

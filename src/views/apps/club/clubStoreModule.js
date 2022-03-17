@@ -16,6 +16,14 @@ export default {
           .catch(error => reject(error))
       })
     },
+    fetchClubsUnderFed(ctx, queryParams) {
+      return new Promise((resolve, reject) => {
+        authentication
+          .clubUnderFed(router.currentRoute.params.id)
+          .then(response => resolve(response))
+          .catch(error => reject(error))
+      })
+    },
  
     fetchClubById(ctx) {
       return new Promise((resolve, reject) => {

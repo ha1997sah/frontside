@@ -192,6 +192,28 @@
                 <small class="text-danger">{{ errors[0] }}</small>
               </validation-provider>
             </b-form-group>
+             <validation-provider
+            name="Club"
+          >
+            <b-form-group
+              label="Club"
+              label-for="club"
+            >
+              <v-select
+              v-model="selectedItem"
+                :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
+                :options="clubs"
+                :clearable="false"
+                input-id="club-fed"
+              />
+            
+            </b-form-group>
+          </validation-provider>
+     <b-form-datepicker
+      id="example-datepicker"
+      v-model="birthDate"
+      class="mb-1"
+    />
             <b-form-group>
                 <b-form-file
                 v-model="file"
@@ -267,7 +289,7 @@ import { ValidationProvider, ValidationObserver, extend } from 'vee-validate'
 import {mapState} from 'vuex'
 
 import {
-  BCard, BLink,BFormFile, BCardTitle, BCardText, BForm,BFormInvalidFeedback,
+  BCard, BLink,BFormFile, BFormDatepicker, BCardTitle, BCardText, BForm,BFormInvalidFeedback,
   BButton, BFormInput, BFormGroup, BInputGroup, BInputGroupAppend, BFormCheckbox, BAlert
 } from 'bootstrap-vue'
 import VuexyLogo from '@core/layouts/components/Logo.vue'
@@ -280,11 +302,13 @@ import { getHomeRouteForLoggedInUser } from '@/auth/utils'
 import vSelect from 'vue-select'
 import flatPickr from 'vue-flatpickr-component'
 
+
 export default {
   components: {
     VuexyLogo,
     BAlert,
     BFormInvalidFeedback,
+    BFormDatepicker,
     vSelect,
     flatPickr,
     // BSV
@@ -321,10 +345,16 @@ export default {
       medicalCertificate:'',
       error: null,
       success:false,
+      selectedItem:'',
+      file:"",
 
       // validation rules
       required,
       email,
+      clubs:[
+        {label:"club1", value:"53"},
+        {label:"club2", value:"50"},
+      ]
     }
   },
   computed: {
@@ -344,7 +374,7 @@ export default {
   },
   methods: {
     selectFile() {
-      this.medicalCertificate=this.$refs.file
+      this.medicalCertificate=this.$refs.file.files[0]
     },
 	async register () {
       try {
@@ -354,6 +384,8 @@ export default {
         formData.append('password',this.password)
         formData.append('name',this.name)
         formData.append('phone',this.phone)
+        formData.append('ClubId',this.selectedItem.value)
+        formData.append('birthDate',this.birthDate)
        const response = await authentication.register(formData)
                 .then(() => {
                   this.$toast({

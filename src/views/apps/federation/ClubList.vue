@@ -2,12 +2,6 @@
 
   <div>
 
-     <club-list-add-new
-      :is-add-new-user-sidebar-active.sync="isAddNewUserSidebarActive"
-      :role-options="roleOptions"
-      :plan-options="planOptions"
-      @refetch-data="refetchData"
-    />
     <!-- Filters -->
 <!--     <users-list-filters
       :role-filter.sync="roleFilter"
@@ -57,12 +51,7 @@
                 class="d-inline-block mr-1"
                 placeholder="Rechercher..."
               />
-              <b-button
-                variant="primary"
-                @click="isAddNewUserSidebarActive = true"
-              >
-                <span class="text-nowrap">Ajouter club</span>
-              </b-button>
+              
             </div>
           </b-col>
         </b-row>
@@ -205,8 +194,8 @@ import store from '@/store'
 import { ref, onUnmounted } from '@vue/composition-api'
 import { avatarText } from '@core/utils/filter'
 import useClubsList from './useClubsList'
-import clubStoreModule from './clubStoreModule'
-import ClubListAddNew from './ClubListAddNew.vue'
+import clubStoreModule from '../club/clubStoreModule'
+import ClubListAddNew from '../club/ClubListAddNew.vue'
 
 export default {
   components: {
@@ -226,7 +215,6 @@ export default {
     vSelect,
     ClubListAddNew,
   },
-
   setup() {
     const CLUB_APP_STORE_MODULE_NAME = 'app-club'
     // Register module
@@ -238,7 +226,7 @@ export default {
     const isAddNewUserSidebarActive = ref(false)
 
     const roleOptions = [
-      { label: 'Fédération tunisienne de karaté', value: '7' },
+      { label: 'Fédération tunisienne de karaté', value: '1' },
       { label: 'Author', value: 'author' },
       { label: 'Editor', value: 'editor' },
       { label: 'Maintainer', value: 'maintainer' },

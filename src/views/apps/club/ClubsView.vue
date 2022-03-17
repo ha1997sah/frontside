@@ -34,7 +34,7 @@
         </b-col>
       </b-row>
       <b-row>
-        <clubs-edit />
+        <users-list />
       </b-row>
     </template>
 
@@ -53,9 +53,11 @@ import clubStoreModule from './clubStoreModule'
 import ClubViewInfoCard from './ClubViewInfoCard.vue'
 import ClubViewPlanCard from './ClubViewPlanCard.vue'
 import ClubsEdit from './ClubsEdit.vue'
+import UsersList from './UsersList.vue'
 
 export default {
   components: {
+    UsersList,
     BRow,
     BCol,
     BAlert,
