@@ -61,8 +61,12 @@ export default {
         return Api().get('allCompetitions')
     },
 
-    addEvent(credentials){
+    addCompetition(credentials){
         return Api().post('addEvent',credentials)
+    },
+    findCometitionById(id){
+        return Api().get(`competition/${id}`)
+
     },
     allClubs(){
         return Api().get('allClubs')
@@ -109,5 +113,14 @@ export default {
        },
        usersUnderClub(id){
         return Api().get(`usersUnderClub/${id}`)
-      }
+      },
+
+      editCompetition(credentials,id){
+        return Api().put(`editCompetition/${id}`,credentials)
+    },
+
+    deleteCompetition(id){
+        return Api().delete(`deleteCompetition/${id}`)
+       }, 
+
 }

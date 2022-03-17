@@ -1,51 +1,56 @@
 <template>
-  <b-card title="User Timeline">
-    <app-timeline>
-
-      <!-- 12 INVOICES HAVE BEEN PAID -->
+  <b-card title="Plus d'informations">
+    <b-row>
+<b-col
+cols="12"
+        xl="6">
       <app-timeline-item>
         <div class="d-flex flex-sm-row flex-column flex-wrap justify-content-between mb-1 mb-sm-0">
-          <h6>12 Invoices have been paid</h6>
-          <small class="text-muted">12 min ago</small>
+          <h6>Poids</h6>
         </div>
-        <p>Invoices have been paid to the company.</p>
-        <p class="mb-0">
-          <b-img
-            :src="require('@/assets/images/icons/pdf.png')"
-            height="auto"
-            width="20"
-            class="mr-1"
-          />
-          <span class="align-bottom">invoice.pdf</span>
-        </p>
+        <p>{{userData.weight}}</p>
+      
       </app-timeline-item>
       <app-timeline-item variant="warning">
 
         <div class="d-flex flex-sm-row flex-column flex-wrap justify-content-between mb-1 mb-sm-0">
-          <h6>Client Meeting</h6>
-          <small class="text-muted">45 min ago</small>
+          <h6>Taille</h6>
         </div>
-        <p>Project meeting with john @10:15am.</p>
-        <b-media>
-          <template #aside>
-            <b-avatar :src="require('@/assets/images/avatars/8-small.png')" />
-          </template>
-          <h6>John Doe (Client)</h6>
-          <p class="mb-0">
-            CEO of Infibeam
-          </p>
-        </b-media>
+        <p>{{userData.height}}</p>
+     
       </app-timeline-item>
-      <app-timeline-item
-        variant="info"
-        title="Create a new project for client"
-        subtitle="Add files to new design folder"
-        time="2 days ago"
-      />
-    </app-timeline>
+      </b-col>
+      <b-col
+      cols="12"
+        xl="6">
+       <app-timeline-item>
+        <div class="d-flex flex-sm-row flex-column flex-wrap justify-content-between mb-1 mb-sm-0">
+          <h6>Poids</h6>
+        </div>
+        <p>{{userData.belt}}</p>
+      
+      </app-timeline-item>
+      <app-timeline-item variant="warning">
+
+        <div class="d-flex flex-sm-row flex-column flex-wrap justify-content-between mb-1 mb-sm-0">
+          <h6>Taille</h6>
+        </div>
+        <p>{{userData.level}}</p>
+     
+      </app-timeline-item>
+      <app-timeline-item variant="warning">
+
+        <div class="d-flex flex-sm-row flex-column flex-wrap justify-content-between mb-1 mb-sm-0">
+          <h6>Certificat Medical</h6>
+        </div>
+ {{ userData.medicalCertification }}
+               <b-button @click="openPdf"> Voir le certificat</b-button>     
+      </app-timeline-item>
+   </b-col>
+       </b-row>
+
   </b-card>
 </template>
-
 <script>
 import {
   BCard, BImg, BMedia, BAvatar,
@@ -62,6 +67,17 @@ export default {
     AppTimeline,
     AppTimelineItem,
   },
+     props: {
+    userData: {
+      type: Object,
+      required: true,
+    },
+  },
+  methods:{
+         openPdf () {
+   window.open("http://localhost:3001/2022-03-16T12-59-25.180Zcertificate.pdf");
+}
+  }
 }
 </script>
 

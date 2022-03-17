@@ -56,7 +56,7 @@ export default function useUsersList() {
             variant: 'success',
           },
         })
-    }
+router.replace({path: '/apps/clubs/list'})    }
     
     )
     

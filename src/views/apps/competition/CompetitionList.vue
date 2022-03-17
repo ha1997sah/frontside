@@ -2,13 +2,13 @@
 
   <div>
 
-     <club-list-add-new
+     <competition-list-add-new
       :is-add-new-user-sidebar-active.sync="isAddNewUserSidebarActive"
       :role-options="roleOptions"
       :plan-options="planOptions"
       @refetch-data="refetchData"
     />
-    <!-- Filters -->
+    <!-- Filters -->    
 <!--     <users-list-filters
       :role-filter.sync="roleFilter"
       :plan-filter.sync="planFilter"
@@ -61,7 +61,7 @@
                 variant="primary"
                 @click="isAddNewUserSidebarActive = true"
               >
-                <span class="text-nowrap">Ajouter club</span>
+                <span class="text-nowrap">Ajouter une compétition</span>
               </b-button>
             </div>
           </b-col>
@@ -72,7 +72,7 @@
       <b-table
         ref="refUserListTable"
         class="position-relative"
-        :items="fetchClubs"
+        :items="fetchCompetitions"
         responsive
         :fields="tableColumns"
         primary-key="id"
@@ -90,11 +90,11 @@
                 size="32"
                 :text="avatarText(data.item.name)"
                 :variant="`light-${resolveUserRoleVariant(data.item.name)}`"
-                :to="{ name: 'apps-clubs-view', params: { id: data.item.id } }"
+                :to="{ name: 'apps-competitions-view', params: { id: data.item.id } }"
               />
             </template>
             <b-link
-              :to="{ name: 'apps-clubs-view', params: { id: data.item.id } }"
+              :to="{ name: 'apps-competitions-view', params: { id: data.item.id } }"
               class="font-weight-bold d-block text-nowrap"
             >
               {{ data.item.name }}
@@ -102,28 +102,52 @@
           </b-media>
         </template>
 
-               <template #cell(Pays)="data">
+               <template #cell(Titre)="data">
           <b-media vertical-align="center">
             
             <b-link
-              :to="{ name: 'apps-clubs-view', params: { id: data.item.id } }"
+              :to="{ name: 'apps-competitions-view', params: { id: data.item.id } }"
               class="font-weight-bold d-block text-nowrap"
             >
               {{ data.item.name }}
             </b-link>
           </b-media>
         </template>
-            <template #cell(Responsable)="data">
+            <template #cell(Adresse)="data">
           <b-media vertical-align="center">
             
             <b-link
-              :to="{ name: 'apps-clubs-view', params: { id: data.item.id } }"
+              :to="{ name: 'apps-competitions-view', params: { id: data.item.id } }"
               class="font-weight-bold d-block text-nowrap"
             >
-              {{ data.item.managerfullName }}
+              {{ data.item.location }}
             </b-link>
           </b-media>
         </template>
+           <template #cell(Debut)="data">
+          <b-media vertical-align="center">
+            
+            <b-link
+              :to="{ name: 'apps-competitions-view', params: { id: data.item.id } }"
+              class="font-weight-bold d-block text-nowrap"
+            >
+              {{ data.item.start }}
+            </b-link>
+          </b-media>
+        </template>
+             <template #cell(Fin)="data">
+          <b-media vertical-align="center">
+            
+            <b-link
+              :to="{ name: 'apps-competitions-view', params: { id: data.item.id } }"
+              class="font-weight-bold d-block text-nowrap"
+            >
+              {{ data.item.fin }}
+            </b-link>
+          </b-media>
+        </template>
+        
+       
         <!-- Column: Actions -->
            <template #cell(actions)="data">
           <b-dropdown
@@ -138,7 +162,7 @@
                 class="align-middle text-body"
               />
             </template>
-            <b-dropdown-item :to="{ name: 'apps-clubs-view', params: { id: data.item.id } }">
+            <b-dropdown-item :to="{ name: 'apps-competitions-view', params: { id: data.item.id } }">
               <feather-icon icon="FileTextIcon" />
               <span class="align-middle ml-50">Détailes</span>
             </b-dropdown-item>
@@ -204,10 +228,9 @@ import vSelect from 'vue-select'
 import store from '@/store'
 import { ref, onUnmounted } from '@vue/composition-api'
 import { avatarText } from '@core/utils/filter'
-import useClubsList from './useClubsList'
-import clubStoreModule from './clubStoreModule'
-import ClubListAddNew from './ClubListAddNew.vue'
-import axios from 'axios'
+import useCompetitionsList from './useCompetitionsList'
+import competitionStoreModule from './competitionStoreModule'
+import CompetitionListAddNew from './CompetitionListAddNew.vue'
 
 export default {
   components: {
@@ -225,35 +248,26 @@ export default {
     BDropdownItem,
     BPagination,
     vSelect,
-    ClubListAddNew,
+    CompetitionListAddNew
   },
 
   setup() {
-    const CLUB_APP_STORE_MODULE_NAME = 'app-club'
+    const COMPETITION_APP_STORE_MODULE_NAME = 'app-competition'
     // Register module
-    if (!store.hasModule(CLUB_APP_STORE_MODULE_NAME)) store.registerModule(CLUB_APP_STORE_MODULE_NAME, clubStoreModule)
+    if (!store.hasModule(COMPETITION_APP_STORE_MODULE_NAME)) store.registerModule(COMPETITION_APP_STORE_MODULE_NAME, competitionStoreModule)
     // UnRegister on leave
     onUnmounted(() => {
-      if (store.hasModule(CLUB_APP_STORE_MODULE_NAME)) store.unregisterModule(CLUB_APP_STORE_MODULE_NAME)
+      if (store.hasModule(COMPETITION_APP_STORE_MODULE_NAME)) store.unregisterModule(COMPETITION_APP_STORE_MODULE_NAME)
     })
     const isAddNewUserSidebarActive = ref(false)
- const fedData= []
-  var roleOptions = [
-     
+
+    const roleOptions = [
+      { label: 'Fédération tunisienne de karaté', value: '1' },
+      { label: 'Author', value: 'author' },
+      { label: 'Editor', value: 'editor' },
+      { label: 'Maintainer', value: 'maintainer' },
+      { label: 'Subscriber', value: 'subscriber' },
     ]
- axios.get("http://localhost:3001/allFederations").then(
-   response=>{
-const data = response.data.feds
-data.forEach(element => { roleOptions.push({label:element.name, value:element.id})
-  
-});
-      console.log(roleOptions)
-
-   }
-
- )
-
-  
     const planOptions = [
       { label: 'Basic', value: 'basic' },
       { label: 'Company', value: 'company' },
@@ -266,7 +280,8 @@ data.forEach(element => { roleOptions.push({label:element.name, value:element.id
       { label: 'Inactive', value: 'inactive' },
     ]
     const {
-      fetchClubs,
+     
+      fetchCompetitions,
       tableColumns,
       perPage,
       currentPage,
@@ -286,12 +301,12 @@ data.forEach(element => { roleOptions.push({label:element.name, value:element.id
       roleFilter,
       planFilter,
       statusFilter,
-    } = useClubsList()
+    } = useCompetitionsList()
   
     return {
       // Sidebar
       isAddNewUserSidebarActive,
-      fetchClubs,
+      fetchCompetitions,
      
       tableColumns,
       perPage,
@@ -317,7 +332,6 @@ data.forEach(element => { roleOptions.push({label:element.name, value:element.id
       roleFilter,
       planFilter,
       statusFilter,
-      fedData
     }
     
   },

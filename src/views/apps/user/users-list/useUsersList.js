@@ -56,6 +56,8 @@ export default function useUsersList() {
             variant: 'success',
           },
         })
+        router.replace({path: '/apps/users/list'})    
+
     }
     
     )

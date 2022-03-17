@@ -261,14 +261,26 @@ export default [
     component: () => import('@/views/apps/federation/FederationsView.vue'),
   },
 
-  {
-    path: '/apps/federations/view/:id',
-    name: 'apps-federations-view',
-    component: () => import('@/views/apps/federation/FederationsView.vue'),
-  },
+ 
   {
     path: '/apps/federations/edit/:id',
     name: 'apps-federations-edit',
     component: () => import('@/views/apps/federation/FederationsEdit.vue'),
+  },
+
+  {
+    path: '/apps/competitions/list',
+    name: 'apps-competitions-list',
+    component: () => import('@/views/apps/competition/CompetitionList.vue'),
+  },
+  {
+    path: '/apps/competitions/edit/:id',
+    name: 'apps-competitions-edit',
+    component: () => import('@/views/apps/competition/CompetitionsEdit.vue'),
+  },
+  {
+    path: '/apps/competitions/view/:id',
+    name: 'apps-competitions-view',
+    component: () => import('@/views/apps/competition/CompetitionsView.vue'),
   },
 ]

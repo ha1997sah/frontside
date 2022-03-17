@@ -20,6 +20,11 @@ export default [
     icon: 'OctagonIcon',
   },
   {
+    title: 'Compétitions',
+    icon: 'GlobeIcon',
+    route: 'apps-competitions-list'
+  },
+  {
     title: 'Fédérations',
     icon: 'GlobeIcon',
     route: 'apps-federations-list'

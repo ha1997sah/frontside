@@ -287,8 +287,9 @@ export default {
              toast({
           component: ToastificationContent,
           props: {
-            title: 'user deleted',
+            title: 'Opération réussi',
             icon: 'AlertTriangleIcon',
+            text:"Fédeération ajouté avec succes ",
             variant: 'success',
           },
         })

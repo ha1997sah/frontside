@@ -34,9 +34,14 @@
         </b-col>
         
       </b-row>
-
-      <b-row>
-      <users-edit/>
+ <b-row>
+        <b-col
+          cols="12"
+          lg="6"
+        >
+          <user-view-user-timeline-card :user-data="userData" />
+        </b-col>
+      
       </b-row>
 
     </template>
@@ -56,6 +61,7 @@ import userStoreModule from '../userStoreModule'
 import UserViewUserInfoCard from './UserViewUserInfoCard.vue'
 import UserViewUserPlanCard from './UserViewUserPlanCard.vue'
 import UsersEdit from '../users-edit/UsersEdit.vue'
+import UserViewUserTimelineCard from './UserViewUserTimelineCard.vue'
 
 export default {
   components: {
@@ -64,6 +70,7 @@ export default {
     BAlert,
     BLink,
     UsersEdit,
+    UserViewUserTimelineCard,
     // Local Components
     UserViewUserInfoCard,
     UserViewUserPlanCard,

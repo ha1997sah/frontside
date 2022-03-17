@@ -209,12 +209,34 @@
             
             </b-form-group>
           </validation-provider>
+             <b-form-group
+              label="Date de naissance"
+              label-for="Date de naissance"
+            >
+              <validation-provider
+                #default="{ errors }"
+                name="Date de naissance"
+                rules="required"
+              >
      <b-form-datepicker
       id="example-datepicker"
       v-model="birthDate"
       class="mb-1"
     />
-            <b-form-group>
+     <small class="text-danger">{{ errors[0] }}</small>
+
+          </validation-provider>
+     </b-form-group>
+     
+             <b-form-group
+              label="Certificat medical"
+              label-for="Certificat medical"
+            >
+              <validation-provider
+                #default="{ errors }"
+                name="Certificat medical"
+                rules="required"
+              >
                 <b-form-file
                 v-model="file"
                placeholder="Choose a file or drop it here..."
@@ -222,8 +244,11 @@
                  ref="file"
                  @change="selectFile"
                    />
-             </b-form-group>
-            
+                 <small class="text-danger">{{ errors[0] }}</small>
+
+          </validation-provider>
+     </b-form-group>
+     
 
             <!-- submit button -->
             <b-button
@@ -352,8 +377,8 @@ export default {
       required,
       email,
       clubs:[
-        {label:"club1", value:"53"},
-        {label:"club2", value:"50"},
+        {label:"club1", value:"2"},
+        {label:"club2", value:"3"},
       ]
     }
   },

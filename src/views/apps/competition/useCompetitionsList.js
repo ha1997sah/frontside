@@ -7,7 +7,7 @@ import { useToast } from 'vue-toastification/composition'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 import router from '@/router'
 
-export default function useFederationsList() {
+export default function useCompetitionsList() {
   // Use toast
   const toast = useToast()
 
@@ -15,11 +15,10 @@ export default function useFederationsList() {
 
   // Table Handlers
   const tableColumns = [
-    { key: 'Federation', sortable: true },
-    { key: 'Pays', sortable: true },
-    { key: 'Contact', sortable: true },
-    { key: 'Responsable', sortable: true },
-
+    { key: 'Titre', sortable: true },
+    { key: 'Adresse', sortable: true },
+    { key: 'Debut', sortable: true },
+    { key: 'Fin', sortable: true },
     { key: 'actions' },
   ]
   const perPage = ref(10)
@@ -53,33 +52,33 @@ export default function useFederationsList() {
     refetchData()
   })
   const handleOk= () =>{
-    store.dispatch('app-federation/deleteFederation',   router.currentRoute.params.id )
+    store.dispatch('app-competition/deleteCompetition',   router.currentRoute.params.id )
     .then(() => {
         toast({
           component: ToastificationContent,
           props: {
             title: 'Opération réussi',
-            text:"La fédération a été bien enregistré",
+            text:"Le club a été bien supprimé",
             variant: 'success',
           },
         })
-        router.replace({path: '/apps/federations/list'})    
-
+        router.replace({ path: '/apps/competitions/list'})
       })
      .catch(error=>{console.log(error),
        toast({
       component: ToastificationContent,
       props: {
         title: 'Opération réussi',
-        text:"La fédération a été bien enregistré",
+        text:"Le club a été bien enregistré",
+        icon: 'AlertTriangleIcon',
         variant: 'danger',
       },
     })})
 }
 
-  const fetchFederations = (ctx, callback) => {
+  const fetchCompetitions = (ctx, callback) => {
     store
-      .dispatch('app-federation/fetchFederations', {
+      .dispatch('app-competition/fetchCompetitions', {
         q: searchQuery.value,
         perPage: perPage.value,
         page: currentPage.value,
@@ -90,9 +89,9 @@ export default function useFederationsList() {
         status: statusFilter.value,
       })
       .then(response => {
-        const { feds, total } = response.data
+        const { competitions, total } = response.data
 
-        callback(feds)
+        callback(competitions)
         totalUsers.value = total
       })
       .catch(() => {
@@ -161,7 +160,7 @@ export default function useFederationsList() {
     roleFilter,
     planFilter,
     statusFilter,
-    fetchFederations,
+    fetchCompetitions,
     handleOk,
   }
 
