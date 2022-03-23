@@ -108,36 +108,7 @@
       cancel-variant="outline-secondary"
     >
       <b-form>
-        <b-form-group
-          label="Enter Name"
-          label-for="name"
-        >
-          <b-form-input
-            id="name"
-            placeholder="Enter name"
-          />
-        </b-form-group>
-        <b-form-group
-          label="Choose the country"
-          label-for="vue-select"
-        >
-          <v-select
-            id="vue-select"
-            v-model="selected"
-            :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-            :options="option"
-          />
-        </b-form-group>
-        <b-form-group
-          label="Zip Code"
-          label-for="zip-code"
-        >
-          <b-form-input
-            id="zip-code"
-            type="number"
-            placeholder="Zip Code"
-          />
-        </b-form-group>
+  
       </b-form>
     </b-modal>
 

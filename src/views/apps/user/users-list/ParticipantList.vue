@@ -2,13 +2,14 @@
 
   <div>
 
-     <competition-list-add-new
+    <user-list-add-new
       :is-add-new-user-sidebar-active.sync="isAddNewUserSidebarActive"
       :role-options="roleOptions"
       :plan-options="planOptions"
       @refetch-data="refetchData"
     />
-    <!-- Filters -->    
+
+    <!-- Filters -->
 <!--     <users-list-filters
       :role-filter.sync="roleFilter"
       :plan-filter.sync="planFilter"
@@ -57,12 +58,7 @@
                 class="d-inline-block mr-1"
                 placeholder="Rechercher..."
               />
-              <b-button
-                variant="primary"
-                @click="isAddNewUserSidebarActive = true"
-              >
-                <span class="text-nowrap">Ajouter une compétition</span>
-              </b-button>
+            
             </div>
           </b-col>
         </b-row>
@@ -72,7 +68,7 @@
       <b-table
         ref="refUserListTable"
         class="position-relative"
-        :items="fetchCompetitions"
+        :items="userData"
         responsive
         :fields="tableColumns"
         primary-key="id"
@@ -83,18 +79,30 @@
       >
 
         <!-- Column: User -->
-        <template #cell(Club)="data">
+        <template #cell(Nom)="data">
           <b-media vertical-align="center">
             <template #aside>
               <b-avatar
                 size="32"
-                :text="avatarText(data.item.name)"
-                :variant="`light-${resolveUserRoleVariant(data.item.name)}`"
-                :to="{ name: 'pages-blog-detail', params: { id: data.item.id } }"
+                :text="avatarText(data.item.lastname)"
+                :variant="`light-${resolveUserRoleVariant(data.item.lastname)}`"
+                :to="{ name: 'apps-users-view', params: { id: data.item.id } }"
               />
             </template>
             <b-link
-              :to="{ name: 'pages-blog-detail', params: { id: data.item.id } }"
+              :to="{ name: 'apps-users-view', params: { id: data.item.id } }"
+              class="font-weight-bold d-block text-nowrap"
+            >
+              {{ data.item.lastname }}
+            </b-link>
+          </b-media>
+        </template>
+
+               <template #cell(Prénom)="data">
+          <b-media vertical-align="center">
+            
+            <b-link
+              :to="{ name: 'apps-users-view', params: { id: data.item.id } }"
               class="font-weight-bold d-block text-nowrap"
             >
               {{ data.item.name }}
@@ -102,52 +110,9 @@
           </b-media>
         </template>
 
-               <template #cell(Titre)="data">
-          <b-media vertical-align="center">
-            
-            <b-link
-              :to="{ name: 'pages-blog-detail', params: { id: data.item.id } }"
-              class="font-weight-bold d-block text-nowrap"
-            >
-              {{ data.item.name }}
-            </b-link>
-          </b-media>
-        </template>
-            <template #cell(Adresse)="data">
-          <b-media vertical-align="center">
-            
-            <b-link
-              :to="{ name: 'apps-competitions-view', params: { id: data.item.id } }"
-              class="font-weight-bold d-block text-nowrap"
-            >
-              {{ data.item.location }}
-            </b-link>
-          </b-media>
-        </template>
-           <template #cell(Debut)="data">
-          <b-media vertical-align="center">
-            
-            <b-link
-              :to="{ name: 'apps-competitions-view', params: { id: data.item.id } }"
-              class="font-weight-bold d-block text-nowrap"
-            >
-              {{ data.item.start }}
-            </b-link>
-          </b-media>
-        </template>
-             <template #cell(Fin)="data">
-          <b-media vertical-align="center">
-            
-            <b-link
-              :to="{ name: 'apps-competitions-view', params: { id: data.item.id } }"
-              class="font-weight-bold d-block text-nowrap"
-            >
-              {{ data.item.fin }}
-            </b-link>
-          </b-media>
-        </template>
-        
-       
+        <!-- Column: Role -->
+    
+
         <!-- Column: Actions -->
            <template #cell(actions)="data">
           <b-dropdown
@@ -155,6 +120,7 @@
             no-caret
             :right="$store.state.appConfig.isRTL"
           >
+
             <template #button-content>
               <feather-icon
                 icon="MoreVerticalIcon"
@@ -162,9 +128,14 @@
                 class="align-middle text-body"
               />
             </template>
-            <b-dropdown-item :to="{ name: 'apps-competitions-view', params: { id: data.item.id } }">
+            <b-dropdown-item :to="{ name: 'apps-users-view', params: { id: data.item.id } }">
               <feather-icon icon="FileTextIcon" />
               <span class="align-middle ml-50">Détailes</span>
+            </b-dropdown-item>
+
+            <b-dropdown-item :to="{ name: 'apps-users-edit', params: { id: data.item.id } }">
+              <feather-icon icon="EditIcon" />
+              <span class="align-middle ml-50">Modifier</span>
             </b-dropdown-item>
           </b-dropdown>
         </template>
@@ -219,6 +190,7 @@
     </b-card>
   </div>
 </template>
+
 <script>
 import {
   BCard, BRow, BCol, BFormInput, BButton, BTable, BMedia, BAvatar, BLink,
@@ -228,12 +200,14 @@ import vSelect from 'vue-select'
 import store from '@/store'
 import { ref, onUnmounted } from '@vue/composition-api'
 import { avatarText } from '@core/utils/filter'
-import useCompetitionsList from './useCompetitionsList'
-import competitionStoreModule from './competitionStoreModule'
-import CompetitionListAddNew from './CompetitionListAddNew.vue'
-
+import UsersListFilters from './UsersListFilters.vue'
+import useUsersList from './useUsersList'
+import userStoreModule from '../userStoreModule'
+import UserListAddNew from './UserListAddNew.vue'
 export default {
   components: {
+    UsersListFilters,
+    UserListAddNew,
     BCard,
     BRow,
     BCol,
@@ -248,21 +222,26 @@ export default {
     BDropdownItem,
     BPagination,
     vSelect,
-    CompetitionListAddNew
   },
-
+   props: {
+    userData: {
+      type: Object,
+      required: true,
+    },
+  
+  },
   setup() {
-    const COMPETITION_APP_STORE_MODULE_NAME = 'app-competition'
+    const USER_APP_STORE_MODULE_NAME = 'app-user'
     // Register module
-    if (!store.hasModule(COMPETITION_APP_STORE_MODULE_NAME)) store.registerModule(COMPETITION_APP_STORE_MODULE_NAME, competitionStoreModule)
+    if (!store.hasModule(USER_APP_STORE_MODULE_NAME)) store.registerModule(USER_APP_STORE_MODULE_NAME, userStoreModule)
     // UnRegister on leave
     onUnmounted(() => {
-      if (store.hasModule(COMPETITION_APP_STORE_MODULE_NAME)) store.unregisterModule(COMPETITION_APP_STORE_MODULE_NAME)
+      if (store.hasModule(USER_APP_STORE_MODULE_NAME)) store.unregisterModule(USER_APP_STORE_MODULE_NAME)
     })
+     
     const isAddNewUserSidebarActive = ref(false)
-
     const roleOptions = [
-      { label: 'Fédération tunisienne de karaté', value: '1' },
+      { label: 'Admin', value: 'admin' },
       { label: 'Author', value: 'author' },
       { label: 'Editor', value: 'editor' },
       { label: 'Maintainer', value: 'maintainer' },
@@ -280,8 +259,8 @@ export default {
       { label: 'Inactive', value: 'inactive' },
     ]
     const {
-     
-      fetchCompetitions,
+      fetchUsersTest,
+      fetchUsers,
       tableColumns,
       perPage,
       currentPage,
@@ -301,13 +280,13 @@ export default {
       roleFilter,
       planFilter,
       statusFilter,
-    } = useCompetitionsList()
+    } = useUsersList()
   
     return {
       // Sidebar
       isAddNewUserSidebarActive,
-      fetchCompetitions,
-     
+      fetchUsersTest,
+      fetchUsers,
       tableColumns,
       perPage,
       currentPage,

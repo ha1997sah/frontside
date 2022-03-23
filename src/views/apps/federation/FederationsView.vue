@@ -37,7 +37,15 @@
     
 
        <b-row>
+           <b-col
+          cols="12"
+          xl="12"
+          lg="12"
+          md="12"
+        >
         <club-list/>
+                </b-col>
+
       </b-row>
     </template>
 

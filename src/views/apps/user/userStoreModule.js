@@ -16,10 +16,43 @@ export default {
           .catch(error => reject(error))
       })
     },
-    fetchUsersUnderClub(ctx, queryParams) {
+
+    fetchAthletes(ctx, queryParams) {
+    
       return new Promise((resolve, reject) => {
         authentication
-          .usersUnderClub(router.currentRoute.params.id )
+          .allAthletes()
+          .then(response => resolve(response))
+          .catch(error => reject(error))
+      })
+    },
+    fetchAthletesBysexe(ctx,sexe) {
+      return new Promise((resolve, reject) => {
+        authentication
+          .athletesBySexe({sexe:sexe})
+          .then(response => resolve(response))
+          .catch(error => reject(error))
+      })
+    },
+    fetchAthletesByLevel(ctx,level) {
+      return new Promise((resolve, reject) => {
+        authentication.athletesByLevel({level:level})
+          .then(response => resolve(response))
+          .catch(error => reject(error))
+      })
+    },
+    fetchUsersUnderClub(ctx,ClubId) {
+      return new Promise((resolve, reject) => {
+        authentication
+          .usersUnderClub({ClubId:ClubId} )
+          .then(response => resolve(response))
+          .catch(error => reject(error))
+      })
+    },
+    fetchUsersUnderFed(ctx,FederationId) {
+      return new Promise((resolve, reject) => {
+        authentication
+          .usersUnderFed({FederationId:FederationId} )
           .then(response => resolve(response))
           .catch(error => reject(error))
       })

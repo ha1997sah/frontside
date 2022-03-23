@@ -1,0 +1,253 @@
+<template>
+  <content-with-sidebar
+    v-if="Object.keys(blogDetail).length"
+    class="cws-container cws-sidebar-right blog-wrapper"
+  >
+
+    <!-- content -->
+    <div class="blog-detail-wrapper">
+      <b-row>
+        <!-- blogs -->
+        <b-col cols="12">
+          <b-card
+            :img-src="blogDetail.image"
+            img-top
+            img-alt="Blog Detail Pic"
+            :title="blogDetail.name"
+            img-height="200"
+          >
+            <b-media no-body>
+              <b-media-aside
+                vertical-align="center"
+                class="mr-50"
+              >
+              
+              </b-media-aside>
+              <b-media-body>
+                <small class="text-muted mr-50">Date</small>
+                <small>
+                  <b-link class="text-body">{{ blogDetail.start }}</b-link>
+                </small>
+                <span class="text-muted ml-75 mr-50">|</span>
+                <small class="text-muted">{{ blogDetail.end }}</small>
+              </b-media-body>
+            </b-media>
+            <div class="my-1 py-25">
+            
+            </div>
+            <!-- eslint-disable vue/no-v-html -->
+            <div
+              class="blog-content"
+              v-html="blogDetail.description"
+            />
+
+            <!-- user commnets -->
+     
+            <!-- eslint-enable -->
+            <hr class="my-2">
+
+            <div class="d-flex align-items-center justify-content-between">
+             
+            
+            </div>
+          </b-card>
+        </b-col>
+        <!--/ Leave a Blog Comment -->
+      </b-row>
+      <!--/ blogs -->
+    </div>
+    <!--/ content -->
+
+    <!-- sidebar -->
+    <div
+      slot="sidebar"
+      class="blog-sidebar py-2 py-lg-0"
+    >
+      <!-- input search -->
+      <b-form-group class="blog-search">
+        <b-input-group class="input-group-merge">
+          <b-form-input
+            id="search-input"
+            v-model="search_query"
+            placeholder="Search here"
+          />
+          <b-input-group-append
+            class="cursor-pointer"
+            is-text
+          >
+            <feather-icon
+              icon="SearchIcon"
+            />
+          </b-input-group-append>
+        </b-input-group>
+      </b-form-group>
+      <!--/ input search -->
+
+      <!-- recent posts -->
+      <div class="blog-recent-posts mt-3">
+        <h6 class="section-label mb-75">
+          Recent Posts
+        </h6>
+        <b-media
+          v-for="(recentpost,index) in latestComp"
+          :key="`http://localhost:3001/${recentpost.image}`"
+          no-body
+          :class="index? 'mt-2':''"
+        >
+          <b-media-aside class="mr-2">
+            <b-link>
+              <b-img
+                :src="`http://localhost:3001/${recentpost.image}`"
+                :alt="`http://localhost:3001/${recentpost.image}`.slice(6)"
+                width="100"
+                rounded
+                height="70"
+              />
+            </b-link>
+          </b-media-aside>
+          <b-media-body>
+            <h6 class="blog-recent-post-title">
+              <b-link class="text-body-heading">
+                {{ recentpost.name }}
+              </b-link>
+            </h6>
+            <span class="text-muted mb-0">
+              {{ recentpost.start }}
+            </span>
+          </b-media-body>
+        </b-media>
+      </div>
+      <!--/ recent posts -->
+
+    </div>
+<participant-list :user-data="participantList"/> 
+   </content-with-sidebar>
+
+</template>
+
+<script>
+import {
+  BFormInput, BMedia, BAvatar, BMediaAside, BMediaBody, BImg, BLink, BFormGroup, BInputGroup, BInputGroupAppend,
+  BCard, BRow, BCol, BBadge, BCardText, BDropdown, BDropdownItem, BForm, BFormTextarea, BFormCheckbox, BButton,
+} from 'bootstrap-vue'
+import { ref, onUnmounted } from '@vue/composition-api'
+import store from '@/store'
+import router from '@/router'
+import competitionStoreModule from './competitionStoreModule'
+
+import Ripple from 'vue-ripple-directive'
+import { kFormatter } from '@core/utils/filter'
+import ContentWithSidebar from '@core/layouts/components/content-with-sidebar/ContentWithSidebar.vue'
+import ParticipantList from '../user/users-list/ParticipantList.vue'
+import authentication from '@/services/authentication.js'
+
+export default {
+  components: {
+    ParticipantList,
+    competitionStoreModule,
+    BFormInput,
+    BMedia,
+    BAvatar,
+    BMediaAside,
+    BMediaBody,
+    BLink,
+    BCard,
+    BRow,
+    BCol,
+    BFormGroup,
+    BInputGroup,
+    BInputGroupAppend,
+    BImg,
+    BBadge,
+    BCardText,
+    BDropdown,
+    BForm,
+    BDropdownItem,
+    BFormTextarea,
+    BFormCheckbox,
+    BButton,
+    ContentWithSidebar,
+  },
+  directives: {
+    Ripple,
+  },
+  data() {
+    return {
+      search_query: '',
+      commentCheckmark: '',
+      blogSidebar: {},
+      socialShareIcons: [
+        'GithubIcon',
+        'GitlabIcon',
+        'FacebookIcon',
+        'TwitterIcon',
+        'LinkedinIcon',
+      ],
+    }
+  },
+  created() {
+    this.$http.get('/blog/list/data/detail').then(res => { this.blogDetail = res.data })
+    this.$http.get('/blog/list/data/sidebar').then(res => { this.blogSidebar = res.data })
+  },
+    methods: {
+    kFormatter,
+    tagsColor(tag) {
+      if (tag === 'Quote') return 'light-info'
+      if (tag === 'Gaming') return 'light-danger'
+      if (tag === 'Fashion') return 'light-primary'
+      if (tag === 'Video') return 'light-warning'
+      if (tag === 'Food') return 'light-success'
+      return 'light-primary'
+    },
+  },
+
+    setup() {
+    const blogDetail= ref(null)
+    const image=ref(null)
+    const latestComp=ref(null)
+
+    const participantList=ref(null)
+
+    const COMPETITION_APP_STORE_MODULE_NAME = 'app-competition'
+
+    // Register module
+    if (!store.hasModule(COMPETITION_APP_STORE_MODULE_NAME)) store.registerModule(COMPETITION_APP_STORE_MODULE_NAME, competitionStoreModule)
+
+    // UnRegister on leave
+    onUnmounted(() => {
+      if (store.hasModule(COMPETITION_APP_STORE_MODULE_NAME)) store.unregisterModule(COMPETITION_APP_STORE_MODULE_NAME)
+    })
+    authentication.participantList({ id: router.currentRoute.params.id }).then(response => {
+      participantList.value= response.data.users,
+      console.log(participantList.value)
+
+    }),
+    authentication.latestCompetitions().then(response =>{
+      latestComp.value= response.data.competitions
+
+    }),
+    store.dispatch('app-competition/fetchCompetitionById', { id: router.currentRoute.params.id })
+      .then(response => { blogDetail.value = response.data.competition ,
+           blogDetail.value.image=`http://localhost:3001/${response.data.competition.image}`,
+        console.log(blogDetail.value.image)
+      blogDetail.value.start= (response.data.competition.start).getFullYear(),
+      console.log(response.data.competition.image),
+      console.log(blogDetail.value)})
+      .catch(error => {
+        if (error.response.status === 404) {
+          blogDetail.value = undefined
+        }
+      })
+
+    return {
+      blogDetail,
+      image,
+      participantList,
+      latestComp
+    }}
+}
+</script>
+
+<style lang="scss">
+@import '@core/scss/vue/pages/page-blog.scss';
+</style>

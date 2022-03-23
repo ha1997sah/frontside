@@ -34,7 +34,15 @@
         </b-col>
       </b-row>
       <b-row>
+            <b-col
+          cols="12"
+          xl="12"
+          lg="12"
+          md="12"
+        >
         <users-list />
+                </b-col>
+
       </b-row>
     </template>
 

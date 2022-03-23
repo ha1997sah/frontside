@@ -30,7 +30,7 @@ export default {
         return Api().get('allPendingRequests')
     },
     findUserById(id){
-        return Api().get(`user/${id}`)
+        return Api().get("user/1")
     },
 
     acceptRegister(id){
@@ -111,8 +111,11 @@ export default {
        clubUnderFed(id){
          return Api().get(`clubUnderFed/${id}`)
        },
-       usersUnderClub(id){
-        return Api().get(`usersUnderClub/${id}`)
+       usersUnderClub(credentials){
+        return Api().post('usersUnderClub',credentials)
+      },
+      usersUnderFed(credentials){
+        return Api().post('usersUnderFed',credentials)
       },
 
       editCompetition(credentials,id){
@@ -123,4 +126,29 @@ export default {
         return Api().delete(`deleteCompetition/${id}`)
        }, 
 
+    // athlete
+    allAthletes(){
+        return Api().get('allAthletes')
+    },
+    athletesBySexe(credentials){
+        return Api().post('athletesBySexe',credentials)
+    },
+    athletesByLevel(credentials){
+        return Api().post('athletesByLevel',credentials)
+    },
+    getCategorie(){
+        return Api().get('getCategorie')
+    },
+    findCategoryById(credentials){
+        return Api().post('findCategoryById',credentials)
+    },
+    participantList(credentials){
+        return Api().post('participantList',credentials)
+    },
+    latestCompetitions(){
+        return Api().get('recentCompetition')
+    },
+    inscrit(credentials){
+        return Api().post('inscri',credentials)
+    }
 }

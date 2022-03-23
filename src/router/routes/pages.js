@@ -261,7 +261,7 @@ export default [
   {
     path: '/pages/blog/:id',
     name: 'pages-blog-detail',
-    component: () => import('@/views/pages/blog/BlogDetail.vue'),
+    component: () => import('@/views/apps/competition/BlogDetail.vue'),
     meta: {
       pageTitle: 'Blog Detail',
       breadcrumb: [

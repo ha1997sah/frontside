@@ -5,28 +5,27 @@
     <b-row class="blog-list-wrapper">
       <b-col
         v-for="blog in blogList"
-        :key="`http://localhost:3001/${blog.image}`"
+        :key="blog.img"
         md="6"
       >
         <b-card
           tag="article"
           no-body
         >
-          <b-link :to="{ name: 'apps-competition-detail', params: { id: blog.id } }">
+          <b-link :to="{ name: 'pages-blog-detail', params: { id: blog.id } }">
             <b-img
-              :src="`http://localhost:3001/${blog.image}`"
-
-
+              :src="blog.img"
+              :alt="blog.img.slice(5)"
               class="card-img-top"
             />
           </b-link>
           <b-card-body>
             <b-card-title>
               <b-link
-                :to="{ name: 'apps-competition-detail', params: { id: blog.id } }"
+                :to="{ name: 'pages-blog-detail', params: { id: blog.id } }"
                 class="blog-title-truncate text-body-heading"
               >
-                {{ blog.name }}
+                {{ blog.title }}
               </b-link>
             </b-card-title>
             <b-media no-body>
@@ -43,7 +42,7 @@
               <b-media-body>
                 <small class="text-muted mr-50">by</small>
                 <small>
-                  <b-link class="text-body">{{ blog.name }}</b-link>
+                  <b-link class="text-body">{{ blog.userFullName }}</b-link>
                 </small>
                 <span class="text-muted ml-75 mr-50">|</span>
                 <small class="text-muted">{{ blog.blogPosted }}</small>
@@ -68,22 +67,22 @@
             </b-card-text>
             <hr>
             <div class="d-flex justify-content-between align-items-center">
-               <b-button
-        v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-        v-b-modal.modal-select2
-        variant="outline-primary"
-      >
-       Participer
-      </b-button>
-          
+              <b-link :to="{ path: `/pages/blog/${blog.id}#blogComment`}">
+                <div class="d-flex align-items-center text-body">
+                  <feather-icon
+                    icon="MessageSquareIcon"
+                    class="mr-50"
+                  />
+                  <span class="font-weight-bold">{{ kFormatter(blog.comment) }} Comments</span>
+                </div>
+              </b-link>
               <b-link
-                :to="{ name: 'apps-competition-detail', params: { id: blog.id } }"
+                :to="{ name: 'pages-blog-detail', params: { id: blog.id } }"
                 class="font-weight-bold"
               >
                 Read More
               </b-link>
             </div>
-        
           </b-card-body>
         </b-card>
       </b-col>
@@ -155,9 +154,10 @@
           :class="index? 'mt-2':''"
         >
           <b-media-aside class="mr-2">
-            <b-link :to="{ name: 'apps-competition-detail', params:{ id :recentpost.id } }">
+            <b-link :to="{ name: 'pages-blog-detail', params:{ id :recentpost.id } }">
               <b-img
                 :src="recentpost.img"
+                :alt="recentpost.img.slice(6)"
                 width="100"
                 rounded
                 height="70"
@@ -167,7 +167,7 @@
           <b-media-body>
             <h6 class="blog-recent-post-title">
               <b-link
-                :to="{ name: 'apps-competition-detail', params:{ id :recentpost.id } }"
+                :to="{ name: 'pages-blog-detail', params:{ id :recentpost.id } }"
                 class="text-body-heading"
               >
                 {{ recentpost.title }}
@@ -215,122 +215,18 @@
       <!--/ categories -->
     </div>
     <!--/ sidebar -->
-         <b-modal
-      id="modal-select2"
-      title="Basic Modal"
-      cancel-variant="outline-secondary"
-
-    >
-      <b-form>
-        <b-row>
-     <b-col md="6">
-        <b-form-group>
-          <label for="taille">Taille:</label>
-          <b-form-input
-            id="taille"
-            type="text"
-            placeholder="Taille"
-            v-model="userData.height"
-
-          />
-        </b-form-group>
-        </b-col>
-     <b-col md="6">
-          <b-form-group>
-          <label for="Poids">Poids:</label>
-          <b-form-input
-            id="poids"
-            type="poids"
-            placeholder="Poids"
-            v-model="userData.weight"
-
-          />
-        </b-form-group>
-        </b-col>
-        </b-row>
-           <b-row>
-     <b-col md="6">
-        <b-form-group>
-          <label for="belt">Ceinture:</label>
-          <b-form-input
-            id="belt"
-            type="text"
-            placeholder="Ceinture"
-            v-model="userData.belt"
-
-          />
-        </b-form-group>
-        </b-col>
-     <b-col md="6">
-          <b-form-group>
-          <label for="club">Club:</label>
-          <b-form-input
-            id="club"
-            type="text"
-            placeholder="Club"
-            v-model="userData.Club.name"
-
-          />
-        </b-form-group>
-        </b-col>
-        </b-row>
-        
-  
-        
-      </b-form>
-       <b-button
-        v-ripple.400="'rgba(255, 255, 255, 0.15)'"
-        v-b-modal.modal-multi-2
-        variant="primary"
-        @click="inscrit"
-
-      >
-        Open Second Modal
-      </b-button>
-    </b-modal>
-     <b-modal
-      id="modal-multi-2"
-      title="Second Modal"
-      ok-only
-      ok-title="Accept"
-    >
-      <b-card-text class="my-2">
-        Second Modal
-      </b-card-text>
-      <b-button
-        v-ripple.400="'rgba(255, 255, 255, 0.15)'"
-        v-b-modal.modal-multi-3
-        size="sm"
-        variant="primary"
-      >
-        Open Third Modal
-      </b-button>
-    </b-modal>
   </content-with-sidebar>
 </template>
 
 <script>
 import {
-  BRow, BCol,BButton,BModal,VBModal, BCard,BForm, BFormInput, BCardText, BCardTitle, BMedia, BAvatar, BMediaAside, BMediaBody, BImg, BCardBody, BLink, BBadge, BFormGroup, BInputGroup, BInputGroupAppend, BPagination,
+  BRow, BCol, BCard, BFormInput, BCardText, BCardTitle, BMedia, BAvatar, BMediaAside, BMediaBody, BImg, BCardBody, BLink, BBadge, BFormGroup, BInputGroup, BInputGroupAppend, BPagination,
 } from 'bootstrap-vue'
-import vSelect from 'vue-select'
-
 import { kFormatter } from '@core/utils/filter'
 import ContentWithSidebar from '@core/layouts/components/content-with-sidebar/ContentWithSidebar.vue'
-import authentication from '@/services/authentication.js'
-import Ripple from 'vue-ripple-directive'
-import { useToast } from 'vue-toastification/composition'
-import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
-
 
 export default {
   components: {
-    useToast,
-    BModal,
-    vSelect,
-    VBModal,
-    BForm,
-    BButton,
     BRow,
     BCol,
     BCard,
@@ -351,10 +247,6 @@ export default {
     BPagination,
     ContentWithSidebar,
   },
-    directives: {
-    'b-modal': VBModal,
-    Ripple,
-  },
   data() {
     return {
       search_query: '',
@@ -363,23 +255,10 @@ export default {
       currentPage: 1,
       perPage: 1,
       rows: 140,
-      img: require('@/assets/images/karate.jpg'),
-      userData:null
-
     }
   },
   created() {
-      
-          authentication
-          .allCompetitions()
-          .then(response =>  { this.blogList = response.data.competitions ,conole.log(response.data)})
-          .catch(error => error.message),
-
-          authentication.findUserById({id:"1"}).then(response => { this.userData = response.data.user
-
-          })
-     
- 
+    this.$http.get('/blog/list/data').then(res => { this.blogList = res.data })
     this.$http.get('/blog/list/data/sidebar').then(res => { this.blogSidebar = res.data })
   },
   methods: {
@@ -392,18 +271,7 @@ export default {
       if (tag === 'Food') return 'light-success'
       return 'light-primary'
     },
-    inscrit(){
-           authentication.inscrit({
-            compId:"1",
-            userId:"1"
-          }).then(response=>{
-            console.log("ok")
-          })
-    }
   },
-
-
-
 }
 </script>
 

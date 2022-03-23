@@ -84,7 +84,7 @@ export default function useUsersList() {
       .dispatch('app-user/fetchPendingRequests', {
         q: searchQuery.value,
         perPage: perPage.value,
-        page: currentPage.value,
+        page: currentPage.value, 
         sortBy: sortBy.value,
         sortDesc: isSortDirDesc.value,
         role: roleFilter.value,
@@ -108,6 +108,62 @@ export default function useUsersList() {
         })
       })
   }
+  const fetchAthletes= (ctx, callback) => {
+    store
+      .dispatch('app-user/fetchAthletes', {
+        q: searchQuery.value,
+        perPage: perPage.value,
+        page: currentPage.value, 
+        sortBy: sortBy.value,
+        sortDesc: isSortDirDesc.value,
+        role: roleFilter.value,
+        plan: planFilter.value,
+        status: statusFilter.value,
+      })
+      .then(response => {
+        const { users, total } = response.data
+         console.log(users)
+        callback(users)
+        totalUsers.value = total
+      })
+      .catch(() => {
+        toast({
+          component: ToastificationContent,
+          props: {
+            title: 'Error fetching users list',
+            icon: 'AlertTriangleIcon',
+            variant: 'danger',
+          },
+        })
+      })}
+      const athletesBySexe= (ctx, callback) => {
+        store
+          .dispatch('app-user/fetchAthletes',athletesByLevel, {
+            q: searchQuery.value,
+            perPage: perPage.value,
+            page: currentPage.value, 
+            sortBy: sortBy.value,
+            sortDesc: isSortDirDesc.value,
+            role: roleFilter.value,
+            plan: planFilter.value,
+            status: statusFilter.value,
+          })
+          .then(response => {
+            const { users, total } = response.data
+             console.log(users)
+            callback(users)
+            totalUsers.value = total
+          })
+          .catch(() => {
+            toast({
+              component: ToastificationContent,
+              props: {
+                title: 'Error fetching users list',
+                icon: 'AlertTriangleIcon',
+                variant: 'danger',
+              },
+            })
+          })}
   const fetchUsers = (ctx, callback) => {
     store
       .dispatch('app-user/fetchPendingRequests', {
@@ -221,6 +277,8 @@ export default function useUsersList() {
     statusFilter,
     handleOk,
     fetchPendingRequests,
+    fetchAthletes,
+    athletesBySexe,
   }
 
 }

@@ -15,7 +15,7 @@
       <!-- Header -->
       <div class="d-flex justify-content-between align-items-center content-sidebar-header px-2 py-1">
         <h5 class="mb-0">
-          Ajouter une competition
+          Add un nouveau utilisateur
         </h5>
 
         <feather-icon
@@ -42,18 +42,20 @@
           <!-- Full Name -->
           <validation-provider
             #default="validationContext"
-            name="titre"
+            name="Nom"
+            rules="required"
           >
             <b-form-group
-              label="Titre"
-              label-for="titre"
+              label="Nom"
+              label-for="Nom"
             >
               <b-form-input
-                id="titre"
-                v-model="clubData.name"
+                id="nom"
+                v-model="userData.lastname"
                 autofocus
                 :state="getValidationState(validationContext)"
                 trim
+                placeholder="John Doe"
               />
 
               <b-form-invalid-feedback>
@@ -62,18 +64,19 @@
             </b-form-group>
           </validation-provider>
 
-          <!-- Country -->
+          <!-- Username -->
           <validation-provider
             #default="validationContext"
-            name="Adresse"
+            name="Prénom"
+            rules="required"
           >
             <b-form-group
-              label="Adresse"
-              label-for="adresse"
+              label="Prénom"
+              label-for="prénom"
             >
               <b-form-input
-                id="adresse"
-                v-model="clubData.location"
+                id="prenom"
+                v-model="userData.name"
                 :state="getValidationState(validationContext)"
                 trim
               />
@@ -84,17 +87,19 @@
             </b-form-group>
           </validation-provider>
 
-             <validation-provider
+          <!-- Email -->
+          <validation-provider
             #default="validationContext"
-            name="Description"
+            name="Email"
+            rules="required|email"
           >
             <b-form-group
-              label="Description"
-              label-for="description"
+              label="Email"
+              label-for="email"
             >
               <b-form-input
-                id="description"
-                v-model="clubData.description"
+                id="email"
+                v-model="userData.email"
                 :state="getValidationState(validationContext)"
                 trim
               />
@@ -104,46 +109,79 @@
               </b-form-invalid-feedback>
             </b-form-group>
           </validation-provider>
-    
+
+             <!-- password -->
+          <validation-provider
+            #default="validationContext"
+            name="Password"
+            rules="required"
+          >
+            <b-form-group
+              label="Password"
+              label-for="password"
+            >
+              <b-form-input
+                id="password"
+                v-model="userData.password"
+                :state="getValidationState(validationContext)"
+                trim
+              />
+
+              <b-form-invalid-feedback>
+                {{ validationContext.errors[0] }}
+              </b-form-invalid-feedback>
+            </b-form-group>
+          </validation-provider>
+
+          <!-- Company -->
+          <validation-provider
+            #default="validationContext"
+            name="Numéro de téléphone"
+            rules="required"
+          >
+            <b-form-group
+              label="phone"
+              label-for="phone"
+            >
+              <b-form-input
+                id="contact"
+                v-model="userData.phone"
+                :state="getValidationState(validationContext)"
+                trim
+              />
+
+              <b-form-invalid-feedback>
+                {{ validationContext.errors[0] }}
+              </b-form-invalid-feedback>
+            </b-form-group>
+          </validation-provider>
+
+
           <!-- User Role -->
           <validation-provider
             #default="validationContext"
-            name="Categorie"
+            name="Role"
+            rules="required"
           >
             <b-form-group
-              label="Categorie des poids"
-              label-for="categorie"
+              label="Role"
+              label-for="role"
               :state="getValidationState(validationContext)"
             >
               <v-select
-              v-model="clubData.selectedItem"
+                v-model="userData.role"
                 :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
                 :options="roleOptions"
+                :reduce="val => val.value"
                 :clearable="false"
-                input-id="club-categorie"
+                input-id="user-role"
               />
               <b-form-invalid-feedback :state="getValidationState(validationContext)">
                 {{ validationContext.errors[0] }}
               </b-form-invalid-feedback>
             </b-form-group>
           </validation-provider>
-          <b-form-group>
-                <b-form-file
-               placeholder="Choisir une photo..."
-                 drop-placeholder="Photo..."
-                 @change="selectFile"
-                   />
-             </b-form-group>
- <b-form-datepicker
-      id="start-datepicker"
-      v-model="clubData.start"
-      class="mb-1"
-    />
-<b-form-datepicker
-      id="end-datepicker"
-      v-model="clubData.end"
-      class="mb-1"
-    />
+
           <!-- Form Actions -->
           <div class="d-flex mt-2">
             <b-button
@@ -160,7 +198,7 @@
               variant="outline-secondary"
               @click="hide"
             >
-              Effacer
+              Cancel
             </b-button>
           </div>
 
@@ -172,7 +210,7 @@
 
 <script>
 import {
-  BSidebar, BForm,BFormFile,BFormDatepicker, BFormGroup, BFormInput, BFormInvalidFeedback, BButton,
+  BSidebar, BForm, BFormGroup, BFormInput, BFormInvalidFeedback, BButton,
 } from 'bootstrap-vue'
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import { ref } from '@vue/composition-api'
@@ -191,8 +229,6 @@ export default {
 
   components: {
     BSidebar,
-    BFormFile,
-    BFormDatepicker,
     BForm,
     BFormGroup,
     BFormInput,
@@ -230,60 +266,36 @@ export default {
       required,
       alphaNum,
       email,
-      location,
       countries,
-      error:null,
-      file:""
-
+            error:null
 
     }
   },
   setup(props, { emit }) {
         const toast = useToast()
 
-    const blankclubData = {
+    const blankUserData = {
       name: '',
 	    lastname: '',
 	    phone: '',
       email: '',
       password: '',
       role:null,
-      error:null,
     }
-           const file = ref(null)
 
-    const clubData = ref(JSON.parse(JSON.stringify(blankclubData)))
-    const resetclubData = () => {
-      clubData.value = JSON.parse(JSON.stringify(blankclubData))
+    const userData = ref(JSON.parse(JSON.stringify(blankUserData)))
+    const resetuserData = () => {
+      userData.value = JSON.parse(JSON.stringify(blankUserData))
     }
-      const selectFile=(e) => {
-   file.value=e.target.files[0]
-  console.log(file.value)
 
-      }
     const onSubmit = () => {
-      const formData = new FormData()
-      formData.append('name',clubData.value.name)
-      formData.append('start',clubData.value.start)
-      formData.append('end',clubData.value.end)
-      formData.append('location',clubData.value.location)
-      formData.append('description',clubData.value.description)
-      formData.append('idCat',"1")
-
-
-
-
-      formData.append('compImage',file.value)
-    
-
-      store.dispatch('app-competition/addCompetition',formData)
+      store.dispatch('app-user/addUser', userData.value)
         .then(() => {
-            toast({
+             toast({
           component: ToastificationContent,
           props: {
-            title: 'Opération réussi',
+            title: 'Opération Réussi',
             icon: 'AlertTriangleIcon',
-            
             variant: 'success',
           },
         })
@@ -297,16 +309,14 @@ export default {
       refFormObserver,
       getValidationState,
       resetForm,
-    } = formValidation(resetclubData)
+    } = formValidation(resetuserData)
 
     return {
-      clubData,
+      userData,
       onSubmit,
       refFormObserver,
       getValidationState,
       resetForm,
-      selectFile,
-      file,
     }
   },
 }

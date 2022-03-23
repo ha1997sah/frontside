@@ -202,7 +202,7 @@
               <v-select
               v-model="selectedItem"
                 :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-                :options="clubs"
+                :options="roleOptions"
                 :clearable="false"
                 input-id="club-fed"
               />
@@ -228,7 +228,7 @@
           </validation-provider>
      </b-form-group>
      
-             <b-form-group
+           <b-form-group
               label="Certificat medical"
               label-for="Certificat medical"
             >
@@ -247,7 +247,7 @@
                  <small class="text-danger">{{ errors[0] }}</small>
 
           </validation-provider>
-     </b-form-group>
+     </b-form-group> 
      
 
             <!-- submit button -->
@@ -312,6 +312,7 @@
 <script>
 import { ValidationProvider, ValidationObserver, extend } from 'vee-validate'
 import {mapState} from 'vuex'
+import axios from 'axios'
 
 import {
   BCard, BLink,BFormFile, BFormDatepicker, BCardTitle, BCardText, BForm,BFormInvalidFeedback,
@@ -372,6 +373,7 @@ export default {
       success:false,
       selectedItem:'',
       file:"",
+     roleOptions :[],
 
       // validation rules
       required,
@@ -396,6 +398,19 @@ export default {
       validate: this.isUsernameUnique,
       message: "Username already taken"
     });
+  },
+  created() {
+ axios.get("http://localhost:3001/allClubs").then(
+   response=>{
+const data = response.data.clubs
+data.forEach(element => { this.roleOptions.push({label:element.name, value:element.id})
+  console.log(this.roleOptions)
+});
+
+
+   }
+
+ )
   },
   methods: {
     selectFile() {

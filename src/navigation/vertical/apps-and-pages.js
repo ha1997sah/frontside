@@ -10,6 +10,12 @@ export default [
   },
 
   {
+    title: 'Athlétes',
+    route: 'apps-athletes-list',
+    icon: 'StarIcon',
+  },
+
+  {
     title: 'Inscriptions',
     route: 'apps-users-requests',
     icon: 'UserCheckIcon',

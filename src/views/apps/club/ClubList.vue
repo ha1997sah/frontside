@@ -238,16 +238,14 @@ export default {
     })
     const isAddNewUserSidebarActive = ref(false)
  const fedData= []
-  var roleOptions = [
-     
-    ]
+  const roleOptions = ref([])
  axios.get("http://localhost:3001/allFederations").then(
    response=>{
 const data = response.data.feds
-data.forEach(element => { roleOptions.push({label:element.name, value:element.id})
-  
+data.forEach(element => { roleOptions.value.push({label:element.name, value:element.id})
+  console.log(roleOptions)
 });
-      console.log(roleOptions)
+
 
    }
 

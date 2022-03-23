@@ -43,8 +43,9 @@ cols="12"
         <div class="d-flex flex-sm-row flex-column flex-wrap justify-content-between mb-1 mb-sm-0">
           <h6>Certificat Medical</h6>
         </div>
- {{ userData.medicalCertification }}
-               <b-button @click="openPdf"> Voir le certificat</b-button>     
+   {{ userData.medicalCertification }}
+
+<b-button @click="openPdf"> Voir le certificat</b-button>
       </app-timeline-item>
    </b-col>
        </b-row>
@@ -75,7 +76,7 @@ export default {
   },
   methods:{
          openPdf () {
-   window.open("http://localhost:3001/2022-03-16T12-59-25.180Zcertificate.pdf");
+   window.open(`http://localhost:3001/${userData.image}`);
 }
   }
 }

@@ -190,6 +190,13 @@ export default [
     component: () => import('@/views/apps/user/users-list/UsersList.vue'),
   },
   {
+    path: '/apps/athletes/list',
+    name: 'apps-athletes-list',
+    component: () => import('@/views/apps/user/users-list/AthletesList.vue'),
+  },
+
+  
+  {
     path: '/apps/users/requests',
     name: 'apps-users-requests',
     component: () => import('@/views/apps/user/users-list/PendingUsersList.vue'),
