@@ -41,10 +41,10 @@ export default {
           .catch(error => reject(error))
       })
     },
-    fetchUsersUnderClub(ctx,ClubId) {
+    fetchUsersUnderClub(ctx) {
       return new Promise((resolve, reject) => {
         authentication
-          .usersUnderClub({ClubId:ClubId} )
+          .usersUnderClub({ClubId:router.currentRoute.params.id} )
           .then(response => resolve(response))
           .catch(error => reject(error))
       })

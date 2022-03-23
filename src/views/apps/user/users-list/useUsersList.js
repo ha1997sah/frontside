@@ -31,6 +31,7 @@ export default function useUsersList() {
   const roleFilter = ref(null)
   const planFilter = ref(null)
   const statusFilter = ref(null)
+  const users = ref([])
 
   const dataMeta = computed(() => {
     const localItemsCount = refUserListTable.value ? refUserListTable.value.localItems.length : 0
@@ -206,7 +207,8 @@ export default function useUsersList() {
         status: statusFilter.value,
       })
       .then(response => {
-        const { users, total } = response.data
+        users.value=response.data.users
+        const {  total } = response.data
 
         callback(users)
         totalUsers.value = total
@@ -279,6 +281,7 @@ export default function useUsersList() {
     fetchPendingRequests,
     fetchAthletes,
     athletesBySexe,
+    users
   }
 
 }

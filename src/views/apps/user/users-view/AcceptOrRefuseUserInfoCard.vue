@@ -7,7 +7,7 @@
       <!-- User Info: Left col -->
       <b-col
         cols="21"
-        xl="4"
+        xl="6"
         class="d-flex justify-content-between flex-column"
       >
         <!-- User Avatar & Action Buttons -->
@@ -32,7 +32,7 @@
 
         <!-- User Stats -->
        
- <div class="d-flex flex-wrap">
+        <div class="d-flex align-items-center mt-2">
         <b-button
           variant="primary"
         @click="acceptRegister"
@@ -62,7 +62,7 @@
       <!-- Right Col: Table -->
       <b-col
         cols="12"
-        xl="4"
+        xl="6"
       >
         <table class="mt-2 mt-xl-0 w-100">
           <tr>
@@ -127,77 +127,7 @@
           </tr>
         </table>
       </b-col>
-      <b-col
-        cols="12"
-        xl="4"
-      >
-        <table class="mt-2 mt-xl-0 w-100">
-          <tr>
-            <th class="pb-50">
-              <feather-icon
-                icon="UserIcon"
-                class="mr-75"
-              />
-              <span class="font-weight-bold">Poids</span>
-            </th>
-            <td class="pb-50">
-              {{ userData.weight }}
-            </td>
-          </tr>
-          <tr>
-            <th class="pb-50">
-              <feather-icon
-                icon="CheckIcon"
-                class="mr-75"
-              />
-              <span class="font-weight-bold">Taille</span>
-            </th>
-            <td class="pb-50 text-capitalize">
-              {{ userData.height }}
-            </td>
-          </tr>
-          <tr>
-            <th class="pb-50">
-              <feather-icon
-                icon="AwardIcon"
-                class="mr-75"
-              />
-              <span class="font-weight-bold">Ceinture</span>
-            </th>
-            <td class="pb-50 text-capitalize">
-              {{ userData.belt }}
-            </td>
-          </tr>
-          <tr>
-            <th class="pb-50">
-              <feather-icon
-                icon="ChevronsUpIcon"
-                class="mr-75"
-              />
-              <span class="font-weight-bold">Niveau</span>
-            </th>
-            <td class="pb-50 text-capitalize">
-              {{ userData.level }}
-
-            </td>
-          </tr>
-          <tr>
-            <th class="pb-50">
-              <feather-icon
-                icon="FileMinusIcon"
-                class="mr-75"
-              />
-              <span class="font-weight-bold">Certificat Medical</span>
-            </th>
-            <td class="pb-50">
-              {{ userData.medicalCertification }}
-
-         <b-button @click="openPdf"> Voir le certificat</b-button>
-            </td>
-          </tr>
-        
-        </table>
-      </b-col>
+    
     </b-row>
                    
     <b-modal id="modal-1" title="BootstrapVue"

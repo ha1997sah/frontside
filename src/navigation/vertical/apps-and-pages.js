@@ -25,11 +25,21 @@ export default [
     route: 'apps-clubs-list',
     icon: 'OctagonIcon',
   },
+
   {
     title: 'Compétitions',
     icon: 'GlobeIcon',
-    route: 'apps-competitions-list'
-  },
+    children: [
+      {
+        title: 'Compétitions',
+        route: 'apps-competitions-list',
+      },
+      {
+        title: 'Catégories',
+        route: 'apps-categories-list',
+      },
+      
+    ]},
   {
     title: 'Fédérations',
     icon: 'GlobeIcon',

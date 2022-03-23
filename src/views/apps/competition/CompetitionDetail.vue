@@ -20,28 +20,73 @@
               <b-media-aside
                 vertical-align="center"
                 class="mr-50"
-              >
+              > 
               
               </b-media-aside>
-              <b-media-body>
+              <b-media-body> 
                 <small class="text-muted mr-50">Date</small>
-                <small>
                   <b-link class="text-body">{{ blogDetail.start }}</b-link>
-                </small>
                 <span class="text-muted ml-75 mr-50">|</span>
-                <small class="text-muted">{{ blogDetail.end }}</small>
+                  <b-link class="text-body">{{ blogDetail.end }}</b-link>
               </b-media-body>
             </b-media>
-            <div class="my-1 py-25">
             
-            </div>
-            <!-- eslint-disable vue/no-v-html -->
-            <div
+            <!-- user commnets -->
+        <table class="mt-2 mt-xl-0 w-100" v-for="(cat) in blogDetail.Categories" :key="cat.id">
+            <tr>
+            <th class="pb-50">
+              <feather-icon
+                icon="BookmarkIcon"
+                class="mr-75"
+              />
+              <span class="font-weight-bold">Type</span>
+            </th>
+            <td class="pb-50 text-capitalize">
+              {{cat.type}}
+            </td>
+          </tr>
+          <tr>
+            <th class="pb-50">
+              <feather-icon
+                icon="UsersIcon"
+                class="mr-75"
+              />
+              <span class="font-weight-bold">Sexe</span>
+            </th>
+            <td class="pb-50">
+              {{ cat.sexe }}
+            </td>
+          </tr>
+          <tr>
+            <th>
+              <feather-icon
+                icon="UsersIcon"
+                class="mr-75"
+              />
+              <span class="font-weight-bold">Poids</span>
+            </th>
+            <td>
+              {{ cat.weight }}
+            </td>
+          </tr>
+             <tr>
+            <th>
+              <feather-icon
+                icon="UsersIcon"
+                class="mr-75"
+              />
+              <span class="font-weight-bold">Age</span>
+            </th>
+            <td>
+              {{ cat.age }}
+            </td>
+          </tr>
+        </table>
+        
+          <div
               class="blog-content"
               v-html="blogDetail.description"
             />
-
-            <!-- user commnets -->
      
             <!-- eslint-enable -->
             <hr class="my-2">
@@ -112,7 +157,7 @@
               </b-link>
             </h6>
             <span class="text-muted mb-0">
-              {{ recentpost.start }}
+              {{ new Date(recentpost.start).getDate()+'-'+new Date(recentpost.start).getMonth()+'-'+new Date(recentpost.start).getFullYear()}}
             </span>
           </b-media-body>
         </b-media>
@@ -207,8 +252,9 @@ export default {
     const latestComp=ref(null)
 
     const participantList=ref(null)
-
     const COMPETITION_APP_STORE_MODULE_NAME = 'app-competition'
+    const date=ref(null)
+    const end=ref(null)
 
     // Register module
     if (!store.hasModule(COMPETITION_APP_STORE_MODULE_NAME)) store.registerModule(COMPETITION_APP_STORE_MODULE_NAME, competitionStoreModule)
@@ -217,27 +263,29 @@ export default {
     onUnmounted(() => {
       if (store.hasModule(COMPETITION_APP_STORE_MODULE_NAME)) store.unregisterModule(COMPETITION_APP_STORE_MODULE_NAME)
     })
-    authentication.participantList({ id: router.currentRoute.params.id }).then(response => {
-      participantList.value= response.data.users,
-      console.log(participantList.value)
-
-    }),
-    authentication.latestCompetitions().then(response =>{
-      latestComp.value= response.data.competitions
-
-    }),
+ 
     store.dispatch('app-competition/fetchCompetitionById', { id: router.currentRoute.params.id })
       .then(response => { blogDetail.value = response.data.competition ,
            blogDetail.value.image=`http://localhost:3001/${response.data.competition.image}`,
-        console.log(blogDetail.value.image)
-      blogDetail.value.start= (response.data.competition.start).getFullYear(),
-      console.log(response.data.competition.image),
-      console.log(blogDetail.value)})
+            date.value = new Date(response.data.competition.start),
+            end.value = new Date(response.data.competition.end),
+
+           blogDetail.value.start= date.value.getDate()+'-'+date.value.getMonth()+'-'+date.value.getFullYear(),
+           blogDetail.value.end= end.value.getDate()+'-'+end.value.getMonth()+'-'+end.value.getFullYear()})
       .catch(error => {
         if (error.response.status === 404) {
           blogDetail.value = undefined
         }
-      })
+      }),
+
+         authentication.participantList({ id: router.currentRoute.params.id }).then(response => {
+      participantList.value= response.data.users,
+      console.log("bn")
+    }),
+    authentication.latestCompetitions().then(response =>{
+      latestComp.value= response.data.competitions
+
+    })
 
     return {
       blogDetail,

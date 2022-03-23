@@ -41,6 +41,12 @@
         >
           <user-view-user-timeline-card :user-data="userData" />
         </b-col>
+         <b-col
+          cols="12"
+          lg="6"
+        >
+          <user-timeline :user-data="userRecord" />
+        </b-col>
       
       </b-row>
 
@@ -62,6 +68,7 @@ import UserViewUserInfoCard from './UserViewUserInfoCard.vue'
 import UserViewUserPlanCard from './UserViewUserPlanCard.vue'
 import UsersEdit from '../users-edit/UsersEdit.vue'
 import UserViewUserTimelineCard from './UserViewUserTimelineCard.vue'
+import UserTimeline from './UserTimeline.vue'
 
 export default {
   components: {
@@ -70,6 +77,7 @@ export default {
     BAlert,
     BLink,
     UsersEdit,
+    UserTimeline,
     UserViewUserTimelineCard,
     // Local Components
     UserViewUserInfoCard,
@@ -80,6 +88,7 @@ export default {
   },
   setup() {
     const userData = ref(null)
+    const userRecord=ref(null)
 
     const USER_APP_STORE_MODULE_NAME = 'app-user'
 
@@ -92,7 +101,7 @@ export default {
     })
 
     store.dispatch('app-user/fetchUserById', { id: router.currentRoute.params.id })
-      .then(response => { userData.value = response.data.user ,console.log(userData)})
+      .then(response => { userData.value = response.data.user ,userRecord.value=response.data.user.records,console.log("record",userRecord.value)})
       .catch(error => {
         if (error.response.status === 404) {
           userData.value = undefined
@@ -101,6 +110,7 @@ export default {
 
     return {
       userData,
+      userRecord,
     }
   },
 }

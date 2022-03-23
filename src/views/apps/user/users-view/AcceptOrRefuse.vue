@@ -34,6 +34,22 @@
         </b-col>
      
       </b-row>
+       <b-row>
+        <b-col
+          cols="12"
+          lg="6"
+        >
+          <user-view-user-timeline-card :user-data="userData" />
+        </b-col>
+            <b-col
+          cols="12"
+          lg="6"
+        >
+          <user-timeline :user-data="userRecord" />
+        </b-col>
+      
+      
+      </b-row>
 
 
     </template>
@@ -51,13 +67,18 @@ import {
 import InvoiceList from '@/views/apps/invoice/invoice-list/InvoiceList.vue'
 import userStoreModule from '../userStoreModule'
 import UserViewUserInfoCard from './UserViewUserInfoCard.vue'
+import UserViewUserTimelineCard from './UserViewUserTimelineCard.vue'
+import UserTimeline from './UserTimeline.vue'
+
 import AcceptOrRefuseUserInfoCard from './AcceptOrRefuseUserInfoCard.vue'
 export default {
   components: {
     BRow,
     BCol,
     BAlert,
-    BLink,
+    BLink, 
+    UserViewUserTimelineCard,
+    UserTimeline,
 
     // Local Components
     UserViewUserInfoCard,
@@ -67,6 +88,7 @@ export default {
   },
   setup() {
     const userData = ref(null)
+    const userRecord = ref(null)
 
     const USER_APP_STORE_MODULE_NAME = 'app-user'
 
@@ -79,7 +101,7 @@ export default {
     })
 
     store.dispatch('app-user/fetchUserById', { id: router.currentRoute.params.id })
-      .then(response => { userData.value = response.data.user ,console.log(userData)})
+      .then(response => {userData.value = response.data.user ,userRecord.value=response.data.user.Records,console.log("record",userRecord.value)})
       .catch(error => {
         if (error.response.status === 404) {
           userData.value = undefined
@@ -88,6 +110,7 @@ export default {
 
     return {
       userData,
+      userRecord
     }
   },
 }

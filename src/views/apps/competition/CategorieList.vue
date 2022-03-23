@@ -2,14 +2,13 @@
 
   <div>
 
-    <user-list-add-new
+     <categorie-list-add-new
       :is-add-new-user-sidebar-active.sync="isAddNewUserSidebarActive"
       :role-options="roleOptions"
       :plan-options="planOptions"
       @refetch-data="refetchData"
     />
-
-    <!-- Filters -->
+    <!-- Filters -->    
 <!--     <users-list-filters
       :role-filter.sync="roleFilter"
       :plan-filter.sync="planFilter"
@@ -54,17 +53,15 @@
           >
             <div class="d-flex align-items-center justify-content-end">
               <b-form-input
-                v-model="query"
+                v-model="searchQuery"
                 class="d-inline-block mr-1"
                 placeholder="Rechercher..."
-                @keyup="search"
-
               />
               <b-button
                 variant="primary"
                 @click="isAddNewUserSidebarActive = true"
               >
-                <span class="text-nowrap">Ajouter utilisateur</span>
+                <span class="text-nowrap">Ajouter une catégorie</span>
               </b-button>
             </div>
           </b-col>
@@ -75,7 +72,7 @@
       <b-table
         ref="refUserListTable"
         class="position-relative"
-        :items="users"
+        :items="fetchCategories"
         responsive
         :fields="tableColumns"
         primary-key="id"
@@ -86,40 +83,71 @@
       >
 
         <!-- Column: User -->
-        <template #cell(Nom)="data">
+        <template #cell(Club)="data">
           <b-media vertical-align="center">
             <template #aside>
               <b-avatar
                 size="32"
-                :text="avatarText(data.item.lastname)"
-                :variant="`light-${resolveUserRoleVariant(data.item.lastname)}`"
-                :to="{ name: 'apps-users-view', params: { id: data.item.id } }"
+                :text="avatarText(data.item.nameCate)"
+                :variant="`light-${resolveUserRoleVariant(data.item.name)}`"
+                :to="{ name: 'pages-blog-detail', params: { id: data.item.id } }"
               />
             </template>
             <b-link
-              :to="{ name: 'apps-users-view', params: { id: data.item.id } }"
+              :to="{ name: 'pages-blog-detail', params: { id: data.item.id } }"
               class="font-weight-bold d-block text-nowrap"
             >
-              {{ data.item.lastname }}
+              {{ data.item.nameCate }}
             </b-link>
           </b-media>
         </template>
 
-               <template #cell(Prénom)="data">
+               <template #cell(Titre)="data">
           <b-media vertical-align="center">
             
             <b-link
-              :to="{ name: 'apps-users-view', params: { id: data.item.id } }"
+              :to="{ name: 'pages-blog-detail', params: { id: data.item.id } }"
               class="font-weight-bold d-block text-nowrap"
             >
-              {{ data.item.name }}
+              {{ data.item.sexe }}
             </b-link>
           </b-media>
         </template>
-
-        <!-- Column: Role -->
-    
-
+            <template #cell(Adresse)="data">
+          <b-media vertical-align="center">
+            
+            <b-link
+              :to="{ name: 'apps-competitions-view', params: { id: data.item.id } }"
+              class="font-weight-bold d-block text-nowrap"
+            >
+              {{ data.item.location }}
+            </b-link>
+          </b-media>
+        </template>
+           <template #cell(Debut)="data">
+          <b-media vertical-align="center">
+            
+            <b-link
+              :to="{ name: 'apps-competitions-view', params: { id: data.item.id } }"
+              class="font-weight-bold d-block text-nowrap"
+            >
+              {{ data.item.start }}
+            </b-link>
+          </b-media>
+        </template>
+             <template #cell(Fin)="data">
+          <b-media vertical-align="center">
+            
+            <b-link
+              :to="{ name: 'apps-competitions-view', params: { id: data.item.id } }"
+              class="font-weight-bold d-block text-nowrap"
+            >
+              {{ data.item.fin }}
+            </b-link>
+          </b-media>
+        </template>
+        
+       
         <!-- Column: Actions -->
            <template #cell(actions)="data">
           <b-dropdown
@@ -127,7 +155,6 @@
             no-caret
             :right="$store.state.appConfig.isRTL"
           >
-
             <template #button-content>
               <feather-icon
                 icon="MoreVerticalIcon"
@@ -135,14 +162,9 @@
                 class="align-middle text-body"
               />
             </template>
-            <b-dropdown-item :to="{ name: 'apps-users-view', params: { id: data.item.id } }">
+            <b-dropdown-item :to="{ name: 'apps-competitions-view', params: { id: data.item.id } }">
               <feather-icon icon="FileTextIcon" />
               <span class="align-middle ml-50">Détailes</span>
-            </b-dropdown-item>
-
-            <b-dropdown-item :to="{ name: 'apps-users-edit', params: { id: data.item.id } }">
-              <feather-icon icon="EditIcon" />
-              <span class="align-middle ml-50">Modifier</span>
             </b-dropdown-item>
           </b-dropdown>
         </template>
@@ -197,7 +219,6 @@
     </b-card>
   </div>
 </template>
-
 <script>
 import {
   BCard, BRow, BCol, BFormInput, BButton, BTable, BMedia, BAvatar, BLink,
@@ -207,14 +228,12 @@ import vSelect from 'vue-select'
 import store from '@/store'
 import { ref, onUnmounted } from '@vue/composition-api'
 import { avatarText } from '@core/utils/filter'
-import UsersListFilters from './UsersListFilters.vue'
-import useUsersList from './useUsersList'
-import userStoreModule from '../userStoreModule'
-import UserListAddNew from './UserListAddNew.vue'
+import useCompetitionsList from './useCompetitionsList'
+import competitionStoreModule from './competitionStoreModule'
+import CategorieListAddNew from './CategorieListAddNew.vue'
+
 export default {
   components: {
-    UsersListFilters,
-    UserListAddNew,
     BCard,
     BRow,
     BCol,
@@ -229,21 +248,21 @@ export default {
     BDropdownItem,
     BPagination,
     vSelect,
+    CategorieListAddNew
   },
+
   setup() {
-    const USER_APP_STORE_MODULE_NAME = 'app-user'
+    const COMPETITION_APP_STORE_MODULE_NAME = 'app-competition'
     // Register module
-    if (!store.hasModule(USER_APP_STORE_MODULE_NAME)) store.registerModule(USER_APP_STORE_MODULE_NAME, userStoreModule)
+    if (!store.hasModule(COMPETITION_APP_STORE_MODULE_NAME)) store.registerModule(COMPETITION_APP_STORE_MODULE_NAME, competitionStoreModule)
     // UnRegister on leave
     onUnmounted(() => {
-      if (store.hasModule(USER_APP_STORE_MODULE_NAME)) store.unregisterModule(USER_APP_STORE_MODULE_NAME)
+      if (store.hasModule(COMPETITION_APP_STORE_MODULE_NAME)) store.unregisterModule(COMPETITION_APP_STORE_MODULE_NAME)
     })
-    const people=ref([])
-
-
     const isAddNewUserSidebarActive = ref(false)
+
     const roleOptions = [
-      { label: 'Admin', value: 'admin' },
+      { label: 'Fédération tunisienne de karaté', value: '1' },
       { label: 'Author', value: 'author' },
       { label: 'Editor', value: 'editor' },
       { label: 'Maintainer', value: 'maintainer' },
@@ -261,8 +280,8 @@ export default {
       { label: 'Inactive', value: 'inactive' },
     ]
     const {
-      fetchUsersTest,
-      fetchUsers,
+     
+      fetchCategories,
       tableColumns,
       perPage,
       currentPage,
@@ -282,29 +301,13 @@ export default {
       roleFilter,
       planFilter,
       statusFilter,
-      users
-    } = useUsersList()
-    fetchUsersTest()
-    console.log(users)
-    const query=ref('')
-    const search= () =>{
-       if (query) {
-            users.value = users.value.filter(people =>
-              people.name.toLowerCase().includes(query.value.toLowerCase())
-            );
-          } else {
-            users.value = users.value;
-          }
-    }
-     
-return {
+    } = useCompetitionsList()
+  
+    return {
       // Sidebar
-
       isAddNewUserSidebarActive,
-    
-      fetchUsersTest,
-        users,
-      fetchUsers,
+      fetchCategories,
+     
       tableColumns,
       perPage,
       currentPage,
@@ -329,9 +332,6 @@ return {
       roleFilter,
       planFilter,
       statusFilter,
-      query,
-      search,
-      people
     }
     
   },

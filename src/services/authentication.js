@@ -54,6 +54,10 @@ export default {
     allNotifications() {
         return Api().get('notifications')
     },
+     //catgeories
+     allCategories(){
+        return Api().get('allCategories')
+    },
 
     //competitions
 
@@ -63,6 +67,9 @@ export default {
 
     addCompetition(credentials){
         return Api().post('addEvent',credentials)
+    },
+    addCategory(credentials){
+        return Api().post('addCategory',credentials)
     },
     findCometitionById(id){
         return Api().get(`competition/${id}`)

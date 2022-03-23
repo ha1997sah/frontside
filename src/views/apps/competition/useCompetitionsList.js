@@ -76,6 +76,37 @@ export default function useCompetitionsList() {
     })})
 }
 
+const fetchCategories = (ctx, callback) => {
+  store
+    .dispatch('app-competition/fetchCategories', {
+      q: searchQuery.value,
+      perPage: perPage.value,
+      page: currentPage.value,
+      sortBy: sortBy.value,
+      sortDesc: isSortDirDesc.value,
+      role: roleFilter.value,
+      plan: planFilter.value,
+      status: statusFilter.value,
+    })
+    .then(response => {
+      const { categories, total } = response.data
+
+      callback(categories)
+      totalUsers.value = total
+      console.log("cat",categories)
+    })
+    .catch(() => {
+      toast({
+        component: ToastificationContent,
+        props: {
+          title: 'Error fetching users list',
+          icon: 'AlertTriangleIcon',
+          variant: 'danger',
+        },
+      })
+    })
+}
+
   const fetchCompetitions = (ctx, callback) => {
     store
       .dispatch('app-competition/fetchCompetitions', {
@@ -161,7 +192,7 @@ export default function useCompetitionsList() {
     planFilter,
     statusFilter,
     fetchCompetitions,
-    handleOk,
+    fetchCategories,    handleOk,
   }
 
 }

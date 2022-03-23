@@ -8,6 +8,21 @@ export default {
   getters: {},
   mutations: {},
   actions: {
+    fetchCategories(ctx, queryParams) {
+      return new Promise((resolve, reject) => {
+        authentication
+         .allCategories()
+          .then(response => resolve(response))
+          .catch(error => reject(error))
+      })
+    },
+    addCategory(ctx, clubData) {
+      return new Promise((resolve, reject) => {
+        authentication.addCategory(clubData)
+          .then(response => resolve(response))
+          .catch(error => reject(error))
+      })
+    }, 
     fetchCompetitions(ctx, queryParams) {
       return new Promise((resolve, reject) => {
         authentication

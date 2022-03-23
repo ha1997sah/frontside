@@ -287,11 +287,10 @@ export default {
     const selectedItem2 = ref('')
     const selectedItem3 = ref('')
     const selectedItem4 = ref('')
-    const onSubmit = () => {
     store.dispatch('app-user/fetchAthletes')
       .then(response => {
-        usersItems.value=response.data.users
-         console.log(usersItems)
+        usersItems.value=response.data.users,
+         console.log("users",usersItems)
        
       })
       .catch(() => {
@@ -303,7 +302,7 @@ export default {
             variant: 'danger',
           },
         })
-      })}
+      })
 
       // filter by sexe
       const filterBySexe = () => {
@@ -443,7 +442,6 @@ data.forEach(element => { levels.value.push({label:element.nameCat, value:elemen
       refetchData,
       // Filter
       avatarText,
-      onSubmit,
       // UI
       resolveUserRoleVariant,
       resolveUserRoleIcon,

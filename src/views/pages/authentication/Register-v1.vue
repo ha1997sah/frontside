@@ -22,6 +22,17 @@
             @submit.prevent="validationForm" enctype="multipart/form-data"
           >
             <!-- name -->
+                <b-tabs>
+
+         <b-tab active>
+          <template #title>
+          <feather-icon
+            icon="Share2Icon"
+            size="16"
+            class="mr-0 mr-sm-50"
+          />
+          <span class="d-none d-sm-inline">Etape 1</span>
+        </template>
             <b-form-group
               label="Prénom"
               label-for="name"
@@ -57,27 +68,6 @@
                   :state="errors.length > 0 ? false:null"
                   name="register-lastname"
                   placeholder="johndoe"
-                />
-                <small class="text-danger">{{ errors[0] }}</small>
-              </validation-provider>
-            </b-form-group>
-       
-
-            <!-- phone -->
-             <b-form-group
-              label="Numéro de téléphone"
-              label-for="phone"
-            >
-              <validation-provider
-                #default="{ errors }"
-                name="phone"
-                rules="required|min:8"
-              >
-                <b-form-input
-                  id="phone"
-                  v-model="phone"
-                  :state="errors.length > 0 ? false:null"
-                  name="register-phone"
                 />
                 <small class="text-danger">{{ errors[0] }}</small>
               </validation-provider>
@@ -137,7 +127,85 @@
                 <small class="text-danger">{{ errors[0] }}</small>
               </validation-provider>
             </b-form-group>
+                            </b-tab>
+                             <b-tab >
+              <template #title>
+          <feather-icon
+            icon="Share2Icon"
+            size="16"
+            class="mr-0 mr-sm-50"
+          />
+          <span class="d-none d-sm-inline">Etape 2</span>
+        </template>
+               <!-- phone -->
+             <b-form-group
+              label="Numéro de téléphone"
+              label-for="phone"
+            >
+              <validation-provider
+                #default="{ errors }"
+                name="phone"
+                rules="required|min:8"
+              >
+                <b-form-input
+                  id="phone"
+                  v-model="phone"
+                  :state="errors.length > 0 ? false:null"
+                  name="register-phone"
+                />
+                <small class="text-danger">{{ errors[0] }}</small>
+              </validation-provider>
+            </b-form-group>
+
+
+           <!-- club -->
+                 <validation-provider
+            name="Club"
+          >
+            <b-form-group
+              label="Club"
+              label-for="club"
+            >
+              <v-select
+              v-model="selectedItem"
+                :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
+                :options="roleOptions"
+                :clearable="false"
+                input-id="club-fed"
+              />
             
+            </b-form-group>
+          </validation-provider>
+           <!-- -->
+               <b-form-group
+              label="Date de naissance"
+              label-for="Date de naissance"
+            >
+              <validation-provider
+                #default="{ errors }"
+                name="Date de naissance"
+                rules="required"
+              >
+     <b-form-datepicker
+      id="example-datepicker"
+      v-model="birthDate"
+      class="mb-1"
+    />
+     <small class="text-danger">{{ errors[0] }}</small>
+
+          </validation-provider>
+     </b-form-group>
+           <!-- -->
+           </b-tab>
+   <b-tab >
+          <template #title>
+          <feather-icon
+            icon="Share2Icon"
+            size="16"
+            class="mr-0 mr-sm-50"
+          />
+          <span class="d-none d-sm-inline">Etape 3</span>
+        </template>
              <b-form-group
               label="Poids"
               label-for="weight"
@@ -192,41 +260,8 @@
                 <small class="text-danger">{{ errors[0] }}</small>
               </validation-provider>
             </b-form-group>
-             <validation-provider
-            name="Club"
-          >
-            <b-form-group
-              label="Club"
-              label-for="club"
-            >
-              <v-select
-              v-model="selectedItem"
-                :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-                :options="roleOptions"
-                :clearable="false"
-                input-id="club-fed"
-              />
-            
-            </b-form-group>
-          </validation-provider>
-             <b-form-group
-              label="Date de naissance"
-              label-for="Date de naissance"
-            >
-              <validation-provider
-                #default="{ errors }"
-                name="Date de naissance"
-                rules="required"
-              >
-     <b-form-datepicker
-      id="example-datepicker"
-      v-model="birthDate"
-      class="mb-1"
-    />
-     <small class="text-danger">{{ errors[0] }}</small>
-
-          </validation-provider>
-     </b-form-group>
+       
+         
      
            <b-form-group
               label="Certificat medical"
@@ -249,6 +284,8 @@
           </validation-provider>
      </b-form-group> 
      
+                </b-tab>
+                    </b-tabs>
 
             <!-- submit button -->
             <b-button
@@ -316,7 +353,7 @@ import axios from 'axios'
 
 import {
   BCard, BLink,BFormFile, BFormDatepicker, BCardTitle, BCardText, BForm,BFormInvalidFeedback,
-  BButton, BFormInput, BFormGroup, BInputGroup, BInputGroupAppend, BFormCheckbox, BAlert
+  BButton, BFormInput, BFormGroup, BInputGroup, BInputGroupAppend, BFormCheckbox, BAlert,BTab, BTabs
 } from 'bootstrap-vue'
 import VuexyLogo from '@core/layouts/components/Logo.vue'
 import { required, email } from '@validations'
@@ -332,6 +369,7 @@ import flatPickr from 'vue-flatpickr-component'
 export default {
   components: {
     VuexyLogo,
+    BTab, BTabs,
     BAlert,
     BFormInvalidFeedback,
     BFormDatepicker,
@@ -423,6 +461,8 @@ data.forEach(element => { this.roleOptions.push({label:element.name, value:eleme
         formData.append('email',this.email)
         formData.append('password',this.password)
         formData.append('name',this.name)
+        formData.append('lastname',this.lastname)
+
         formData.append('phone',this.phone)
         formData.append('ClubId',this.selectedItem.value)
         formData.append('birthDate',this.birthDate)

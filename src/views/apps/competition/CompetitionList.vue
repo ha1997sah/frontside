@@ -4,7 +4,7 @@
 
      <competition-list-add-new
       :is-add-new-user-sidebar-active.sync="isAddNewUserSidebarActive"
-      :role-options="roleOptions"
+      :role-options="categories"
       :plan-options="planOptions"
       @refetch-data="refetchData"
     />
@@ -230,8 +230,8 @@ import { ref, onUnmounted } from '@vue/composition-api'
 import { avatarText } from '@core/utils/filter'
 import useCompetitionsList from './useCompetitionsList'
 import competitionStoreModule from './competitionStoreModule'
+import axios from 'axios'
 import CompetitionListAddNew from './CompetitionListAddNew.vue'
-
 export default {
   components: {
     BCard,
@@ -279,6 +279,14 @@ export default {
       { label: 'Active', value: 'active' },
       { label: 'Inactive', value: 'inactive' },
     ]
+       const categories=ref([])
+     axios.get("http://localhost:3001/allCategories").then(
+   response=>{
+const data = response.data.categories
+data.forEach(element => { categories.value.push({label:element.nameCat, value:element.id})
+  console.log(categories)
+});
+   })
     const {
      
       fetchCompetitions,
@@ -331,6 +339,7 @@ export default {
       // Extra Filters
       roleFilter,
       planFilter,
+      categories,
       statusFilter,
     }
     
