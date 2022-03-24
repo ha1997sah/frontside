@@ -45,7 +45,10 @@ cols="12"
         </div>
    {{ userData.medicalCertification }}
 
-<b-button @click="openPdf"> Voir le certificat</b-button>
+<b-button 
+        variant="primary"
+        block
+@click="openPdf"> Voir le certificat</b-button>
       </app-timeline-item>
    </b-col>
        </b-row>
@@ -54,7 +57,7 @@ cols="12"
 </template>
 <script>
 import {
-  BCard, BImg, BMedia, BAvatar,
+  BCard, BImg, BMedia, BAvatar,BButton
 } from 'bootstrap-vue'
 import AppTimeline from '@core/components/app-timeline/AppTimeline.vue'
 import AppTimelineItem from '@core/components/app-timeline/AppTimelineItem.vue'
@@ -62,6 +65,7 @@ import AppTimelineItem from '@core/components/app-timeline/AppTimelineItem.vue'
 export default {
   components: {
     BCard,
+    BButton,
     BImg,
     BMedia,
     BAvatar,
@@ -76,7 +80,7 @@ export default {
   },
   methods:{
          openPdf () {
-   window.open(`http://localhost:3001/${userData.image}`);
+   window.open(`http://localhost:3001/${this.userData.image}`);
 }
   }
 }

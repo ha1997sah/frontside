@@ -49,6 +49,14 @@ export default {
           .catch(error => reject(error))
       })
     },
+    fetchUsersClub(ctx,id) {
+      return new Promise((resolve, reject) => {
+        authentication
+          .usersUnderClub({ClubId:id} )
+          .then(response => resolve(response))
+          .catch(error => reject(error))
+      })
+    },
     fetchUsersUnderFed(ctx,FederationId) {
       return new Promise((resolve, reject) => {
         authentication

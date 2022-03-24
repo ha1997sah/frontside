@@ -12,23 +12,23 @@ export default [
   {
     path: '/apps/competition/:id',
     name: 'apps-competition-detail',
-    component: () => import('@/views/apps/acl/CompetitionDetail.vue'),
+    component: () => import('@/views/apps/competition/CompetitionDetail.vue'),
     meta: {
       resource: 'ACL',
       action: 'read',
       pageTitle: 'Blog Detail',
+      pageTitle: 'Détailes de la compétitions',
       breadcrumb: [
+       
         {
-          text: 'Pages',
+          text: 'Compétition',
         },
         {
-          text: 'Blog',
-        },
-        {
-          text: 'Detail',
+          text: 'Détailes',
           active: true,
         },
       ],
     },
+  
   },
 ]

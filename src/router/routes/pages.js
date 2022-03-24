@@ -260,19 +260,17 @@ export default [
   },
   {
     path: '/pages/blog/:id',
-    name: 'pages-blog-detail',
+    name: 'pages-comp-detail',
     component: () => import('@/views/apps/competition/CompetitionDetail.vue'),
     meta: {
-      pageTitle: 'Blog Detail',
+      pageTitle: 'Détailes de la compétition',
       breadcrumb: [
+       
         {
-          text: 'Pages',
+          text: 'Compétition',
         },
         {
-          text: 'Blog',
-        },
-        {
-          text: 'Detail',
+          text: 'Détailes',
           active: true,
         },
       ],

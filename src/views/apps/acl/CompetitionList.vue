@@ -30,23 +30,19 @@
               </b-link>
             </b-card-title>
             <b-media no-body>
-              <b-media-aside
-                vertical-align="center"
-                class="mr-50"
-              >
-                <b-avatar
-                  href="javascript:void(0)"
-                  size="24"
-                  :src="blog.avatar"
-                />
-              </b-media-aside>
+             
               <b-media-body>
-                <small class="text-muted mr-50">by</small>
                 <small>
-                  <b-link class="text-body">{{ blog.name }}</b-link>
+                  <b-link class="text-body">           
+                       {{ new Date(blog.start).getDate()+'-'+new Date(blog.start).getMonth()+'-'+new Date(blog.start).getFullYear()}}
+                       </b-link>
                 </small>
                 <span class="text-muted ml-75 mr-50">|</span>
-                <small class="text-muted">{{ blog.blogPosted }}</small>
+                <small class="text-muted">
+                   <b-link class="text-body">           
+                       {{ new Date(blog.end).getDate()+'-'+new Date(blog.end).getMonth()+'-'+new Date(blog.end).getFullYear()}}
+                </b-link>
+                </small>
               </b-media-body>
             </b-media>
             <div class="my-1 py-25">
@@ -80,7 +76,7 @@
                 :to="{ name: 'apps-competition-detail', params: { id: blog.id } }"
                 class="font-weight-bold"
               >
-                Read More
+                Voir plus
               </b-link>
             </div>
         
@@ -128,8 +124,10 @@
         <b-input-group class="input-group-merge">
           <b-form-input
             id="search-input"
-            v-model="search_query"
-            placeholder="Search here"
+                v-model="query"
+            placeholder="Rechercher"
+           @keyup="search"
+
           />
           <b-input-group-append
             class="cursor-pointer"
@@ -143,21 +141,21 @@
       </b-form-group>
       <!--/ input search -->
 
-      <!-- recent posts -->
       <div class="blog-recent-posts mt-3">
         <h6 class="section-label mb-75">
-          Recent Posts
+          Nouveaux Compétitions
         </h6>
         <b-media
-          v-for="(recentpost,index) in blogSidebar.recentPosts"
-          :key="recentpost.img"
+          v-for="(recentpost,index) in latestComp"
+          :key="`http://localhost:3001/${recentpost.image}`"
           no-body
           :class="index? 'mt-2':''"
         >
           <b-media-aside class="mr-2">
-            <b-link :to="{ name: 'apps-competition-detail', params:{ id :recentpost.id } }">
+            <b-link>
               <b-img
-                :src="recentpost.img"
+                :src="`http://localhost:3001/${recentpost.image}`"
+                :alt="`http://localhost:3001/${recentpost.image}`.slice(6)"
                 width="100"
                 rounded
                 height="70"
@@ -166,61 +164,32 @@
           </b-media-aside>
           <b-media-body>
             <h6 class="blog-recent-post-title">
-              <b-link
-                :to="{ name: 'apps-competition-detail', params:{ id :recentpost.id } }"
-                class="text-body-heading"
-              >
-                {{ recentpost.title }}
+              <b-link class="text-body-heading">
+                {{ recentpost.name }}
               </b-link>
             </h6>
             <span class="text-muted mb-0">
-              {{ recentpost.createdTime }}
+              {{ new Date(recentpost.start).getDate()+'-'+new Date(recentpost.start).getMonth()+'-'+new Date(recentpost.start).getFullYear()}}
             </span>
           </b-media-body>
         </b-media>
       </div>
-      <!--/ recent posts -->
-
       <!-- categories -->
-      <div class="blog-categories mt-3">
-        <h6 class="section-label mb-1">
-          Categories
-        </h6>
-
-        <div
-          v-for="category in blogSidebar.categories"
-          :key="category.icon"
-          class="d-flex justify-content-start align-items-center mb-75"
-        >
-          <b-link>
-            <b-avatar
-              rounded
-              size="32"
-              :variant="tagsColor(category.category)"
-              class="mr-75"
-            >
-              <feather-icon
-                :icon="category.icon"
-                size="16"
-              />
-            </b-avatar>
-          </b-link>
-          <b-link>
-            <div class="blog-category-title text-body">
-              {{ category.category }}
-            </div>
-          </b-link>
-        </div>
-      </div>
+   
       <!--/ categories -->
     </div>
     <!--/ sidebar -->
          <b-modal
       id="modal-select2"
-      title="Basic Modal"
+      title="Votre informations"
       cancel-variant="outline-secondary"
+      ok-title="Accept"
+      @ok="inscrit"
+
+
 
     >
+    <div v-if="show">
       <b-form>
         <b-row>
      <b-col md="6">
@@ -240,7 +209,7 @@
           <label for="Poids">Poids:</label>
           <b-form-input
             id="poids"
-            type="poids"
+            type="text"
             placeholder="Poids"
             v-model="userData.weight"
 
@@ -278,33 +247,22 @@
   
         
       </b-form>
-       <b-button
-        v-ripple.400="'rgba(255, 255, 255, 0.15)'"
-        v-b-modal.modal-multi-2
-        variant="primary"
-        @click="inscrit"
-
-      >
-        Open Second Modal
-      </b-button>
+     
+    </div>
+    <!-- second (v-if) -->
+       <div v-else>
+         <p>Vos informations ne correspondent pas à l’exigences de cette compétition</p>
+      </div>
     </b-modal>
      <b-modal
       id="modal-multi-2"
-      title="Second Modal"
-      ok-only
-      ok-title="Accept"
+      title="Opération réussi"
     >
       <b-card-text class="my-2">
-        Second Modal
+        Confirmation inscription
       </b-card-text>
-      <b-button
-        v-ripple.400="'rgba(255, 255, 255, 0.15)'"
-        v-b-modal.modal-multi-3
-        size="sm"
-        variant="primary"
-      >
-        Open Third Modal
-      </b-button>
+     
+     
     </b-modal>
   </content-with-sidebar>
 </template>
@@ -364,7 +322,10 @@ export default {
       perPage: 1,
       rows: 140,
       img: require('@/assets/images/karate.jpg'),
-      userData:null
+      userData:null,
+      latestComp:null,
+      query:'',
+      show:false
 
     }
   },
@@ -372,12 +333,23 @@ export default {
       
           authentication
           .allCompetitions()
-          .then(response =>  { this.blogList = response.data.competitions ,conole.log(response.data)})
+          .then(response =>  { 
+             if(response.status==201)
+            {this.show=false}
+            else{
+            
+                this.show=true  
+                 this.blogList = response.data.competitions ,conole.log(response.data)}})
           .catch(error => error.message),
 
           authentication.findUserById({id:"1"}).then(response => { this.userData = response.data.user
 
-          })
+          }),
+
+             authentication.latestCompetitions().then(response =>{
+             this.latestComp= response.data.competitions
+
+               })
      
  
     this.$http.get('/blog/list/data/sidebar').then(res => { this.blogSidebar = res.data })
@@ -393,16 +365,38 @@ export default {
       return 'light-primary'
     },
     inscrit(){
-           authentication.inscrit({
+
+ 
+ authentication.inscrit({
             compId:"1",
             userId:"1"
           }).then(response=>{
-            console.log("ok")
-          })
-    }
-  },
+            this.$bvModal.show('modal-multi-2')
 
 
+ })
+    } ,
+  
+  
+  search () {
+
+      authentication
+          .allCompetitions()
+          .then(response =>{
+
+             if (this.query) {
+           this.blogList = response.data.competitions.filter(blogList =>
+              blogList.name.toLowerCase().includes(this.query.toLowerCase()))
+          } else {
+           this.blogList =response.data.competitions
+          }
+ })
+ 
+ 
+ 
+ }
+
+    },
 
 }
 </script>

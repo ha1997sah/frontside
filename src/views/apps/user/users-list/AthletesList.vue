@@ -26,9 +26,9 @@
             cols="12"
             md="3"
           >
-      
+       
+          Sexe
          <v-select
-         label="sexe"
               v-model="selectedItem1"
                 :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
                 :options="roleOptions"
@@ -43,14 +43,14 @@
             cols="12"
             md="3"
           >
-      
+         Niveau
          <v-select
               v-model="selectedItem2"
                 :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
                 :options="levels"
                 :clearable="false"
                 input-id="club-fed"
-                @input="filterBySexe"
+                @input="filterByLevel"
               />
       
       
@@ -60,7 +60,7 @@
             cols="12"
             md="3"
           >
-      
+         Club
          <v-select
               v-model="selectedItem3"
                 :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
@@ -77,7 +77,7 @@
             cols="12"
             md="3"
           >
-      
+          Federation
          <v-select
               v-model="selectedItem4"
                 :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
@@ -306,6 +306,9 @@ export default {
 
       // filter by sexe
       const filterBySexe = () => {
+     selectedItem2.value = "",
+     selectedItem3.value = "",
+     selectedItem4.value = "",
      store.dispatch('app-user/fetchAthletesBysexe',selectedItem1.value.value)
        .then(response => {
 usersItems.value=response.data.users
@@ -324,6 +327,9 @@ usersItems.value=response.data.users
       })}
       // filter by level
          const filterByLevel = () => {
+  selectedItem1.value = "",
+     selectedItem3.value = "",
+     selectedItem4.value = "",
      store.dispatch('app-user/fetchAthletesByLevel',selectedItem2.value.value)
        .then(response => {
          usersItems=null
@@ -345,9 +351,12 @@ usersItems.value=response.data.users
       // filter by club
 
      const filterByClub = () => {
-     store.dispatch('app-user/fetchUsersUnderClub',(selectedItem3.value.value.toString()))
+   selectedItem1.value = "",
+     selectedItem2.value = "",
+     selectedItem4.value = "",
+     store.dispatch('app-user/fetchUsersClub',(selectedItem3.value.value.toString()))
         .then(response => {
-                   usersItems.value=null
+          usersItems.value=null
 
          usersItems.value=response.data.users
          console.log(usersItems)
@@ -359,6 +368,9 @@ usersItems.value=response.data.users
       // filter by fed
       
      const filterByFed = () => {
+            selectedItem1.value = "",
+     selectedItem3.value= "",
+     selectedItem2.value = "",
      store.dispatch('app-user/fetchUsersUnderFed',(selectedItem4.value.value.toString()))
         .then(response => {
          usersItems.value=null

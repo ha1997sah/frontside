@@ -285,6 +285,37 @@
      </b-form-group> 
      
                 </b-tab>
+
+
+
+                <!-- records -->
+<b-tab>
+  <template #title>
+          <feather-icon
+            icon="Share2Icon"
+            size="16"
+            class="mr-0 mr-sm-50"
+          />
+           <span class="d-none d-sm-inline">Etape 3</span>
+        </template>
+                <div class="form-group" v-for="(input,k) in inputs" :key="k">
+   <b-row>
+     <b-col md="3">
+       
+     <input type="text" class="form-control" v-model="input.recordDate">
+
+        </b-col>
+     <b-col md="3">
+            <input type="text" class="form-control" v-model="input.title">
+        </b-col>
+        </b-row>
+    <span>
+        <i @click="remove(k)" v-show="k || ( !k && inputs.length > 1)">supprimer</i>
+        <i  @click="add(k)" v-show="k == inputs.length-1">ajouter</i>
+    </span>
+</div>
+
+</b-tab>
                     </b-tabs>
 
             <!-- submit button -->
@@ -395,6 +426,12 @@ export default {
   mixins: [togglePasswordVisibility],
   data() {
     return {
+        inputs: [
+            {   recordDate:"",
+                title: ''
+            }
+        ],
+        in:[],
        name: '',
 	    lastname: '',
       position: 'admin',
@@ -451,11 +488,18 @@ data.forEach(element => { this.roleOptions.push({label:element.name, value:eleme
  )
   },
   methods: {
+      add(index) {
+            this.inputs.push({ name: '' });
+        },
+        remove(index) {
+            this.inputs.splice(index, 1);
+        },
     selectFile() {
       this.medicalCertificate=this.$refs.file.files[0]
     },
 	async register () {
-      try {
+    console.log("bbbbb",this.inputs)
+     try {
         const formData = new FormData();
         formData.append('medicalCertificate',this.file)
         formData.append('email',this.email)
@@ -466,6 +510,8 @@ data.forEach(element => { this.roleOptions.push({label:element.name, value:eleme
         formData.append('phone',this.phone)
         formData.append('ClubId',this.selectedItem.value)
         formData.append('birthDate',this.birthDate)
+        formData.append('records',JSON.stringify(this.inputs))
+        
        const response = await authentication.register(formData)
                 .then(() => {
                   this.$toast({
@@ -492,7 +538,7 @@ data.forEach(element => { this.roleOptions.push({label:element.name, value:eleme
                     },
                   })
       
-      }
+      } 
     },
 
      async isUsernameUnique() {

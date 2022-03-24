@@ -272,7 +272,7 @@
           <b-form-input
             id="search-input"
             v-model="search_query"
-            placeholder="Search here"
+            placeholder="Rechercher"
           />
           <b-input-group-append
             class="cursor-pointer"
@@ -289,7 +289,7 @@
       <!-- recent posts -->
       <div class="blog-recent-posts mt-3">
         <h6 class="section-label mb-75">
-          Recent Posts
+          Nouveaux Compétitions
         </h6>
         <b-media
           v-for="(recentpost,index) in blogSidebar.recentPosts"
