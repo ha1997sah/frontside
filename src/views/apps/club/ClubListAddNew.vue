@@ -43,6 +43,8 @@
           <validation-provider
             #default="validationContext"
             name="Club"
+            rules="required|alpha"
+
           >
             <b-form-group
               label="Nom Club"
@@ -50,7 +52,7 @@
             >
               <b-form-input
                 id="nom"
-                v-model="clubData.name"
+                v-model="club.name"
                 autofocus
                 :state="getValidationState(validationContext)"
                 trim
@@ -66,6 +68,8 @@
           <validation-provider
             #default="validationContext"
             name="Pays"
+            rules="required|alpha"
+
           >
             <b-form-group
               label="Pays"
@@ -73,7 +77,7 @@
             >
               <b-form-input
                 id="country"
-                v-model="clubData.country"
+                v-model="club.country"
                 :state="getValidationState(validationContext)"
                 trim
               />
@@ -87,6 +91,8 @@
              <validation-provider
             #default="validationContext"
             name="Adresse"
+            rules="required"
+
           >
             <b-form-group
               label="Adresse"
@@ -94,7 +100,7 @@
             >
               <b-form-input
                 id="adress"
-                v-model="clubData.adress"
+                v-model="club.adress"
                 :state="getValidationState(validationContext)"
                 trim
               />
@@ -108,6 +114,8 @@
             <validation-provider
             #default="validationContext"
             name="Nom Responsable"
+            rules="required|alpha"
+
           >
             <b-form-group
               label="Nom Responsable"
@@ -115,7 +123,7 @@
             >
               <b-form-input
                 id="managerFullName"
-                v-model="clubData.managerfullName"
+                v-model="club.managerfullName"
                 :state="getValidationState(validationContext)"
                 trim
               />
@@ -129,6 +137,7 @@
           <validation-provider
             #default="validationContext"
             name="E-mail"
+            rules="unique"
           >
             <b-form-group
               label="E-mail"
@@ -136,7 +145,7 @@
             >
               <b-form-input
                 id="contact"
-                v-model="clubData.email"
+                v-model="club.email"
                 :state="getValidationState(validationContext)"
                 trim
               />
@@ -149,6 +158,11 @@
           <validation-provider
             #default="validationContext"
             name="Numéro de téléphone"
+            rules="num"
+          
+          
+
+
           >
             <b-form-group
               label="Numéro de téléphone"
@@ -156,7 +170,7 @@
             >
               <b-form-input
                 id="phone"
-                v-model="clubData.phone"
+                v-model="club.phone"
                 :state="getValidationState(validationContext)"
                 trim
               />
@@ -177,7 +191,7 @@
               :state="getValidationState(validationContext)"
             >
               <v-select
-              v-model="clubData.selectedItem"
+              v-model="selectedItem"
                 :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
                 :options="roleOptions"
                 :clearable="false"
@@ -219,8 +233,9 @@
 import {
   BSidebar, BForm, BFormGroup, BFormInput, BFormInvalidFeedback, BButton,
 } from 'bootstrap-vue'
-import { ValidationProvider, ValidationObserver } from 'vee-validate'
-import { ref } from '@vue/composition-api'
+import { ValidationProvider, ValidationObserver,extend} from 'vee-validate'
+
+import { ref,onMounted } from '@vue/composition-api'
 import { required, alphaNum, email } from '@validations'
 import formValidation from '@core/comp-functions/forms/form-validation'
 import Ripple from 'vue-ripple-directive'
@@ -276,12 +291,80 @@ export default {
       location,
       countries,
       error:null,
+              selectedItem:'',
+
+      email:'',
+         club: {
+        name:'',
+        phone:'',
+        managerfullName:'',
+        email:'',
+        adress:'',
+        country:'',
+        FederationId:""
+
+      }
 
 
     }
   },
+   mounted() {
+    extend("unique", {
+      validate: this.isUsernameUnique,
+      message: "Username already taken"
+    });
+  },
+  methods: {
+       async isUsernameUnique() {
+      try {
+        const response = await authentication.isUniqueEmailClub ({
+         email: this.club.email,
+     
+        })
+        return false;
+      } catch (err) {
+        if (err.response.status === 404) {
+          return true;
+        }
+      }
+    },
+
+        onSubmit (){
+
+this.club.FederationId=this.selectedItem.value
+      store.dispatch('app-club/addClub', this.club)
+        .then(() => {
+             this.$toast({
+          component: ToastificationContent,
+          props: {
+            title: 'Opération réussi',
+            icon: 'AlertTriangleIcon',
+            text:"Fédeération ajouté avec succes ",
+            variant: 'success',
+          },
+        })
+
+          emit('refetch-data')
+          emit('update:is-add-new-user-sidebar-active', false)
+        }).catch({message:error.message})
+    }
+  },
+ 
   setup(props, { emit }) {
         const toast = useToast()
+        onMounted(() => {
+   
+         
+         extend('num', {
+  validate: value => {
+    return value >0;
+  },
+  message: 'This field must be an odd number'
+})
+   
+}
+
+)
 
     const blankclubData = {
       name: '',
@@ -297,29 +380,7 @@ export default {
     const resetclubData = () => {
       clubData.value = JSON.parse(JSON.stringify(blankclubData))
     }
-      
-    const onSubmit = () => {
-      store.dispatch('app-club/addClub', {
-        name:clubData.value.name,
-        FederationId:clubData.value.selectedItem.value
 
-      })
-        .then(() => {
-          console.log( clubData.value.FederationId)
-            toast({
-          component: ToastificationContent,
-          props: {
-            title: 'Opération réussi',
-            icon: 'AlertTriangleIcon',
-            text:"Club ajouté avec succssé",
-            variant: 'success',
-          },
-        })
-
-          emit('refetch-data')
-          emit('update:is-add-new-user-sidebar-active', false)
-        }).catch({error:error.message})
-    }
 
     const {
       refFormObserver,
@@ -329,10 +390,9 @@ export default {
 
     return {
       clubData,
-      onSubmit,
       refFormObserver,
       getValidationState,
-      resetForm,
+  
     }
   },
 }

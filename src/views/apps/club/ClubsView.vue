@@ -56,7 +56,6 @@ import { ref, onUnmounted } from '@vue/composition-api'
 import {
   BRow, BCol, BAlert, BLink,
 } from 'bootstrap-vue'
-import InvoiceList from '@/views/apps/invoice/invoice-list/InvoiceList.vue'
 import clubStoreModule from './clubStoreModule'
 import ClubViewInfoCard from './ClubViewInfoCard.vue'
 import ClubViewPlanCard from './ClubViewPlanCard.vue'
@@ -75,8 +74,6 @@ export default {
     ClubViewInfoCard,
     ClubViewPlanCard,
     ClubsEdit,
-
-    InvoiceList,
   },
   setup() {
     const clubData = ref(null)

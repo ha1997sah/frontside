@@ -161,6 +161,14 @@
               <feather-icon icon="FileTextIcon" />
               <span class="align-middle ml-50">Détailes</span>
             </b-dropdown-item>
+            <b-dropdown-item :to="{ name:'apps-federations-edit', params: { id: data.item.id } }">
+              <feather-icon icon="FileTextIcon" />
+              <span class="align-middle ml-50">Modifier</span>
+            </b-dropdown-item>
+             <b-dropdown-item  v-b-modal.modal-1 @click="sendInfo(data.item.id )">               
+              <feather-icon icon="TrashIcon" />
+              <span class="align-middle ml-50" >Supprimer</span>
+            </b-dropdown-item>
 
           </b-dropdown>
         </template>
@@ -211,11 +219,22 @@
 
         </b-row>
       </div>
-    
+       <b-modal id="modal-1" title="BootstrapVue"
+     
+          @ok="handleOk">
+             <p class="my-4">Cette action ne peut pas être annulée!</p>
+  
+             </b-modal>
     </b-card>
   </div>
 </template>
 <script>
+import router from '@/router'
+
+import { useToast } from 'vue-toastification/composition'
+import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
+
+
 import {
   BCard, BRow, BCol, BFormInput, BButton, BTable, BMedia, BAvatar, BLink,
   BBadge, BDropdown, BDropdownItem, BPagination,
@@ -246,6 +265,8 @@ export default {
     FederationListAddNew,
   },
   setup() {
+              const toast = useToast()
+
     const FEDERATION_APP_STORE_MODULE_NAME = 'app-federation'
     // Register module
     if (!store.hasModule(FEDERATION_APP_STORE_MODULE_NAME)) store.registerModule(FEDERATION_APP_STORE_MODULE_NAME, federationStoreModule)
@@ -272,6 +293,35 @@ export default {
       { label: 'Active', value: 'active' },
       { label: 'Inactive', value: 'inactive' },
     ]
+    const idSelected=ref('')
+
+      const sendInfo = (info) =>{
+        console.log(idSelected.value)
+       idSelected.value=info }
+    
+  const handleOk= () =>{
+    store.dispatch('app-federation/deleteFederation',   idSelected.value)
+    .then(() => {
+        toast({
+          component: ToastificationContent,
+          props: {
+            title: 'ok deleted',
+            icon: 'AlertTriangleIcon',
+            variant: 'success',
+          },
+        })
+        router.replace({path: '/apps/federations/list'}) 
+    }).catch(error=>{console.log(error),
+       toast({
+      component: ToastificationContent,
+      props: {
+        title: 'problem',
+        icon: 'AlertTriangleIcon',
+        variant: 'danger',
+      },
+    })})
+}
+
     const {
      
       tableColumns,
@@ -325,6 +375,8 @@ export default {
       roleFilter,
       planFilter,
       statusFilter,
+      sendInfo,
+      handleOk
     }
     
   },

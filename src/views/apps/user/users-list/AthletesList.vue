@@ -166,7 +166,13 @@
               <feather-icon icon="EditIcon" />
               <span class="align-middle ml-50">Modifier</span>
             </b-dropdown-item>
+
+             <b-dropdown-item  v-b-modal.modal-1 @click="sendInfo(data.item.id )">               
+              <feather-icon icon="TrashIcon" />
+              <span class="align-middle ml-50" >Supprimer</span>
+            </b-dropdown-item>
           </b-dropdown>
+              
         </template>
     
       </b-table>
@@ -216,7 +222,12 @@
 
         </b-row>
       </div>
-    
+    <b-modal id="modal-1" title="BootstrapVue"
+     
+          @ok="handleOk">
+             <p class="my-4">Cette action ne peut pas être annulée!</p>
+  
+             </b-modal>
     </b-card>
   </div>
 </template>
@@ -235,6 +246,10 @@ import useUsersList from './useUsersList'
 import userStoreModule from '../userStoreModule'
 import UserListAddNew from './UserListAddNew.vue'
 import axios from 'axios'
+import { useToast } from 'vue-toastification/composition'
+import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
+import router from '@/router'
+
 export default {
   components: {
     UsersListFilters,
@@ -255,6 +270,8 @@ export default {
     vSelect,
   },
   setup() {
+      const toast = useToast()
+
     const USER_APP_STORE_MODULE_NAME = 'app-user'
     // Register module
     if (!store.hasModule(USER_APP_STORE_MODULE_NAME)) store.registerModule(USER_APP_STORE_MODULE_NAME, userStoreModule)
@@ -303,6 +320,34 @@ export default {
           },
         })
       })
+          const idSelected=ref('')
+
+      const sendInfo = (info) =>{
+        console.log(idSelected.value)
+       idSelected.value=info }
+    
+  const handleOk= () =>{
+    store.dispatch('app-user/deleteUser',   idSelected.value)
+    .then(() => {
+        toast({
+          component: ToastificationContent,
+          props: {
+            title: 'user deleted',
+            icon: 'AlertTriangleIcon',
+            variant: 'success',
+          },
+        })
+        router.replace({path: '/apps/users/list'}) 
+    }).catch(error=>{console.log(error),
+       toast({
+      component: ToastificationContent,
+      props: {
+        title: 'problem',
+        icon: 'AlertTriangleIcon',
+        variant: 'danger',
+      },
+    })})
+}
 
       // filter by sexe
       const filterBySexe = () => {
@@ -437,6 +482,7 @@ data.forEach(element => { levels.value.push({label:element.nameCat, value:elemen
   
     return {
       // Sidebar
+      toast,
       isAddNewUserSidebarActive,
       levels,
       filterBySexe,
@@ -475,7 +521,10 @@ data.forEach(element => { levels.value.push({label:element.nameCat, value:elemen
       selectedItem1,
       selectedItem2,
       selectedItem3,
-      selectedItem4
+      selectedItem4,
+      handleOk,
+      sendInfo,
+      idSelected
     }
     
   },

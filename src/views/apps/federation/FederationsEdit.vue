@@ -97,10 +97,18 @@
             label="Fédération"
             label-for="username"
           >
+          <validation-provider
+                #default="{ errors }"
+                name="name"
+                rules="min:3"
+              >
             <b-form-input
               id="username"
-              v-model="federationData.name"
+              v-model="fed.name"
+              :placeholder="federationData.name"
             />
+              <small class="text-danger">{{ errors[0] }}</small>
+              </validation-provider>
           </b-form-group>
         </b-col>
 
@@ -113,10 +121,19 @@
             label="Pays"
             label-for="full-name"
           >
+
+         <validation-provider
+                #default="{ errors }"
+                name="name"
+                rules="min:3"
+              >
             <b-form-input
               id="full-name"
-              v-model="federationData.country"
+              v-model="fed.country"
+              :placeholder="federationData.country"
             />
+              <small class="text-danger">{{ errors[0] }}</small>
+              </validation-provider>
           </b-form-group>
         </b-col>
 
@@ -129,31 +146,42 @@
             label="Adresse"
             label-for="email"
           >
+           <validation-provider
+                #default="{ errors }"
+                name="name"
+                rules="min:3"
+              >
             <b-form-input
               id="email"
-              v-model="federationData.adress"
+               v-model="fed.adress"
+              :placeholder="federationData.adress"
               type="email"
             />
+              <small class="text-danger">{{ errors[0] }}</small>
+              </validation-provider>
           </b-form-group>
         </b-col>
 
-        <!-- Field: Status -->
-        <b-col
+           <b-col
           cols="12"
           md="4"
         >
           <b-form-group
-            label="Numéro de téléphone"
-            label-for="user-status"
+              label="Numéro de téléphone"
+            label-for="phone"
           >
-            <v-select
-              v-model="federationData.phone"
-              :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-              :options="statusOptions"
-              :reduce="val => val.value"
-              :clearable="false"
-              input-id="user-status"
+           <validation-provider
+                #default="{ errors }"
+                name="name"
+                rules="min:3"
+              >
+            <b-form-input
+              id="phone"
+               v-model="fed.phone"
+              :placeholder="federationData.phone"
             />
+              <small class="text-danger">{{ errors[0] }}</small>
+              </validation-provider>
           </b-form-group>
         </b-col>
 
@@ -166,10 +194,18 @@
             label="E-mail"
             label-for="company"
           >
+           <validation-provider
+                #default="{ errors }"
+                name="name"
+                rules="unique"
+              >
             <b-form-input
               id="company"
-              v-model="federationData.email"
+              v-model="email"
+              :placeholder="federationData.email"
             />
+              <small class="text-danger">{{ errors[0] }}</small>
+              </validation-provider>
           </b-form-group>
         </b-col>
         <!-- nom responsable -->
@@ -181,10 +217,18 @@
             label="Responsable"
             label-for="company"
           >
+           <validation-provider
+                #default="{ errors }"
+                name="name"
+                rules="min:3"
+              >
             <b-form-input
               id="company"
-              v-model="federationData.managerfullName"
+               v-model="fed.managerfullName"
+              :placeholder="federationData.managerfullName"
             />
+              <small class="text-danger">{{ errors[0] }}</small>
+              </validation-provider>
           </b-form-group>
         </b-col>
 
@@ -232,6 +276,9 @@ import { avatarText } from '@core/utils/filter'
 import vSelect from 'vue-select'
 import { useToast } from 'vue-toastification/composition'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
+import { required, email } from '@validations'
+import { ValidationProvider, ValidationObserver, extend } from 'vee-validate'
+import authentication from '@/services/authentication.js'
 
 
 
@@ -255,8 +302,37 @@ export default {
     BCardTitle,
     BFormCheckbox,
     vSelect,
-  
+     ValidationProvider,
+    ValidationObserver,
   },
+   data() {
+    return {
+      required,
+      email: '',
+      email,
+
+      }},
+       mounted() {
+    extend("unique", {
+      validate: this.isUsernameUnique,
+      message: "Username already taken"
+    });
+  },
+      methods :{
+          async isUsernameUnique() {
+      try {
+        const response = await authentication.isUniqueEmail ({
+         email: fed.value.email
+     
+        })
+        return false;
+      } catch (err) {
+        if (err.response.status === 404) {
+          return true;
+        }
+      }
+    }
+      },
   setup() {
     const toast = useToast()
 
@@ -322,37 +398,40 @@ export default {
       props.federationData.avatar = base64
     })
     const federationData = ref(null)
-    const club = ref(null)
+    const blankFed = {}
+    const fed = ref(JSON.parse(JSON.stringify(blankFed)))
 
 
-    const FEDERATION_APP_STORE_MODULE_NAME = 'app-federation'
+
+    const FED_APP_STORE_MODULE_NAME = 'app-federation'
         const onSubmit = () => {
-          store.dispatch('app-federation/editFederation', federationData.value )
-        .then(() => {
-          response => { federationData.value = response.data.federation}
-             toast({
+          store.dispatch('app-federation/editFederation', fed.value )
+          .then(
+          response => {
+            fed.value = response.data.fed,console.log(fed.value),
+              toast({
             component: ToastificationContent,
             props: {
-            title: 'Operation réussi',
+              title: 'Operation réussi',
               text:"les informations ont été modifiées avec succès",
               icon: 'AlertTriangleIcon',
               variant: 'success',
             },
-          }).catch({error:error.message})
-        })
+          })
+            }) .catch(error)(console.log("vv"))
     }
 
     // Register module
-    if (!store.hasModule(FEDERATION_APP_STORE_MODULE_NAME)) store.registerModule(FEDERATION_APP_STORE_MODULE_NAME, federationStoreModule)
+    if (!store.hasModule(FED_APP_STORE_MODULE_NAME)) store.registerModule(FED_APP_STORE_MODULE_NAME, federationStoreModule)
 
     // UnRegister on leave
     onUnmounted(() => {
-      if (store.hasModule(FEDERATION_APP_STORE_MODULE_NAME)) store.unregisterModule(FEDERATION_APP_STORE_MODULE_NAME)
+      if (store.hasModule(FED_APP_STORE_MODULE_NAME)) store.unregisterModule(FED_APP_STORE_MODULE_NAME)
     })
 
    
      store.dispatch('app-federation/fetchFederationById')
-      .then(response => { federationData.value = response.data.fed})
+      .then(response => { federationData.value = response.data.fed,console.log(federationData.value)})
       .catch(error => {
         if (error.response.status === 404) {
           federationData.value = undefined
@@ -362,7 +441,7 @@ export default {
       return {
       onSubmit,
       federationData,
-      club,
+      fed,
       resolveUserRoleVariant,
       avatarText,
       roleOptions,

@@ -137,6 +137,15 @@
               <feather-icon icon="FileTextIcon" />
               <span class="align-middle ml-50">Details</span>
             </b-dropdown-item>
+           <b-dropdown-item @click="sendInfo(data.item.id )" v-b-modal.modal-1 >               
+              <feather-icon icon="TrashIcon" />
+              <span class="align-middle ml-50" >Accepter</span>
+            </b-dropdown-item>
+                <b-dropdown-item @click="sendInfo(data.item.id )" v-b-modal.modal-2 >               
+              <feather-icon icon="TrashIcon" />
+              <span class="align-middle ml-50" >Refuser</span>
+            </b-dropdown-item>
+           
           </b-dropdown>
         </template>
     
@@ -186,6 +195,18 @@
 
         </b-row>
       </div>
+           <b-modal id="modal-1" title="BootstrapVue"
+     
+          @ok="acceptRegister">
+             <p class="my-4">Cette action ne peut pas être annulée!</p>
+  
+             </b-modal>
+                  <b-modal id="modal-2" title="BootstrapVue"
+     
+          @ok="refuseRegister">
+             <p class="my-4">Cette action ne peut pas être annulée!</p>
+  
+             </b-modal>
     
     </b-card>
   </div>
@@ -204,6 +225,9 @@ import UsersListFilters from './UsersListFilters.vue'
 import useUsersList from './useUsersList'
 import userStoreModule from '../userStoreModule'
 import UserListAddNew from './UserListAddNew.vue'
+import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
+import router from '@/router'
+
 export default {
   components: {
     UsersListFilters,
@@ -222,6 +246,49 @@ export default {
     BDropdownItem,
     BPagination,
     vSelect,
+    idSelected:'',
+
+  },
+
+   methods: {
+
+       sendInfo  (info){
+      
+     this.idSelected=info,
+     console.log(this.idSelected) },
+
+        refuseRegister() {
+    
+       store.dispatch('app-user/refuseRegister',this.idSelected)
+        .then(() => {
+      
+      console.log("okkk"),
+        this.$toast({
+          component: ToastificationContent,
+          props: {
+            title: 'bien refuser',
+            icon: 'AlertTriangleIcon',
+            variant: 'success',
+          },
+        })
+        router.replace({path: '/apps/athletes/list'}) 
+         }).catch(error=>console.log(error)) },
+     
+       acceptRegister() {
+  
+       store.dispatch('app-user/acceptRegister',this.idSelected)
+        .then(() => {
+      this.$toast({
+          component: ToastificationContent,
+          props: {
+            title: 'bien accepter',
+            icon: 'AlertTriangleIcon',
+            variant: 'success',
+          },
+        })
+        router.replace({path: '/apps/athletes/list'}) 
+         }).catch(error=>console.log(error)) },
+     
   },
   setup() {
     const USER_APP_STORE_MODULE_NAME = 'app-user'
@@ -231,7 +298,11 @@ export default {
     onUnmounted(() => {
       if (store.hasModule(USER_APP_STORE_MODULE_NAME)) store.unregisterModule(USER_APP_STORE_MODULE_NAME)
     })
+    const test = ()=> {
+      window.alert("hh")
+    }
      
+    
     const isAddNewUserSidebarActive = ref(false)
     const roleOptions = [
       { label: 'Admin', value: 'admin' },
@@ -304,6 +375,7 @@ export default {
       roleFilter,
       planFilter,
       statusFilter,
+      test,
     }
     
   },

@@ -61,7 +61,7 @@
       <b-table
         ref="refUserListTable"
         class="position-relative"
-        :items="fetchClubs"
+        :items="clubData"
         responsive
         :fields="tableColumns"
         primary-key="id"
@@ -215,6 +215,11 @@ export default {
     vSelect,
     ClubListAddNew,
   },
+   props: {
+    clubData: {
+      type: Object,
+      required: true,
+    },},
   setup() {
     const CLUB_APP_STORE_MODULE_NAME = 'app-club'
     // Register module
@@ -245,7 +250,6 @@ export default {
     ]
     const {
      
-      fetchClubs,
       tableColumns,
       perPage,
       currentPage,
@@ -270,7 +274,6 @@ export default {
     return {
       // Sidebar
       isAddNewUserSidebarActive,
-      fetchClubs,
      
       tableColumns,
       perPage,

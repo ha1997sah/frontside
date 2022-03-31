@@ -43,7 +43,7 @@
           <validation-provider
             #default="validationContext"
             name="Federation"
-            rules="required"
+            rules="required|alpha"
           >
             <b-form-group
               label="Nom Federation"
@@ -51,7 +51,7 @@
             >
               <b-form-input
                 id="nom"
-                v-model="federationData.name"
+                v-model="fed.name"
                 autofocus
                 :state="getValidationState(validationContext)"
                 trim
@@ -67,7 +67,7 @@
           <validation-provider
             #default="validationContext"
             name="Pays"
-            rules="required"
+            rules="required|alpha"
           >
             <b-form-group
               label="Pays"
@@ -75,7 +75,7 @@
             >
               <b-form-input
                 id="country"
-                v-model="federationData.country"
+                v-model="fed.country"
                 :state="getValidationState(validationContext)"
                 trim
               />
@@ -97,7 +97,7 @@
             >
               <b-form-input
                 id="adress"
-                v-model="federationData.adress"
+                v-model="fed.adress"
                 :state="getValidationState(validationContext)"
                 trim
               />
@@ -111,7 +111,7 @@
             <validation-provider
             #default="validationContext"
             name="Nom Responsable"
-            rules="required"
+            rules="required|alpha"
           >
             <b-form-group
               label="Nom Responsable"
@@ -119,7 +119,7 @@
             >
               <b-form-input
                 id="managerFullName"
-                v-model="federationData.managerfullName"
+                v-model="fed.managerfullName"
                 :state="getValidationState(validationContext)"
                 trim
               />
@@ -133,7 +133,7 @@
           <validation-provider
             #default="validationContext"
             name="E-mail"
-            rules="required"
+            rules="unique"
           >
             <b-form-group
               label="E-mail"
@@ -141,7 +141,7 @@
             >
               <b-form-input
                 id="contact"
-                v-model="federationData.email"
+                v-model="fed.email"
                 :state="getValidationState(validationContext)"
                 trim
               />
@@ -162,7 +162,7 @@
             >
               <b-form-input
                 id="phone"
-                v-model="federationData.phone"
+                v-model="fed.phone"
                 :state="getValidationState(validationContext)"
                 trim
               />
@@ -204,8 +204,8 @@
 import {
   BSidebar, BForm, BFormGroup, BFormInput, BFormInvalidFeedback, BButton,
 } from 'bootstrap-vue'
-import { ValidationProvider, ValidationObserver } from 'vee-validate'
-import { ref } from '@vue/composition-api'
+import { ValidationProvider, ValidationObserver, extend } from 'vee-validate'
+import { ref,onMounted } from '@vue/composition-api'
 import { required, alphaNum, email } from '@validations'
 import formValidation from '@core/comp-functions/forms/form-validation'
 import Ripple from 'vue-ripple-directive'
@@ -259,12 +259,64 @@ export default {
       alphaNum,
       email,
       countries,
-      error:null
+      error:null,
+      email:'',
+      fed: {
+        name:'',
+        phone:'',
+        managerfullName:'',
+        email:'',
+        adress:'',
+        country:''
+
+      }
+      
 
     }
   },
+   mounted() {
+    extend("unique", {
+      validate: this.isUsernameUnique,
+      message: "Username already taken"
+    });
+  },
+  methods: {
+       async isUsernameUnique() {
+      try {
+        const response = await authentication.isUniqueEmailFed ({
+         email: this.fed.email,
+     
+        })
+        return false;
+      } catch (err) {
+        if (err.response.status === 404) {
+          return true;
+        }
+      }
+    },
+
+        onSubmit (){
+      store.dispatch('app-federation/addFederation', this.fed)
+        .then(() => {
+             this.$toast({
+          component: ToastificationContent,
+          props: {
+            title: 'Opération réussi',
+            icon: 'AlertTriangleIcon',
+            text:"Fédeération ajouté avec succes ",
+            variant: 'success',
+          },
+        })
+
+          emit('refetch-data')
+          emit('update:is-add-new-user-sidebar-active', false)
+        }).catch({message:error.message})
+    }
+  },
+ 
   setup(props, { emit }) {
         const toast = useToast()
+
 
     const blankFederationData = {
       name: '',
@@ -281,24 +333,7 @@ export default {
       federationData.value = JSON.parse(JSON.stringify(blankFederationData))
     }
 
-    const onSubmit = () => {
-      store.dispatch('app-federation/addFederation', federationData.value)
-        .then(() => {
-             toast({
-          component: ToastificationContent,
-          props: {
-            title: 'Opération réussi',
-            icon: 'AlertTriangleIcon',
-            text:"Fédeération ajouté avec succes ",
-            variant: 'success',
-          },
-        })
-
-          emit('refetch-data')
-          emit('update:is-add-new-user-sidebar-active', false)
-        }).catch({message:error.message})
-    }
-
+ 
     const {
       refFormObserver,
       getValidationState,
@@ -307,11 +342,12 @@ export default {
 
     return {
       federationData,
-      onSubmit,
+      
 
       refFormObserver,
       getValidationState,
       resetForm,
+  
     }
   },
 }

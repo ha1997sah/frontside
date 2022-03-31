@@ -142,9 +142,16 @@
               <feather-icon icon="FileTextIcon" />
               <span class="align-middle ml-50">Détailes</span>
             </b-dropdown-item>
+             <b-dropdown-item :to="{ name:'apps-clubs-edit', params: { id: data.item.id } }">
+              <feather-icon icon="FileTextIcon" />
+              <span class="align-middle ml-50">Modifier</span>
+            </b-dropdown-item>
+                <b-dropdown-item  v-b-modal.modal-1 @click="sendInfo(data.item.id )">               
+              <feather-icon icon="TrashIcon" />
+              <span class="align-middle ml-50" >Supprimer</span>
+            </b-dropdown-item>
           </b-dropdown>
         </template>
-    
       </b-table>
       <div class="mx-2 mb-2">
         <b-row>
@@ -191,11 +198,18 @@
 
         </b-row>
       </div>
-    
+       <b-modal id="modal-1" title="BootstrapVue"
+     
+          @ok="handleOk">
+             <p class="my-4">Cette action ne peut pas être annulée!</p>
+  
+             </b-modal>
     </b-card>
   </div>
 </template>
 <script>
+import router from '@/router'
+
 import {
   BCard, BRow, BCol, BFormInput, BButton, BTable, BMedia, BAvatar, BLink,
   BBadge, BDropdown, BDropdownItem, BPagination,
@@ -208,6 +222,9 @@ import useClubsList from './useClubsList'
 import clubStoreModule from './clubStoreModule'
 import ClubListAddNew from './ClubListAddNew.vue'
 import axios from 'axios'
+import { useToast } from 'vue-toastification/composition'
+import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
+
 
 export default {
   components: {
@@ -229,6 +246,8 @@ export default {
   },
 
   setup() {
+          const toast = useToast()
+
     const CLUB_APP_STORE_MODULE_NAME = 'app-club'
     // Register module
     if (!store.hasModule(CLUB_APP_STORE_MODULE_NAME)) store.registerModule(CLUB_APP_STORE_MODULE_NAME, clubStoreModule)
@@ -250,6 +269,34 @@ data.forEach(element => { roleOptions.value.push({label:element.name, value:elem
    }
 
  )
+  const idSelected=ref('')
+
+      const sendInfo = (info) =>{
+        console.log(idSelected.value)
+       idSelected.value=info }
+    
+  const handleOk= () =>{
+    store.dispatch('app-club/deleteClub',   idSelected.value)
+    .then(() => {
+        toast({
+          component: ToastificationContent,
+          props: {
+            title: 'user deleted',
+            icon: 'AlertTriangleIcon',
+            variant: 'success',
+          },
+        })
+        router.replace({path: '/apps/clubs/list'}) 
+    }).catch(error=>{console.log(error),
+       toast({
+      component: ToastificationContent,
+      props: {
+        title: 'problem',
+        icon: 'AlertTriangleIcon',
+        variant: 'danger',
+      },
+    })})
+}
 
   
     const planOptions = [
@@ -290,6 +337,7 @@ data.forEach(element => { roleOptions.value.push({label:element.name, value:elem
       // Sidebar
       isAddNewUserSidebarActive,
       fetchClubs,
+      toast,
      
       tableColumns,
       perPage,
@@ -315,7 +363,9 @@ data.forEach(element => { roleOptions.value.push({label:element.name, value:elem
       roleFilter,
       planFilter,
       statusFilter,
-      fedData
+      fedData,
+      sendInfo,
+      handleOk
     }
     
   },

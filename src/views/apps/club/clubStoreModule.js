@@ -25,6 +25,16 @@ export default {
       })
     },
  
+    fetchClubsUnderFeds(ctx, queryParams) {
+      return new Promise((resolve, reject) => {
+        authentication
+          .clubUnderFeds(router.currentRoute.params.id)
+          .then(response => resolve(response))
+          .catch(error => reject(error))
+      })
+    },
+ 
+
     fetchClubById(ctx) {
       return new Promise((resolve, reject) => {
         authentication

@@ -46,7 +46,6 @@ import { ref, onUnmounted } from '@vue/composition-api'
 import {
   BRow, BCol, BAlert, BLink,
 } from 'bootstrap-vue'
-import InvoiceList from '@/views/apps/invoice/invoice-list/InvoiceList.vue'
 import competitionStoreModule from './competitionStoreModule'
 import CompetitionViewInfoCard from './CompetitionViewInfoCard.vue'
 import CompetitionViewPlanCard from './CompetitionViewPlanCard.vue'
@@ -62,7 +61,6 @@ export default {
     CompetitionViewInfoCard,
     CompetitionViewPlanCard,
 
-    InvoiceList,
   },
   setup() {
     const competitionData = ref(null)

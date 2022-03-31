@@ -23,6 +23,12 @@ export default {
         return Api().post('validate/email',credentials)
     },
 
+    isUniqueEmailClub(credentials){
+        return Api().post('club/validate/email',credentials)
+    },
+    isUniqueEmailFed(credentials){
+        return Api().post('fed/validate/email',credentials)
+    },
     allUsers(){
         return Api().get('users')
     },
@@ -30,7 +36,7 @@ export default {
         return Api().get('allPendingRequests')
     },
     findUserById(id){
-        return Api().get("user/1")
+        return Api().get(`user/${id}`)
     },
 
     acceptRegister(id){
@@ -115,8 +121,8 @@ export default {
     deleteFederation(id){
         return Api().delete(`deleteFederation/${id}`)
        }, 
-       clubUnderFed(id){
-         return Api().get(`clubUnderFed/${id}`)
+       clubUnderFeds(id){
+         return Api().get(`clubUnderFeds/${id}`)
        },
        usersUnderClub(credentials){
         return Api().post('usersUnderClub',credentials)
@@ -157,5 +163,8 @@ export default {
     },
     inscrit(credentials){
         return Api().post('inscri',credentials)
+    },
+    getRecords(credentials){
+        return Api().post('userRecords',credentials)
     }
 }

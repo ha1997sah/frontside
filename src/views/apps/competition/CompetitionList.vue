@@ -90,11 +90,11 @@
                 size="32"
                 :text="avatarText(data.item.name)"
                 :variant="`light-${resolveUserRoleVariant(data.item.name)}`"
-                :to="{ name: 'pages-blog-detail', params: { id: data.item.id } }"
+                :to="{ name: 'apps-competition-detail', params: { id: data.item.id } }"
               />
             </template>
             <b-link
-              :to="{ name: 'pages-blog-detail', params: { id: data.item.id } }"
+              :to="{ name: 'apps-competition-detail', params: { id: data.item.id } }"
               class="font-weight-bold d-block text-nowrap"
             >
               {{ data.item.name }}
@@ -106,7 +106,7 @@
           <b-media vertical-align="center">
             
             <b-link
-              :to="{ name: 'pages-blog-detail', params: { id: data.item.id } }"
+              :to="{ name: 'apps-competition-detail', params: { id: data.item.id } }"
               class="font-weight-bold d-block text-nowrap"
             >
               {{ data.item.name }}
@@ -117,7 +117,7 @@
           <b-media vertical-align="center">
             
             <b-link
-              :to="{ name: 'apps-competitions-view', params: { id: data.item.id } }"
+              :to="{ name: 'apps-competition-detail', params: { id: data.item.id } }"
               class="font-weight-bold d-block text-nowrap"
             >
               {{ data.item.location }}
@@ -128,7 +128,7 @@
           <b-media vertical-align="center">
             
             <b-link
-              :to="{ name: 'apps-competitions-view', params: { id: data.item.id } }"
+              :to="{ name: 'apps-competition-detail', params: { id: data.item.id } }"
               class="font-weight-bold d-block text-nowrap"
             >
               {{ data.item.start }}
@@ -139,7 +139,7 @@
           <b-media vertical-align="center">
             
             <b-link
-              :to="{ name: 'apps-competitions-view', params: { id: data.item.id } }"
+              :to="{ name: 'apps-competition-detail', params: { id: data.item.id } }"
               class="font-weight-bold d-block text-nowrap"
             >
               {{ data.item.fin }}

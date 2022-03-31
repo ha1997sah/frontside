@@ -57,13 +57,8 @@ export default function useUsersList() {
             variant: 'success',
           },
         })
-        router.replace({path: '/apps/users/list'})    
-
-    }
-    
-    )
-    
-     .catch(error=>{console.log(error),
+        router.replace({path: '/apps/users/list'}) 
+    }).catch(error=>{console.log(error),
        toast({
       component: ToastificationContent,
       props: {

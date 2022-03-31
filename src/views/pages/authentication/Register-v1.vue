@@ -22,15 +22,11 @@
             @submit.prevent="validationForm" enctype="multipart/form-data"
           >
             <!-- name -->
-                <b-tabs>
+                <b-tabs v-model="currentTab">
 
          <b-tab active>
           <template #title>
-          <feather-icon
-            icon="Share2Icon"
-            size="16"
-            class="mr-0 mr-sm-50"
-          />
+        
           <span class="d-none d-sm-inline">Etape 1</span>
         </template>
             <b-form-group
@@ -128,13 +124,9 @@
               </validation-provider>
             </b-form-group>
                             </b-tab>
-                             <b-tab >
+                             <b-tab :disabled="disabledTabIndex < 1" >
               <template #title>
-          <feather-icon
-            icon="Share2Icon"
-            size="16"
-            class="mr-0 mr-sm-50"
-          />
+        
           <span class="d-none d-sm-inline">Etape 2</span>
         </template>
                <!-- phone -->
@@ -157,7 +149,25 @@
               </validation-provider>
             </b-form-group>
 
+               <validation-provider
+            name="Federation"
+          >
+            <b-form-group
+              label="Federation"
+              label-for="federation"
+            >
+              <v-select
+              v-model="selectedFed"
+                :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
+                :options="fedOptions"
+                :clearable="false"
+                 @input="clubUnderFed"
 
+               
+              />
+            
+            </b-form-group>
+          </validation-provider>
            <!-- club -->
                  <validation-provider
             name="Club"
@@ -197,15 +207,45 @@
      </b-form-group>
            <!-- -->
            </b-tab>
-   <b-tab >
+   <b-tab :disabled="disabledTabIndex < 2" >
           <template #title>
-          <feather-icon
-            icon="Share2Icon"
-            size="16"
-            class="mr-0 mr-sm-50"
-          />
+        
           <span class="d-none d-sm-inline">Etape 3</span>
         </template>
+          <validation-provider
+            #default="validationContext"
+            name="Sexe"
+            rules="required"
+
+          >
+            <b-form-group
+              label="Sexe"
+              label-for="sexe">
+     <div class="demo-inline-spacing">
+      <b-form-radio
+        v-model="selectedSexe"
+        plain
+        name="some-radios3"
+        value="femme"
+      >
+        Femme
+      </b-form-radio>
+      <b-form-radio
+        v-model="selectedSexe"
+        plain
+        name="some-radios3"
+        value="homme"
+      >
+        Homme
+      </b-form-radio>
+    </div>
+              <b-form-invalid-feedback>
+                {{ validationContext.errors[0] }}
+              </b-form-invalid-feedback>
+            </b-form-group>
+          </validation-provider>
+
+         
              <b-form-group
               label="Poids"
               label-for="weight"
@@ -215,17 +255,18 @@
                 name="weight"
                 rules="required"
               >
-                <b-form-input
-                  id="weight"
-                  v-model="weight"
-                  :state="errors.length > 0 ? false:null"
-                  name="register-weight"
-                />
-                <small class="text-danger">{{ errors[0] }}</small>
+                      <v-select
+              v-model="selectedWeight"
+                :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
+                :options="weighttOptions"
+                :clearable="false"
+                input-id="club-fed"
+              />
+        <small class="text-danger">{{ errors[0] }}</small>
               </validation-provider>
             </b-form-group>
              <b-form-group
-              label="Longeur"
+              label="Taille"
               label-for="height"
             >
               <validation-provider
@@ -233,15 +274,20 @@
                 name="height"
                 rules="required"
               >
-                <b-form-input
-                  id="height"
-                  v-model="height"
-                  :state="errors.length > 0 ? false:null"
-                  name="register-height"
-                />
+                   <v-select
+              v-model="selectedHeight"
+                :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
+                :options="heightOptions"
+                :clearable="false"
+                input-id="club-fed"
+              />
                 <small class="text-danger">{{ errors[0] }}</small>
               </validation-provider>
             </b-form-group>
+
+            <!-- -->
+            
+
              <b-form-group
               label="Ceinture"
               label-for="belt"
@@ -251,12 +297,13 @@
                 name="belt"
                 rules="required"
               >
-                <b-form-input
-                  id="belt"
-                  v-model="belt"
-                  :state="errors.length > 0 ? false:null"
-                  name="register-belt"
-                />
+                <v-select
+              v-model="selectedBelt"
+                :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
+                :options="beltOptions"
+                :clearable="false"
+                input-id="club-fed"
+              />
                 <small class="text-danger">{{ errors[0] }}</small>
               </validation-provider>
             </b-form-group>
@@ -289,24 +336,30 @@
 
 
                 <!-- records -->
-<b-tab>
+<b-tab :disabled="disabledTabIndex < 3">
   <template #title>
-          <feather-icon
-            icon="Share2Icon"
-            size="16"
-            class="mr-0 mr-sm-50"
-          />
-           <span class="d-none d-sm-inline">Etape 3</span>
+       
+           <span class="d-none d-sm-inline">Etape 4</span>
         </template>
                 <div class="form-group" v-for="(input,k) in inputs" :key="k">
    <b-row>
-     <b-col md="3">
+      <b-col md="6">
        
-     <input type="text" class="form-control" v-model="input.recordDate">
+     <input type="text" class="form-control" v-model="input.title">
 
-        </b-col>
-     <b-col md="3">
-            <input type="text" class="form-control" v-model="input.title">
+       </b-col>
+      <b-col md="6">
+    
+                <b-form-group
+            >
+             
+     <b-form-datepicker
+      id="example-datepicker"
+      v-model="input.recordDate"
+      class="mb-1"
+    />
+   
+     </b-form-group>
         </b-col>
         </b-row>
     <span>
@@ -317,17 +370,66 @@
 
 </b-tab>
                     </b-tabs>
+                    <div>
+            <b-row>
+                     <b-col
+        md="2"
+       
+      >
 
-            <!-- submit button -->
-            <b-button
+              <b-button-group>
+           
+        <b-button
+          v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+          class="btn-icon"
+          variant="outline-primary"
+          @click="disabledTabIndex--"
+            :disabled="disabledTabIndex<1"
+
+        >
+          <feather-icon icon="ChevronsLeftIcon" />
+        </b-button>
+      
+      </b-button-group>
+   </b-col>
+                        <b-col
+        md="8"
+       
+      >
+
+             <b-button
               variant="primary"
-              block
-              :disabled="invalid"
               type="button"
+              block
               @click="register"
+              :disabled="invalid"
             >
-              Sign up
+              Register
             </b-button>
+            </b-col>
+              <b-col
+        md="2"
+       
+      >
+
+       <b-button-group>
+      
+        <b-button
+          v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+          class="btn-icon"
+          variant="outline-primary"
+                   @click="disabledTabIndex++"
+                 :disabled="disabledTabIndex>2"
+
+        >
+          <feather-icon icon="ChevronsRightIcon" />
+        </b-button>
+      </b-button-group>
+      </b-col>
+      </b-row>
+          </div>
+
+
           </b-form>
         </validation-observer>
 
@@ -381,10 +483,12 @@
 import { ValidationProvider, ValidationObserver, extend } from 'vee-validate'
 import {mapState} from 'vuex'
 import axios from 'axios'
+import Ripple from 'vue-ripple-directive'
+
 
 import {
-  BCard, BLink,BFormFile, BFormDatepicker, BCardTitle, BCardText, BForm,BFormInvalidFeedback,
-  BButton, BFormInput, BFormGroup, BInputGroup, BInputGroupAppend, BFormCheckbox, BAlert,BTab, BTabs
+  BCard, BLink,BFormFile, BFormDatepicker, BCardTitle, BCardText, BForm,BFormInvalidFeedback,BButtonToolbar,
+  BButton, BFormInput, BFormGroup, BInputGroup, BInputGroupAppend, BFormCheckbox, BAlert,BTab, BTabs,BCol,BRow,BFormRadio
 } from 'bootstrap-vue'
 import VuexyLogo from '@core/layouts/components/Logo.vue'
 import { required, email } from '@validations'
@@ -399,7 +503,9 @@ import flatPickr from 'vue-flatpickr-component'
 
 export default {
   components: {
+    BFormRadio,
     VuexyLogo,
+    BButtonToolbar,
     BTab, BTabs,
     BAlert,
     BFormInvalidFeedback,
@@ -409,6 +515,8 @@ export default {
     // BSV
     BCard,
     BLink,
+    BCol,
+    BRow,
     BCardTitle,
     BCardText,
     BForm,
@@ -447,8 +555,16 @@ export default {
       error: null,
       success:false,
       selectedItem:'',
+      selectedBelt:'',
+      selectedHeight:'',
+      selectedWeight:'',
+      selectedFed:'',
+      selectedSexe:'',
       file:"",
      roleOptions :[],
+       fedOptions :[],
+      currentTab: 0,
+      disabledTabIndex: 0,
 
       // validation rules
       required,
@@ -456,8 +572,24 @@ export default {
       clubs:[
         {label:"club1", value:"2"},
         {label:"club2", value:"3"},
+      ],
+       beltOptions:[
+        "noir","jaune"
+      ],
+      heightOptions:[
+        "1.75 cm",
+        "1.76 cm",
+        "1.77 cm"
+      ],
+       weighttOptions:[
+       "75 kg",
+        "80 kg",
+        "10 kg"
       ]
     }
+  },
+   directives: {
+    Ripple,
   },
   computed: {
     passwordToggleIcon() {
@@ -468,6 +600,12 @@ export default {
       'user',
     ])
   },
+    watch: {
+    disabledTabIndex(newVal) {
+      this.$nextTick(() => {
+        this.currentTab = newVal;
+      })
+    }},
     mounted() {
     extend("unique", {
       validate: this.isUsernameUnique,
@@ -475,7 +613,22 @@ export default {
     });
   },
   created() {
- axios.get("http://localhost:3001/allClubs").then(
+     axios.get("http://localhost:3001/allFederations").then(
+   response=>{
+const data = response.data.feds
+data.forEach(element => { this.fedOptions.push({label:element.name, value:element.id})
+  console.log(this.fedOptions)
+});
+
+
+   })
+
+
+  },
+  methods: {
+    clubUnderFed() {
+      console.log("okkkkkkkkkkkkkkkkkkkk")
+     axios.post("http://localhost:3001/clubUnderFed",{id:this.selectedFed.value}).then(
    response=>{
 const data = response.data.clubs
 data.forEach(element => { this.roleOptions.push({label:element.name, value:element.id})
@@ -483,11 +636,7 @@ data.forEach(element => { this.roleOptions.push({label:element.name, value:eleme
 });
 
 
-   }
-
- )
-  },
-  methods: {
+   } )},
       add(index) {
             this.inputs.push({ name: '' });
         },
@@ -506,9 +655,16 @@ data.forEach(element => { this.roleOptions.push({label:element.name, value:eleme
         formData.append('password',this.password)
         formData.append('name',this.name)
         formData.append('lastname',this.lastname)
+         formData.append('belt',this.selectedBelt)
+         formData.append('height',this.selectedHeight)
+         formData.append('weight',this.selectedWeight)
 
         formData.append('phone',this.phone)
         formData.append('ClubId',this.selectedItem.value)
+        formData.append('FederationId',this.selectedFed.value)
+                formData.append('sexe',this.selectedSexe)
+
+
         formData.append('birthDate',this.birthDate)
         formData.append('records',JSON.stringify(this.inputs))
         
@@ -544,7 +700,7 @@ data.forEach(element => { this.roleOptions.push({label:element.name, value:eleme
      async isUsernameUnique() {
       try {
         const response = await authentication.isUniqueEmail ({
-      email: this.email,
+         email: this.email,
      
         })
         return false;

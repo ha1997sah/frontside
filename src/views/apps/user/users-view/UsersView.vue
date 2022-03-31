@@ -62,13 +62,13 @@ import { ref, onUnmounted } from '@vue/composition-api'
 import {
   BRow, BCol, BAlert, BLink,
 } from 'bootstrap-vue'
-import InvoiceList from '@/views/apps/invoice/invoice-list/InvoiceList.vue'
 import userStoreModule from '../userStoreModule'
 import UserViewUserInfoCard from './UserViewUserInfoCard.vue'
 import UserViewUserPlanCard from './UserViewUserPlanCard.vue'
 import UsersEdit from '../users-edit/UsersEdit.vue'
 import UserViewUserTimelineCard from './UserViewUserTimelineCard.vue'
 import UserTimeline from './UserTimeline.vue'
+import authentication from '@/services/authentication.js'
 
 export default {
   components: {
@@ -84,7 +84,6 @@ export default {
     UserViewUserPlanCard,
  
 
-    InvoiceList,
   },
   setup() {
     const userData = ref(null)
@@ -101,11 +100,16 @@ export default {
     })
 
     store.dispatch('app-user/fetchUserById', { id: router.currentRoute.params.id })
-      .then(response => { userData.value = response.data.user ,userRecord.value=response.data.user.records,console.log("record",userRecord.value)})
+      .then(response => { userData.value = response.data.user })
       .catch(error => {
         if (error.response.status === 404) {
           userData.value = undefined
         }
+      })
+
+      authentication.getRecords({ UserId: router.currentRoute.params.id }).then(response =>{
+        userRecord.value=response.data.records,
+        console.log(userRecord.value)
       })
 
     return {

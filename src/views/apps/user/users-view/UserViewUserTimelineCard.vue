@@ -1,9 +1,6 @@
 <template>
   <b-card title="Plus d'informations">
-    <b-row>
-<b-col
-cols="12"
-        xl="6">
+ 
       <app-timeline-item>
         <div class="d-flex flex-sm-row flex-column flex-wrap justify-content-between mb-1 mb-sm-0">
           <h6>Poids</h6>
@@ -19,10 +16,7 @@ cols="12"
         <p>{{userData.height}}</p>
      
       </app-timeline-item>
-      </b-col>
-      <b-col
-      cols="12"
-        xl="6">
+    
        <app-timeline-item>
         <div class="d-flex flex-sm-row flex-column flex-wrap justify-content-between mb-1 mb-sm-0">
           <h6>Poids</h6>
@@ -50,9 +44,7 @@ cols="12"
         block
 @click="openPdf"> Voir le certificat</b-button>
       </app-timeline-item>
-   </b-col>
-       </b-row>
-
+  
   </b-card>
 </template>
 <script>

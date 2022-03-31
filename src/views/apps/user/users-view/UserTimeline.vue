@@ -1,11 +1,15 @@
 <template>
-  <b-card title="Plus d'informations">
+  <b-card title="Records">
     <b-row>
 <b-col
 cols="12"
         xl="6">  
       <app-timeline-item 
 v-for="(record) in userData" :key="record.id">
+        <div class="d-flex flex-sm-row flex-column flex-wrap justify-content-between mb-1 mb-sm-0">
+          <h6>Date</h6>
+        </div>
+        <p>{{record.recordDate}}</p>
         <div class="d-flex flex-sm-row flex-column flex-wrap justify-content-between mb-1 mb-sm-0">
           <h6>Titre</h6>
         </div>
@@ -21,7 +25,7 @@ v-for="(record) in userData" :key="record.id">
 </template>
 <script>
 import {
-  BCard, BImg, BMedia, BAvatar,
+  BCard, BImg, BMedia, BAvatar,BCol,BRow
 } from 'bootstrap-vue'
 import AppTimeline from '@core/components/app-timeline/AppTimeline.vue'
 import AppTimelineItem from '@core/components/app-timeline/AppTimelineItem.vue'
@@ -29,6 +33,7 @@ import AppTimelineItem from '@core/components/app-timeline/AppTimelineItem.vue'
 export default {
   components: {
     BCard,
+    BCol,BRow,
     BImg,
     BMedia,
     BAvatar,
@@ -37,7 +42,7 @@ export default {
   },
      props: {
     userData: {
-      type: Object,
+      type: Array,
       required: true,
     },
   },

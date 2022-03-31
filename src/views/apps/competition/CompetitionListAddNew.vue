@@ -43,6 +43,8 @@
           <validation-provider
             #default="validationContext"
             name="titre"
+            rules="required"
+
           >
             <b-form-group
               label="Titre"
@@ -66,6 +68,8 @@
           <validation-provider
             #default="validationContext"
             name="Adresse"
+            rules="required"
+
           >
             <b-form-group
               label="Adresse"
@@ -91,6 +95,8 @@
             <b-form-group
               label="Description"
               label-for="description"
+               rules="required"
+
             >
               <b-form-input
                 id="description"
@@ -109,6 +115,8 @@
           <validation-provider
             #default="validationContext"
             name="Categorie"
+                        rules="required"
+
           >
             <b-form-group
               label="Categorie des poids"
@@ -116,7 +124,7 @@
               :state="getValidationState(validationContext)"
             >
               <v-select
-              v-model="clubData.selectedItem"
+              v-model="selected"
                 :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
                 :options="roleOptions"
                 :clearable="false"
@@ -127,6 +135,16 @@
               </b-form-invalid-feedback>
             </b-form-group>
           </validation-provider>
+              <validation-provider
+            #default="validationContext"
+            name="image"
+          >
+            <b-form-group
+              label="image"
+              label-for="image"
+              rules="required"
+
+            >
           <b-form-group>
                 <b-form-file
                placeholder="Choisir une photo..."
@@ -134,16 +152,57 @@
                  @change="selectFile"
                    />
              </b-form-group>
+         <b-form-invalid-feedback>
+                {{ validationContext.errors[0] }}
+              </b-form-invalid-feedback>
+            </b-form-group>
+          </validation-provider>
+          <!-- -->
+              <validation-provider
+            #default="validationContext"
+            name="start"
+          >
+            <b-form-group
+              label="Date debut"
+              label-for="start"
+              rules="required"
+
+            >
  <b-form-datepicker
       id="start-datepicker"
       v-model="clubData.start"
       class="mb-1"
     />
+         <b-form-invalid-feedback>
+                {{ validationContext.errors[0] }}
+              </b-form-invalid-feedback>
+            </b-form-group>
+          </validation-provider>
+
+
+    <!---->
+        <validation-provider
+            #default="validationContext"
+            name="fin"
+            rules="required"
+          >
+            <b-form-group
+              label="Date fin"
+              label-for="fin"
+              rules="required"
+
+            >
 <b-form-datepicker
       id="end-datepicker"
       v-model="clubData.end"
       class="mb-1"
     />
+    <b-form-invalid-feedback>
+                {{ validationContext.errors[0] }}
+              </b-form-invalid-feedback>
+            </b-form-group>
+          </validation-provider>
+    <!---------->
           <!-- Form Actions -->
           <div class="d-flex mt-2">
             <b-button
@@ -251,6 +310,7 @@ export default {
       error:null,
     }
            const file = ref(null)
+           const selected = ref(null)
 
     const clubData = ref(JSON.parse(JSON.stringify(blankclubData)))
     const resetclubData = () => {
@@ -268,16 +328,13 @@ export default {
       formData.append('end',clubData.value.end)
       formData.append('location',clubData.value.location)
       formData.append('description',clubData.value.description)
-      formData.append('idCat',"1")
-
-
-
-
+      formData.append('idCat',selected.value.value)
       formData.append('compImage',file.value)
     
 
       store.dispatch('app-competition/addCompetition',formData)
         .then(() => {
+              console.log(selected.value)
             toast({
           component: ToastificationContent,
           props: {
@@ -307,6 +364,7 @@ export default {
       resetForm,
       selectFile,
       file,
+      selected
     }
   },
 }

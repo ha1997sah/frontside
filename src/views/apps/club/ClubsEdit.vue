@@ -1,10 +1,10 @@
 <template>
-  <component :is="clubData === undefined ? 'div' : 'b-card'">
+  <component :is="federationData === undefined ? 'div' : 'b-card'">
 
     <!-- Alert: No item found -->
     <b-alert
       variant="danger"
-      :show="clubData === undefined"
+      :show="federationData === undefined"
     >
       <h4 class="alert-heading">
         Error fetching user data
@@ -13,7 +13,7 @@
         No user found with this user id. Check
         <b-link
           class="alert-link"
-          :to="{ name: 'apps-clubs-list'}"
+          :to="{ name: 'apps-federations-list'}"
         >
           User List
         </b-link>
@@ -22,7 +22,7 @@
     </b-alert>
 
     <b-tabs
-      v-if="clubData"
+      v-if="federationData"
       pills
     >
 
@@ -34,7 +34,7 @@
             size="16"
             class="mr-0 mr-sm-50"
           />
-          <span class="d-none d-sm-inline">Modifier les informtions</span>
+          <span class="d-none d-sm-inline">Modifier les informations</span>
         </template>
           <div>
 
@@ -43,18 +43,16 @@
       <template #aside>
         <b-avatar
           ref="previewEl"
-          :src="clubData.avatar"
-          :text="avatarText(clubData.name)"
-          :variant="`light-${resolveUserRoleVariant(clubData.role)}`"
+          :src="federationData.avatar"
+          :text="avatarText(federationData.name)"
+          :variant="`light-${resolveUserRoleVariant(federationData.role)}`"
           size="90px"
           rounded
         />
       </template>
-       <div class="d-flex flex-wrap">
       <h4 class="mb-1">
-        {{ clubData.name }}
+        {{ federationData.name }}
       </h4>
-      </div>
       <div class="d-flex flex-wrap">
         <b-button
           variant="primary"
@@ -99,10 +97,18 @@
             label="Club"
             label-for="username"
           >
+          <validation-provider
+                #default="{ errors }"
+                name="name"
+                rules="min:3"
+              >
             <b-form-input
               id="username"
-              v-model="clubData.name"
+              v-model="fed.name"
+              :placeholder="federationData.name"
             />
+              <small class="text-danger">{{ errors[0] }}</small>
+              </validation-provider>
           </b-form-group>
         </b-col>
 
@@ -112,31 +118,73 @@
           md="4"
         >
           <b-form-group
-            label="Adresse"
+            label="Pays"
             label-for="full-name"
           >
+
+         <validation-provider
+                #default="{ errors }"
+                name="name"
+                rules="min:3"
+              >
             <b-form-input
               id="full-name"
-              v-model="clubData.adress"
-
+              v-model="fed.country"
+              :placeholder="federationData.country"
             />
+              <small class="text-danger">{{ errors[0] }}</small>
+              </validation-provider>
           </b-form-group>
         </b-col>
-         <b-col
+
+        <!-- Field: Email -->
+        <b-col
           cols="12"
           md="4"
         >
           <b-form-group
-            label="Pays"
-            label-for="full-name"
+            label="Adresse"
+            label-for="email"
           >
+           <validation-provider
+                #default="{ errors }"
+                name="name"
+                rules="min:3"
+              >
             <b-form-input
-              id="full-name"
-              v-model="clubData.country"
-
+              id="email"
+               v-model="fed.adress"
+              :placeholder="federationData.adress"
+              type="email"
             />
+              <small class="text-danger">{{ errors[0] }}</small>
+              </validation-provider>
           </b-form-group>
         </b-col>
+
+           <b-col
+          cols="12"
+          md="4"
+        >
+          <b-form-group
+              label="Numéro de téléphone"
+            label-for="phone"
+          >
+           <validation-provider
+                #default="{ errors }"
+                name="name"
+                rules="min:3"
+              >
+            <b-form-input
+              id="phone"
+               v-model="fed.phone"
+              :placeholder="federationData.phone"
+            />
+              <small class="text-danger">{{ errors[0] }}</small>
+              </validation-provider>
+          </b-form-group>
+        </b-col>
+
         <!-- Field: Email -->
         <b-col
           cols="12"
@@ -144,31 +192,23 @@
         >
           <b-form-group
             label="E-mail"
-            label-for="email"
-          >
-            <b-form-input
-              id="email"
-              v-model="clubData.email"
-              type="email"
-            />
-          </b-form-group>
-        </b-col>
-
-        <!-- Field: Email -->
-        <b-col
-          cols="12"
-          md="4"
-        >
-          <b-form-group
-            label="Contact"
             label-for="company"
           >
+           <validation-provider
+                #default="{ errors }"
+                name="name"
+                rules="unique"
+              >
             <b-form-input
               id="company"
-              v-model="clubData.phone"
+              v-model="email"
+              :placeholder="federationData.email"
             />
+              <small class="text-danger">{{ errors[0] }}</small>
+              </validation-provider>
           </b-form-group>
         </b-col>
+        <!-- nom responsable -->
           <b-col
           cols="12"
           md="4"
@@ -177,10 +217,18 @@
             label="Responsable"
             label-for="company"
           >
+           <validation-provider
+                #default="{ errors }"
+                name="name"
+                rules="min:3"
+              >
             <b-form-input
               id="company"
-              v-model="clubData.managerfullName"
+               v-model="fed.managerfullName"
+              :placeholder="federationData.managerfullName"
             />
+              <small class="text-danger">{{ errors[0] }}</small>
+              </validation-provider>
           </b-form-group>
         </b-col>
 
@@ -228,6 +276,10 @@ import { avatarText } from '@core/utils/filter'
 import vSelect from 'vue-select'
 import { useToast } from 'vue-toastification/composition'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
+import { required, email } from '@validations'
+import { ValidationProvider, ValidationObserver, extend } from 'vee-validate'
+import authentication from '@/services/authentication.js'
+
 
 
 
@@ -251,8 +303,37 @@ export default {
     BCardTitle,
     BFormCheckbox,
     vSelect,
-  
+     ValidationProvider,
+    ValidationObserver,
   },
+   data() {
+    return {
+      required,
+      email: '',
+      email,
+
+      }},
+       mounted() {
+    extend("unique", {
+      validate: this.isUsernameUnique,
+      message: "Username already taken"
+    });
+  },
+      methods :{
+          async isUsernameUnique() {
+      try {
+        const response = await authentication.isUniqueEmail ({
+         email: this.email
+     
+        })
+        return false;
+      } catch (err) {
+        if (err.response.status === 404) {
+          return true;
+        }
+      }
+    }
+      },
   setup() {
     const toast = useToast()
 
@@ -315,18 +396,21 @@ export default {
 
     const { inputImageRenderer } = useInputImageRenderer(refInputEl, base64 => {
       // eslint-disable-next-line no-param-reassign
-      props.clubData.avatar = base64
+      props.federationData.avatar = base64
     })
-    const clubData = ref(null)
-    const club = ref(null)
+    const federationData = ref(null)
+    const blankFed = {}
+    const fed = ref(JSON.parse(JSON.stringify(blankFed)))
+
 
 
     const CLUB_APP_STORE_MODULE_NAME = 'app-club'
         const onSubmit = () => {
-          store.dispatch('app-club/editClub', clubData.value )
-        .then(() => {
-          response => { clubData.value = response.data.club}
-             toast({
+          store.dispatch('app-club/editClub', fed.value )
+          .then(
+          response => {
+            fed.value = response.data.club,console.log(fed.value),
+              toast({
             component: ToastificationContent,
             props: {
               title: 'Operation réussi',
@@ -334,8 +418,8 @@ export default {
               icon: 'AlertTriangleIcon',
               variant: 'success',
             },
-          }).catch({error:error.message})
-        })
+          })
+            }) .catch(error)(console.log("vv"))
     }
 
     // Register module
@@ -348,17 +432,17 @@ export default {
 
    
      store.dispatch('app-club/fetchClubById')
-      .then(response => { clubData.value = response.data.club })
+      .then(response => { federationData.value = response.data.club,console.log(federationData.value)})
       .catch(error => {
         if (error.response.status === 404) {
-          clubData.value = undefined
+          federationData.value = undefined
         }
       })
 
       return {
       onSubmit,
-      clubData,
-      club,
+      federationData,
+      fed,
       resolveUserRoleVariant,
       avatarText,
       roleOptions,

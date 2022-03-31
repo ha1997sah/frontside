@@ -120,19 +120,19 @@ export default {
           .catch(error => {reject(error), console.log(error.message)})
       })
     },
-    acceptRegister(ctx) {
+    acceptRegister(ctx,id) {
       return new Promise((resolve, reject) => {
         authentication
-          .acceptRegister(router.currentRoute.params.id)
+          .acceptRegister(id)
           .then(response => resolve(response))
           .catch(error => {reject(error), console.log(error.message)})
       })
     },
 
-    refuseRegister(ctx, userData) {
+    refuseRegister(ctx,id) {
       return new Promise((resolve, reject) => {
         authentication
-          .refuseRegister(router.currentRoute.params.id)
+          .refuseRegister(id)
           .then(response => resolve(response))
           .catch(error => {reject(error), console.log(error.message)})
       })

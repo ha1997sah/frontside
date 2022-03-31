@@ -43,7 +43,7 @@
           lg="12"
           md="12"
         >
-        <club-list/>
+        <club-list :club-data="clubs" />
                 </b-col>
 
       </b-row>
@@ -59,7 +59,6 @@ import { ref, onUnmounted } from '@vue/composition-api'
 import {
   BRow, BCol, BAlert, BLink,
 } from 'bootstrap-vue'
-import InvoiceList from '@/views/apps/invoice/invoice-list/InvoiceList.vue'
 import federationStoreModule from './federationStoreModule'
 import FederationViewInfoCard from './FederationViewInfoCard.vue'
 import FederationViewPlanCard from './FederationViewPlanCard.vue'
@@ -78,7 +77,6 @@ export default {
     ClubList,
  
 
-    InvoiceList,
     FederationsEdit,
   },
   setup() {
@@ -96,7 +94,7 @@ export default {
     })
 
     store.dispatch('app-federation/fetchFederationById', { id: router.currentRoute.params.id })
-      .then(response => { federationData.value = response.data.fed ,clubs.value=response.data.fed.Clubs,console.log(clubs)})
+      .then(response => { federationData.value = response.data.fed ,clubs.value=response.data.fed.Clubs,console.log(clubs.value)})
       .catch(error => {
         if (error.response.status === 404) {
           federationData.value = undefined
@@ -107,6 +105,7 @@ export default {
 
     return {
       federationData,
+      clubs
     }
   },
 }

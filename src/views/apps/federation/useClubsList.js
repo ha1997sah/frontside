@@ -76,7 +76,7 @@ export default function useUsersList() {
 
   const fetchClubs = (ctx, callback) => {
     store
-      .dispatch('app-club/fetchClubsUnderFed', {
+      .dispatch('app-club/fetchClubsUnderFeds', {
         q: searchQuery.value,
         perPage: perPage.value,
         page: currentPage.value,

@@ -15,7 +15,7 @@
       <!-- Header -->
       <div class="d-flex justify-content-between align-items-center content-sidebar-header px-2 py-1">
         <h5 class="mb-0">
-          Ajouter une competition
+          Ajouter une catégorie
         </h5>
 
         <feather-icon
@@ -43,9 +43,11 @@
           <validation-provider
             #default="validationContext"
             name="titre"
+            rules="required"
+
           >
             <b-form-group
-              label="Categorie"
+              label="Titre"
               label-for="titre"
             >
               <b-form-input
@@ -62,18 +64,20 @@
             </b-form-group>
           </validation-provider>
 
-          <!-- Country -->
+          <!-- type -->
           <validation-provider
             #default="validationContext"
-            name="Adresse"
+            name="Type"
+           rules="required"
+
           >
             <b-form-group
-              label="Adresse"
-              label-for="adresse"
+              label="Type"
+              label-for="type"
             >
               <b-form-input
-                id="adresse"
-                v-model="clubData.age"
+                id="type"
+                v-model="clubData.type"
                 :state="getValidationState(validationContext)"
                 trim
               />
@@ -86,24 +90,82 @@
 
              <validation-provider
             #default="validationContext"
-            name="Description"
+            name="Sexe"
+            rules="required"
+
           >
             <b-form-group
-              label="Description"
-              label-for="description"
+              label="Sexe"
+              label-for="sexe">
+     <div class="demo-inline-spacing">
+      <b-form-radio
+        v-model="selected"
+        plain
+        name="some-radios3"
+        value="femme"
+      >
+        Femme
+      </b-form-radio>
+      <b-form-radio
+        v-model="selected"
+        plain
+        name="some-radios3"
+        value="homme"
+      >
+        Homme
+      </b-form-radio>
+    </div>
+              <b-form-invalid-feedback>
+                {{ validationContext.errors[0] }}
+              </b-form-invalid-feedback>
+            </b-form-group>
+          </validation-provider>
+             <validation-provider
+            #default="validationContext"
+            name="Age"
+           rules="required"
+
+          >
+            <b-form-group
+              label="Catégorie d'age"
+              label-for="age"
+              rules="required"
+
             >
-              <b-form-input
-                id="description"
-                v-model="clubData.sexe"
-                :state="getValidationState(validationContext)"
-                trim
-              />
+            <multiselect
+      v-model="selectedDate"
+      :options="yearOptions"
+        :multiple="true"
+      >
+    </multiselect>
 
               <b-form-invalid-feedback>
                 {{ validationContext.errors[0] }}
               </b-form-invalid-feedback>
             </b-form-group>
           </validation-provider>
+      <validation-provider
+            #default="validationContext"
+            name="Poids"
+          >
+            <b-form-group
+              label="Catégorie des poids"
+              label-for="poids"
+              rules="required"
+
+            >
+            <multiselect
+      v-model="selectedWeight"
+      :options="weightOptions"
+        :multiple="true"
+      >
+    </multiselect>
+             
+              <b-form-invalid-feedback>
+                {{ validationContext.errors[0] }}
+              </b-form-invalid-feedback>
+            </b-form-group>
+          </validation-provider>    
     
           <!-- User Role -->
 
@@ -114,6 +176,8 @@
               variant="primary"
               class="mr-2"
               type="submit"
+              :disabled="invalid"
+
             >
               Ajouter
             </b-button>
@@ -135,7 +199,7 @@
 
 <script>
 import {
-  BSidebar, BForm,BFormFile,BFormDatepicker, BFormGroup, BFormInput, BFormInvalidFeedback, BButton,
+  BSidebar, BForm,BFormFile,BFormDatepicker, BFormGroup, BFormInput, BFormInvalidFeedback, BButton,BFormRadio,
 } from 'bootstrap-vue'
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import { ref } from '@vue/composition-api'
@@ -147,13 +211,16 @@ import countries from '@/@fake-db/data/other/countries'
 import store from '@/store'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 import { useToast } from 'vue-toastification/composition'
-
+import Multiselect from 'vue-multiselect'
 import authentication from '@/services/authentication.js'
+import 'vue-multiselect/dist/vue-multiselect.min.css'
 
 export default {
 
   components: {
     BSidebar,
+    BFormRadio,
+    Multiselect ,
     BFormFile,
     BFormDatepicker,
     BForm,
@@ -202,8 +269,16 @@ export default {
     }
   },
   setup(props, { emit }) {
-        const toast = useToast()
+    const toast = useToast()
+    const selected  = ref(null)
+    const selectedDate= ref(null)
+    const selectedWeight=ref(null)
+    
 
+    const yearOptions= ref(['2000', '2001', '2002'])
+    const weightOptions= ref(['75 kg', '50 kg', '54 kg'])
+
+    const test = ref ([])
     const blankclubData = {
       name: '',
 	    lastname: '',
@@ -214,7 +289,8 @@ export default {
       error:null,
     }
            const file = ref(null)
-
+           const ch= ref("")
+           const strWeight=ref("")
     const clubData = ref(JSON.parse(JSON.stringify(blankclubData)))
     const resetclubData = () => {
       clubData.value = JSON.parse(JSON.stringify(blankclubData))
@@ -224,14 +300,15 @@ export default {
   console.log(file.value)
 
       }
-    const onSubmit = () => {
-
+    const onSubmit = () => { 
+       selectedDate.value.forEach(element => console.log(ch.value+=element+"/"))
+       selectedWeight.value.forEach(element => console.log(strWeight.value+=element+"/"))
       store.dispatch('app-competition/addCategory',{
         nameCat:clubData.value.nameCat,
-        sexe:clubData.value.sexe,
-        weight:clubData.value.weight,
+        sexe:selected.value,
         type:clubData.value.type,
-        age:clubData.value.age
+        age:ch.value,
+        weight:strWeight.value
       })
         .then(() => {
             toast({
@@ -263,6 +340,13 @@ export default {
       resetForm,
       selectFile,
       file,
+      selected,
+      selectedDate,
+      yearOptions,
+      weightOptions,
+      ch,
+      strWeight,
+      selectedWeight
     }
   },
 }

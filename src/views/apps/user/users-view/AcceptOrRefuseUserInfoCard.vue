@@ -150,6 +150,7 @@ import Ripple from 'vue-ripple-directive'
 import store from '@/store'
 import pdf from 'vue-pdf'
 
+import router from '@/router'
 
 
 export default {
@@ -184,7 +185,7 @@ export default {
   confirmButtonText: 'Oui! Confirmer!',
 }).then((result) => {
   if (result.isConfirmed) {
-       store.dispatch('app-user/refuseRegister')
+       store.dispatch('app-user/refuseRegister',router.currentRoute.params.id)
         .then(() => {
           response => { console.log("okkk")}
          this.$swal({
@@ -216,7 +217,7 @@ export default {
   confirmButtonText: 'Oui, Accepter !',
 }).then((result) => {
   if (result.isConfirmed) {
-       store.dispatch('app-user/acceptRegister')
+       store.dispatch('app-user/acceptRegister',router.currentRoute.params.id)
         .then(() => {
           response => { console.log("okkk")}
          this.$swal({
