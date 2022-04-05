@@ -112,29 +112,34 @@
           </validation-provider>
     
           <!-- User Role -->
-          <validation-provider
+           <validation-provider
             #default="validationContext"
-            name="Categorie"
-                        rules="required"
+            name="Age"
+           rules="required"
 
           >
             <b-form-group
-              label="Categorie des poids"
-              label-for="categorie"
-              :state="getValidationState(validationContext)"
+              label="Catégorie d'age"
+              label-for="age"
+              rules="required"
+
+
             >
-              <v-select
-              v-model="selected"
-                :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-                :options="roleOptions"
-                :clearable="false"
-                input-id="club-categorie"
-              />
-              <b-form-invalid-feedback :state="getValidationState(validationContext)">
+            <multiselect
+      v-model="selectedCategories"
+      :options="roleOptions"
+        :multiple="true"
+        track-by="value"
+  label="label"
+      >
+    </multiselect>
+
+              <b-form-invalid-feedback>
                 {{ validationContext.errors[0] }}
               </b-form-invalid-feedback>
             </b-form-group>
           </validation-provider>
+          
               <validation-provider
             #default="validationContext"
             name="image"
@@ -243,12 +248,15 @@ import countries from '@/@fake-db/data/other/countries'
 import store from '@/store'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 import { useToast } from 'vue-toastification/composition'
+import Multiselect from 'vue-multiselect'
+import 'vue-multiselect/dist/vue-multiselect.min.css'
 
 import authentication from '@/services/authentication.js'
 
 export default {
 
   components: {
+    Multiselect,
     BSidebar,
     BFormFile,
     BFormDatepicker,
@@ -275,6 +283,7 @@ export default {
       type: Boolean,
       required: true,
     },
+    	
     roleOptions: {
       type: Array,
       required: true,
@@ -292,13 +301,21 @@ export default {
       location,
       countries,
       error:null,
-      file:""
+      file:"",
+        options: [
+        { name: 'Vue.js', language: 'JavaScript' },
+        { name: 'Rails', language: 'Ruby' },
+        { name: 'Sinatra', language: 'Ruby' },
+        { name: 'Laravel', language: 'PHP' },
+        { name: 'Phoenix', language: 'Elixir' }
+      ]
 
 
     }
   },
   setup(props, { emit }) {
         const toast = useToast()
+    const selectedCategories= ref(null)
 
     const blankclubData = {
       name: '',
@@ -309,8 +326,8 @@ export default {
       role:null,
       error:null,
     }
+   
            const file = ref(null)
-           const selected = ref(null)
 
     const clubData = ref(JSON.parse(JSON.stringify(blankclubData)))
     const resetclubData = () => {
@@ -321,20 +338,24 @@ export default {
   console.log(file.value)
 
       }
+                 const ch= ref("")
+
     const onSubmit = () => {
+     selectedCategories.value.forEach(element => ch.value+=element.value+"/")
+     console.log(ch.value)
+
       const formData = new FormData()
       formData.append('name',clubData.value.name)
       formData.append('start',clubData.value.start)
       formData.append('end',clubData.value.end)
       formData.append('location',clubData.value.location)
       formData.append('description',clubData.value.description)
-      formData.append('idCat',selected.value.value)
       formData.append('compImage',file.value)
+      formData.append('categories',ch.value)
     
 
       store.dispatch('app-competition/addCompetition',formData)
         .then(() => {
-              console.log(selected.value)
             toast({
           component: ToastificationContent,
           props: {
@@ -364,7 +385,8 @@ export default {
       resetForm,
       selectFile,
       file,
-      selected
+      selectedCategories,
+      
     }
   },
 }

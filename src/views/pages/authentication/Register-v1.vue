@@ -137,7 +137,7 @@
               <validation-provider
                 #default="{ errors }"
                 name="phone"
-                rules="required|min:8"
+                rules="required|num"
               >
                 <b-form-input
                   id="phone"
@@ -216,7 +216,6 @@
             #default="validationContext"
             name="Sexe"
             rules="required"
-
           >
             <b-form-group
               label="Sexe"
@@ -435,7 +434,7 @@
 
         <b-card-text class="text-center mt-2">
           <span>Vous avez déja un compte?  </span>
-          <b-link :to="{name:'auth-login'}">
+          <b-link :to="{name:'auth-login1'}">
             <span>Connexion</span>
           </b-link>
         </b-card-text>
@@ -499,6 +498,8 @@ import { password } from '@/@core/utils/validations/validations'
 import { getHomeRouteForLoggedInUser } from '@/auth/utils'
 import vSelect from 'vue-select'
 import flatPickr from 'vue-flatpickr-component'
+import useJwt from '@/auth/jwt/useJwt'
+
 
 
 export default {
@@ -611,6 +612,12 @@ export default {
       validate: this.isUsernameUnique,
       message: "Username already taken"
     });
+            extend('num', {
+  validate: value => {
+    return value >0;
+  },
+  message: 'This field must be an odd number'
+})
   },
   created() {
      axios.get("http://localhost:3001/allFederations").then(

@@ -32,7 +32,7 @@ const router = new VueRouter({
   ],
 })
 
-router.beforeEach((to, _, next) => {
+ router.beforeEach((to, _, next) => {
   const isLoggedIn = isUserLoggedIn()
 
   if (!canNavigate(to)) {
@@ -40,8 +40,8 @@ router.beforeEach((to, _, next) => {
     if (!isLoggedIn) return next({ name: 'auth-login' })
 
     // If logged in => not authorized
-    return next({ name: 'misc-not-authorized' })
-  }
+   return next({ name: 'misc-not-authorized' })
+   }
 
   // Redirect if logged in
   if (to.meta.redirectIfLoggedIn && isLoggedIn) {
@@ -50,11 +50,11 @@ router.beforeEach((to, _, next) => {
   }
 
   return next()
-})
+}) 
 
 // ? For splash screen
 // Remove afterEach hook if you are not using splash screen
-router.afterEach(() => {
+ router.afterEach(() => {
   // Remove initial loading
   const appLoading = document.getElementById('loading-bg')
   if (appLoading) {

@@ -1,10 +1,10 @@
 <template>
-  <component :is="competitionData === undefined ? 'div' : 'b-card'">
+  <component :is="catData === undefined ? 'div' : 'b-card'">
 
     <!-- Alert: No item found -->
     <b-alert
       variant="danger"
-      :show="competitionData === undefined"
+      :show="catData === undefined"
     >
       <h4 class="alert-heading">
         Error fetching user data
@@ -22,7 +22,7 @@
     </b-alert>
 
     <b-tabs
-      v-if="competitionData"
+      v-if="catData"
       pills
     >
 
@@ -43,16 +43,16 @@
       <template #aside>
         <b-avatar
           ref="previewEl"
-          :src="competitionData.avatar"
-          :text="avatarText(competitionData.name)"
-          :variant="`light-${resolveUserRoleVariant(competitionData.role)}`"
+          :src="catData.avatar"
+          :text="avatarText(catData.nameCat)"
+          :variant="`light-${resolveUserRoleVariant(catData.nameCat)}`"
           size="90px"
           rounded
         />
       </template>
        <div class="d-flex flex-wrap">
       <h4 class="mb-1">
-        {{ competitionData.name }}
+        {{ catData.nameCat }}
       </h4>
       </div>
       <div class="d-flex flex-wrap">
@@ -101,10 +101,44 @@
           >
             <b-form-input
               id="username"
-              v-model="competitionData.name"
+              v-model="user.nameCat"
+              :placeholder="catData.nameCat"
+
             />
           </b-form-group>
         </b-col>
+          <b-col
+          cols="12"
+          md="4"
+        >
+          <b-form-group
+            label="Age"
+            label-for="username"
+          >
+            <b-form-input
+              id="username"
+                 v-model="user.age"
+              :placeholder="catData.age"
+              />
+          </b-form-group>
+        </b-col>
+
+           <b-col
+          cols="12"
+          md="4"
+        >
+          <b-form-group
+            label="Poids"
+            label-for="username"
+          >
+            <b-form-input
+              id="username"
+                 v-model="user.weight"
+              :placeholder="catData.weight"
+            />
+          </b-form-group>
+        </b-col>
+
 
         <!-- Field: Full Name -->
         <b-col
@@ -112,56 +146,21 @@
           md="4"
         >
           <b-form-group
-            label="Adresse"
+            label="Type"
             label-for="full-name"
           >
             <b-form-input
               id="full-name"
-              v-model="competitionData.location"
+              v-model="user.type"
+              :placeholder="catData.type"
+              
 
             />
-          </b-form-group>
-        </b-col>
-        <!-- Field: Email -->
-        <b-col
-          cols="12"
-          md="4"
-        >
-          <b-form-group
-            label="Date debut"
-            label-for="debut"
-          >
-            <b-form-datepicker
-      id="start-datepicker"
-      v-model="competitionData.start"
-      class="mb-1"
-    />
-          </b-form-group>
-        </b-col>
-
-        <!-- Field: Email -->
-        <b-col
-          cols="12"
-          md="4"
-        >
-        <b-form-group
-            label="Date fin"
-            label-for="fin"
-          >
-            <b-form-datepicker
-      id="end-datepicker"
-      v-model="competitionData.end"
-      class="mb-1"
-    />
           </b-form-group>
         </b-col>
        
       </b-row>
     </b-form>
-
-    <!-- PERMISSION TABLE -->
-   
-    <!-- Action Buttons -->
     <b-button
       variant="primary"
       type="button"
@@ -230,6 +229,9 @@ export default {
     const toast = useToast()
 
     const { resolveUserRoleVariant } = useCompetitionsList()
+          const blankData = {}
+    const user = ref(JSON.parse(JSON.stringify(blankData)))
+ 
 
     const roleOptions = [
       { label: 'Admin', value: 'admin' },
@@ -288,17 +290,17 @@ export default {
 
     const { inputImageRenderer } = useInputImageRenderer(refInputEl, base64 => {
       // eslint-disable-next-line no-param-reassign
-      props.competitionData.avatar = base64
+      props.catData.avatar = base64
     })
-    const competitionData = ref(null)
+    const catData = ref(null)
     const club = ref(null)
 
 
     const COMPETITION_APP_STORE_MODULE_NAME = 'app-competition'
         const onSubmit = () => {
-          store.dispatch('app-competition/editCompetition', competitionData.value )
+          store.dispatch('app-competition/editCompetition', catData.value )
         .then(() => {
-          response => { competitionData.value = response.data.club}
+          response => { catData.value = response.data.club,window.location.reload(false)}
 
              toast({
             component: ToastificationContent,
@@ -309,8 +311,9 @@ export default {
               variant: 'success',
             },
           }
+          ),
+                  router.replace({path: '/apps/competitions/list'}) 
 
-          )
 
         }).catch({error:error.message})
     }
@@ -324,17 +327,19 @@ export default {
     })
 
    
-     store.dispatch('app-competition/fetchCompetitionById')
-      .then(response => { competitionData.value = response.data.competition })
+     store.dispatch('app-competition/fetchCatById', { id: router.currentRoute.params.id })
+      .then(response => { catData.value = response.data.cat 
+      catData.value.start= (response.data.competition.start).getFullYear()
+      console.log(catData)})
       .catch(error => {
         if (error.response.status === 404) {
-          competitionData.value = undefined
+          catData.value = undefined
         }
       })
 
       return {
       onSubmit,
-      competitionData,
+      catData,
       club,
       resolveUserRoleVariant,
       avatarText,
@@ -346,6 +351,7 @@ export default {
       refInputEl,
       previewEl,
       inputImageRenderer,
+      user
     }
   },
 }

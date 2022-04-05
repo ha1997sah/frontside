@@ -324,7 +324,6 @@ export default {
       try {
         const response = await authentication.isUniqueEmail ({
          email: this.email
-     
         })
         return false;
       } catch (err) {
@@ -409,7 +408,7 @@ export default {
           store.dispatch('app-club/editClub', fed.value )
           .then(
           response => {
-            fed.value = response.data.club,console.log(fed.value),
+            fed.value = response.data.club,
               toast({
             component: ToastificationContent,
             props: {
@@ -418,7 +417,8 @@ export default {
               icon: 'AlertTriangleIcon',
               variant: 'success',
             },
-          })
+          }),  router.replace({path: '/apps/clubs/list'}) 
+
             }) .catch(error)(console.log("vv"))
     }
 

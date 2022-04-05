@@ -21,6 +21,14 @@ export default function useCompetitionsList() {
     { key: 'Fin', sortable: true },
     { key: 'actions' },
   ]
+  const catColumns = [
+    { key: 'Titre', sortable: true },
+    { key: 'Type', sortable: true },
+    { key: 'Sexe', sortable: true },
+    { key: 'Age', sortable: true },
+    { key: 'Poids' },
+    { key: 'Actions' },
+  ]
   const perPage = ref(10)
   const totalUsers = ref(0)
   const currentPage = ref(1)
@@ -193,6 +201,7 @@ const fetchCategories = (ctx, callback) => {
     statusFilter,
     fetchCompetitions,
     fetchCategories,    handleOk,
+    catColumns
   }
 
 }

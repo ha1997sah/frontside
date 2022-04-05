@@ -228,6 +228,11 @@ export default [
     component: () => import('@/views/apps/competition/CategoriesEdit.vue'),
   },
   {
+    path: '/apps/categories/edit/:id',
+    name: 'apps-categories-edit',
+    component: () => import('@/views/apps/competition/CategoriesEdit.vue'),
+  },
+  {
     path: '/apps/competitions/view/:id',
     name: 'apps-competitions-view',
     component: () => import('@/views/apps/competition/CompetitionsView.vue'),
@@ -237,4 +242,9 @@ export default [
     name: 'apps-categories-list',
     component: () => import('@/views/apps/competition/CategorieList.vue'),
   },
-]
+  {
+    path: '/apps/category/detail/:id',
+    name: 'apps-category-deatail',
+    component: () => import('@/views/apps/competition/CategoriesView.vue'),
+  },
+]                                                     

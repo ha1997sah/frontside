@@ -33,7 +33,7 @@ export default class JwtService {
       error => Promise.reject(error),
     )
 
-    // Add request/response interceptor
+    // Add request/response interceptorz
     this.axiosIns.interceptors.response.use(
       response => response,
       error => {
@@ -50,7 +50,7 @@ export default class JwtService {
 
               // Update accessToken in localStorage
               this.setToken(r.data.accessToken)
-              this.setRefreshToken(r.data.refreshToken)
+             /*  this.setRefreshToken(r.data.refreshToken) */
 
               this.onAccessTokenFetched(r.data.accessToken)
             })
@@ -86,11 +86,11 @@ export default class JwtService {
   getRefreshToken() {
     return localStorage.getItem(this.jwtConfig.storageRefreshTokenKeyName)
   }
-
+ 
   setToken(value) {
     localStorage.setItem(this.jwtConfig.storageTokenKeyName, value)
   }
-
+ 
   setRefreshToken(value) {
     localStorage.setItem(this.jwtConfig.storageRefreshTokenKeyName, value)
   }
@@ -102,10 +102,9 @@ export default class JwtService {
   register(...args) {
     return this.axiosIns.post(this.jwtConfig.registerEndpoint, ...args)
   }
-
-  refreshToken() {
+refreshToken() {
     return this.axiosIns.post(this.jwtConfig.refreshEndpoint, {
       refreshToken: this.getRefreshToken(),
     })
-  }
+}
 }

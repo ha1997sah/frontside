@@ -8,8 +8,7 @@
     backdrop
     no-header
     right
-    @hidden="resetForm"
-    @change="(val) => $emit('update:is-add-new-user-sidebar-active', val)"
+   
   >
     <template #default="{ hide }">
       <!-- Header -->
@@ -43,7 +42,7 @@
           <validation-provider
             #default="validationContext"
             name="Club"
-            rules="required|alpha"
+            rules="required"
 
           >
             <b-form-group
@@ -68,7 +67,7 @@
           <validation-provider
             #default="validationContext"
             name="Pays"
-            rules="required|alpha"
+            rules="required"
 
           >
             <b-form-group
@@ -114,7 +113,7 @@
             <validation-provider
             #default="validationContext"
             name="Nom Responsable"
-            rules="required|alpha"
+            rules="required|"
 
           >
             <b-form-group
@@ -158,10 +157,8 @@
           <validation-provider
             #default="validationContext"
             name="Numéro de téléphone"
-            rules="num"
+            rules="required|num"
           
-          
-
 
           >
             <b-form-group
@@ -230,6 +227,8 @@
 </template>
 
 <script>
+import router from '@/router'
+
 import {
   BSidebar, BForm, BFormGroup, BFormInput, BFormInvalidFeedback, BButton,
 } from 'bootstrap-vue'
@@ -313,6 +312,13 @@ export default {
       validate: this.isUsernameUnique,
       message: "Username already taken"
     });
+
+             extend('num', {
+  validate: value => {
+    return value >0;
+  }})
+    
+    
   },
   methods: {
        async isUsernameUnique() {
@@ -344,27 +350,14 @@ this.club.FederationId=this.selectedItem.value
           },
         })
 
-          emit('refetch-data')
-          emit('update:is-add-new-user-sidebar-active', false)
+           router.replace({path: '/apps/clubs/list'}) 
         }).catch({message:error.message})
     }
   },
  
   setup(props, { emit }) {
         const toast = useToast()
-        onMounted(() => {
-   
-         
-         extend('num', {
-  validate: value => {
-    return value >0;
-  },
-  message: 'This field must be an odd number'
-})
-   
-}
-
-)
+ 
 
     const blankclubData = {
       name: '',

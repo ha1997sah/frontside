@@ -2,6 +2,8 @@ import Api from '../services/Api.js'
 import router from '@/router'
 
 export default {
+    
+
     register(credentials){
         return Api().post('register',credentials)
     },

@@ -154,7 +154,7 @@
           <validation-provider
             #default="validationContext"
             name="Numéro de téléphone"
-            rules="required"
+            rules="required|num"
           >
             <b-form-group
               label="Numéro de téléphone"
@@ -279,6 +279,12 @@ export default {
       validate: this.isUsernameUnique,
       message: "Username already taken"
     });
+            extend('num', {
+  validate: value => {
+    return value >0;
+  },
+  message: 'This field must be an odd number'
+})
   },
   methods: {
        async isUsernameUnique() {

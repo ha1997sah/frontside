@@ -74,7 +74,7 @@
         class="position-relative"
         :items="fetchCategories"
         responsive
-        :fields="tableColumns"
+        :fields="catColumns"
         primary-key="id"
         :sort-by.sync="sortBy"
         show-empty
@@ -83,67 +83,47 @@
       >
 
         <!-- Column: User -->
-        <template #cell(Club)="data">
+        <template #cell(Titre)="data">
           <b-media vertical-align="center">
-            <template #aside>
-              <b-avatar
-                size="32"
-                :text="avatarText(data.item.nameCate)"
-                :variant="`light-${resolveUserRoleVariant(data.item.name)}`"
-                :to="{ name: 'pages-blog-detail', params: { id: data.item.id } }"
-              />
-            </template>
             <b-link
-              :to="{ name: 'pages-blog-detail', params: { id: data.item.id } }"
+              :to="{ name:'apps-category-deatail', params: { id: data.item.id } }"
               class="font-weight-bold d-block text-nowrap"
             >
-              {{ data.item.nameCate }}
+              {{ data.item.nameCat }}
             </b-link>
           </b-media>
         </template>
 
-               <template #cell(Titre)="data">
+               <template #cell(Type)="data">
           <b-media vertical-align="center">
             
             <b-link
-              :to="{ name: 'pages-blog-detail', params: { id: data.item.id } }"
+              :to="{ name: 'apps-category-deatail', params: { id: data.item.id } }"
               class="font-weight-bold d-block text-nowrap"
             >
+              {{ data.item.type }}
+            </b-link>
+          </b-media>
+        </template>
+           
+           <template #cell(Sexe)="data">
+          <b-media vertical-align="center">
+         
               {{ data.item.sexe }}
-            </b-link>
           </b-media>
         </template>
-            <template #cell(Adresse)="data">
+             <template #cell(Age)="data">
           <b-media vertical-align="center">
             
-            <b-link
-              :to="{ name: 'apps-competitions-view', params: { id: data.item.id } }"
-              class="font-weight-bold d-block text-nowrap"
-            >
-              {{ data.item.location }}
-            </b-link>
+          
+              {{ data.item.age }}
           </b-media>
         </template>
-           <template #cell(Debut)="data">
+             <template #cell(Poids)="data">
           <b-media vertical-align="center">
-            
-            <b-link
-              :to="{ name: 'apps-competitions-view', params: { id: data.item.id } }"
-              class="font-weight-bold d-block text-nowrap"
-            >
-              {{ data.item.start }}
-            </b-link>
-          </b-media>
-        </template>
-             <template #cell(Fin)="data">
-          <b-media vertical-align="center">
-            
-            <b-link
-              :to="{ name: 'apps-competitions-view', params: { id: data.item.id } }"
-              class="font-weight-bold d-block text-nowrap"
-            >
-              {{ data.item.fin }}
-            </b-link>
+      
+              {{ data.item.weight }}
+           
           </b-media>
         </template>
         
@@ -162,7 +142,7 @@
                 class="align-middle text-body"
               />
             </template>
-            <b-dropdown-item :to="{ name: 'apps-competitions-view', params: { id: data.item.id } }">
+            <b-dropdown-item :to="{ name: 'apps-category-deatail', params: { id: data.item.id } }">
               <feather-icon icon="FileTextIcon" />
               <span class="align-middle ml-50">Détailes</span>
             </b-dropdown-item>
@@ -301,10 +281,12 @@ export default {
       roleFilter,
       planFilter,
       statusFilter,
+      catColumns
     } = useCompetitionsList()
   
     return {
       // Sidebar
+      catColumns,
       isAddNewUserSidebarActive,
       fetchCategories,
      

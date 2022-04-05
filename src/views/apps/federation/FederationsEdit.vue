@@ -417,7 +417,8 @@ export default {
               icon: 'AlertTriangleIcon',
               variant: 'success',
             },
-          })
+          }),        router.replace({path: '/apps/federations/list'}) 
+
             }) .catch(error)(console.log("vv"))
     }
 

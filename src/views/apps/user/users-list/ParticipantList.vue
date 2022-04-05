@@ -225,7 +225,7 @@ export default {
   },
    props: {
     userData: {
-      type: Object,
+      type: Array,
       required: true,
     },
   

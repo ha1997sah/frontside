@@ -68,6 +68,7 @@
         v-ripple.400="'rgba(113, 102, 240, 0.15)'"
         v-b-modal.modal-select2
         variant="outline-primary"
+        @click="elig(blog.id )"
       >
        Participer
       </b-button>
@@ -179,17 +180,27 @@
       <!--/ categories -->
     </div>
     <!--/ sidebar -->
-         <b-modal
+    <div>
+      <b-modal   v-if="show"
+      id="modal-select2"
+      title="Votre informations"
+      cancel-variant="outline-secondary"
+      ok-title="Ok"
+    >
+    <!-- second (v-if) -->
+       <div >
+         <p>Vos informations ne correspondent pas à l’exigences de cette compétition</p>
+      </div>
+
+    </b-modal>
+      
+         <b-modal v-if="!show" 
       id="modal-select2"
       title="Votre informations"
       cancel-variant="outline-secondary"
       ok-title="Accept"
       @ok="inscrit"
-
-
-
     >
-    <div v-if="show">
       <b-form>
         <b-row>
      <b-col md="6">
@@ -248,12 +259,10 @@
         
       </b-form>
      
-    </div>
     <!-- second (v-if) -->
-       <div v-else>
-         <p>Vos informations ne correspondent pas à l’exigences de cette compétition</p>
-      </div>
+      
     </b-modal>
+    </div>
      <b-modal
       id="modal-multi-2"
       title="Opération réussi"
@@ -325,7 +334,8 @@ export default {
       userData:null,
       latestComp:null,
       query:'',
-      show:false
+      show:true,
+      idComp:''
 
     }
   },
@@ -334,15 +344,11 @@ export default {
           authentication
           .allCompetitions()
           .then(response =>  { 
-             if(response.status==201)
-            {this.show=false}
-            else{
-            
-                this.show=true  
-                 this.blogList = response.data.competitions ,conole.log(response.data)}})
+                this.blogList = response.data.competitions ,conole.log(response.data)
+            })
           .catch(error => error.message),
 
-          authentication.findUserById({id:"1"}).then(response => { this.userData = response.data.user
+          authentication.findUserById(JSON.parse(localStorage.getItem("userData")).id).then(response => { this.userData = response.data.user
 
           }),
 
@@ -364,15 +370,40 @@ export default {
       if (tag === 'Food') return 'light-success'
       return 'light-primary'
     },
-    inscrit(){
 
- 
+           elig(info){
+             this.idComp=info
+             console.log(this.idComp)
+          authentication.elig({
+            compId:this.idComp,
+            userId:"28"
+          }).then(response=>{
+             if(response.status===201)
+            {this.show=true}
+           if(response.status===200) {
+              this.show=false}
+          
+             
+             console.log(this.show)
+
+
+ })
+    } ,
+    inscrit(){
  authentication.inscrit({
             compId:"1",
-            userId:"1"
+            userId:"28"
           }).then(response=>{
-            this.$bvModal.show('modal-multi-2')
-
+               this.$toast({
+                    component: ToastificationContent,
+                    position: 'top-right',
+                    props: {
+                      title: 'Participation Ok',
+                      icon: 'CoffeeIcon',
+                      variant: 'success',
+                      text: 'Votre demande d\'inscription a été bien enregistrer nous traitons votre demande dans le bref délais',
+                    },
+                  })
 
  })
     } ,

@@ -272,8 +272,8 @@ export default {
           })
             .then(response => {
               useJwt.setToken(response.data.accessToken)
-              useJwt.setRefreshToken(response.data.refreshToken)
-              localStorage.setItem('userData', JSON.stringify(response.data.userData))
+/*               useJwt.setRefreshToken(response.data.refreshToken)
+ */              localStorage.setItem('userData', JSON.stringify(response.data.userData))
               this.$ability.update(response.data.userData.ability)
               this.$router.push('/')
             })

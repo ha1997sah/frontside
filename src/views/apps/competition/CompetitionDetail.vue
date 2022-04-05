@@ -280,7 +280,7 @@ export default {
 
          authentication.participantList({ id: router.currentRoute.params.id }).then(response => {
       participantList.value= response.data.users,
-      console.log("bn")
+      console.log(participantList.value)
     }),
     authentication.latestCompetitions().then(response =>{
       latestComp.value= response.data.competitions

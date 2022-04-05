@@ -285,8 +285,8 @@ export default {
             .then(response => {
               const { userData } = response.data
               useJwt.setToken(response.data.accessToken)
-              useJwt.setRefreshToken(response.data.refreshToken)
-              localStorage.setItem('userData', JSON.stringify(userData))
+/*               useJwt.setRefreshToken(response.data.refreshToken)
+ */              localStorage.setItem('userData', JSON.stringify(userData))
               this.$ability.update(userData.ability)
 
               // ? This is just for demo purpose as well.

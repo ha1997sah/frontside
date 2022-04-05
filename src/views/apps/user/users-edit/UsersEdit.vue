@@ -100,14 +100,14 @@
               <validation-provider
                 #default="{ errors }"
                 name="name"
-                rules="required|min:3"
               >
                 <b-form-input
                   id="name"
-                  v-model="user.name"
                   :state="errors.length > 0 ? false:null"
                   name="register-name"
-                  placeholder="johndoe"
+                  :placeholder="user.name"
+                  v-model="data.name"
+
                 />
                 <small class="text-danger">{{ errors[0] }}</small>
               </validation-provider>
@@ -126,14 +126,14 @@
               <validation-provider
                 #default="{ errors }"
                 name="lastname"
-                rules="required|min:3"
               >
                 <b-form-input
                   id="lastname"
-                  v-model="user.lastname"
+                
+                  :placeholder="user.lastname"
+                  v-model="data.lastname"
                   :state="errors.length > 0 ? false:null"
                   name="register-lastname"
-                  placeholder="johndoe"
                 />
                 <small class="text-danger">{{ errors[0] }}</small>
               </validation-provider>
@@ -152,7 +152,7 @@
               <validation-provider
                 #default="{ errors }"
                 name="Email"
-                rules="required|email|unique"
+                rules="email|unique"
               >
                 <b-form-input
                   id="email"
@@ -179,11 +179,13 @@
               <validation-provider
                 #default="{ errors }"
                 name="phone"
-                rules="required|min:8"
+                rules="min:8"
               >
                 <b-form-input
                   id="phone"
-                  v-model="user.phone"
+                  v-model="data.phone"
+                  :placeholder="user.phone"
+                  
                   :state="errors.length > 0 ? false:null"
                   name="register-phone"
                 />
@@ -212,12 +214,35 @@
           </b-form-group>
         </b-col>
 
-        <!-- Field: Email -->
-        <b-col
+ <b-col
           cols="12"
           md="4"
         >
-        <b-form-group
+        
+             <b-form-group
+              label="Federation"
+              label-for="federation"
+            >
+              <v-select
+              v-model="selectedFed"
+                :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
+                :options="feds"
+                :clearable="false"
+                 @input="clubUnderFed"
+              />
+            </b-form-group>
+            </b-col>
+            
+      </b-row>
+            <b-row>
+    <!-- club -->     <b-col
+          cols="12"
+          md="4"
+        >
+                 <validation-provider
+            name="Club"
+          >
+            <b-form-group
               label="Club"
               label-for="club"
             >
@@ -227,50 +252,71 @@
                 :options="clubs"
                 :clearable="false"
                 input-id="club-fed"
-                :placeholder="user.ClubId"
-
               />
-            
             </b-form-group>
-        </b-col>
+          </validation-provider>
+          </b-col>
+             <b-col
+          cols="12"
+          md="4"
+        >
+        
+            <validation-provider
+            #default="validationContext"
+            name="Sexe"
+          >
+            <b-form-group
+              label="Sexe"
+              label-for="sexe">
+     <div class="demo-inline-spacing">
+      <b-form-radio
+        v-model="selectedSexe"
+        plain
+        name="some-radios3"
+        value="femme"
+      >
+        Femme
+      </b-form-radio>
+      <b-form-radio
+        v-model="selectedSexe"
+        plain
+        name="some-radios3"
+        value="homme"
+      >
+        Homme
+      </b-form-radio>
+    </div>
+              <b-form-invalid-feedback>
+                {{ validationContext.errors[0] }}
+              </b-form-invalid-feedback>
+            </b-form-group>
+          </validation-provider>
 
-      </b-row>
+           <!-- -->
+        </b-col>
+              </b-row>
+
       <b-row>
         <b-col
           cols="12"
           md="4"
         >
-          <b-form-group
-            label="Poids"
-            label-for="poids"
-          >
-            <b-form-input
-              id="weight"
-              v-model="user.weight"
-            />
-          </b-form-group>
-        </b-col>
-
-         <b-col
-          cols="12"
-          md="4"
-        >
-             <b-form-group
+                <b-form-group
               label="Poids"
               label-for="weight"
             >
               <validation-provider
                 #default="{ errors }"
                 name="weight"
-                rules="required"
               >
-                <b-form-input
-                  id="weight"
-                  v-model="user.weight"
-                  :state="errors.length > 0 ? false:null"
-                  name="register-weight"
-                />
-                <small class="text-danger">{{ errors[0] }}</small>
+                      <v-select
+              v-model="selectedWeight"
+                :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
+                :options="weighttOptions"
+                :clearable="false"
+                input-id="club-fed"
+              />
+        <small class="text-danger">{{ errors[0] }}</small>
               </validation-provider>
             </b-form-group>
         </b-col>
@@ -278,44 +324,45 @@
           cols="12"
           md="4"
         >
-          <b-form-group
-              label="Longeur"
+             <b-form-group
+              label="Taille"
               label-for="height"
             >
               <validation-provider
                 #default="{ errors }"
                 name="height"
-                rules="required"
               >
-                <b-form-input
-                  id="height"
-                  v-model="user.height"
-                  :state="errors.length > 0 ? false:null"
-                  name="register-height"
-                />
+                   <v-select
+              v-model="selectedHeight"
+                :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
+                :options="heightOptions"
+                :clearable="false"
+                input-id="club-fed"
+              />
                 <small class="text-danger">{{ errors[0] }}</small>
               </validation-provider>
             </b-form-group>
+
         </b-col>
         <b-col
           cols="12"
           md="4"
         >
-             <b-form-group
+               <b-form-group
               label="Ceinture"
               label-for="belt"
             >
               <validation-provider
                 #default="{ errors }"
                 name="belt"
-                rules="required"
               >
-                <b-form-input
-                  id="belt"
-                  v-model="user.belt"
-                  :state="errors.length > 0 ? false:null"
-                  name="register-belt"
-                />
+                <v-select
+              v-model="selectedBelt"
+                :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
+                :options="beltOptions"
+                :clearable="false"
+                input-id="club-fed"
+              />
                 <small class="text-danger">{{ errors[0] }}</small>
               </validation-provider>
             </b-form-group>
@@ -352,12 +399,12 @@
 
 <script>
 import {
-  BTab, BTabs, BCard, BAlert, BLink, BButton, BMedia, BAvatar, BRow, BCol, BFormGroup, BFormInput, BForm, BTable, BCardHeader, BCardTitle, BFormCheckbox,
+  BTab, BTabs, BCard, BAlert, BLink, BButton, BMedia, BAvatar, BRow, BCol, BFormRadio,BFormGroup, BFormInput, BForm, BTable, BCardHeader, BCardTitle, BFormCheckbox,
 
 } from 'bootstrap-vue'
 import { required, email } from '@validations'
 
-import { ref, onUnmounted } from '@vue/composition-api'
+import { ref, onUnmounted ,onMounted} from '@vue/composition-api'
 import router from '@/router'
 import store from '@/store'
 import userStoreModule from '../userStoreModule'
@@ -393,6 +440,7 @@ export default {
     BForm,
     BTable,
     BCard,
+    BFormRadio,
     BCardHeader,
     BCardTitle,
     BFormCheckbox,
@@ -429,10 +477,28 @@ export default {
           return true;
         }
       }
-    }
+    },
+        clubUnderFed() {
+      console.log("okkkkkkkkkkkkkkkkkkkk")
+     axios.post("http://localhost:3001/clubUnderFed",{id:this.selectedFed.value}).then(
+   response=>{
+const data = response.data.clubs
+data.forEach(element => { this.roleOptions.push({label:element.name, value:element.id})
+  console.log(this.roleOptions)
+});
+   } )},
       },
   setup() {
     const toast = useToast()
+            const blankData = {}
+    const data = ref(JSON.parse(JSON.stringify(blankData)))
+    const selectedWeight = ref('')
+    const selectedHeight = ref('')
+    const selectedBelt = ref('')
+    const selectedFed = ref('')
+    const selectedSexe=ref('')
+
+
 
     const { resolveUserRoleVariant } = useUsersList()
 
@@ -450,6 +516,19 @@ export default {
       { label: 'Inactive', value: 'inactive' },
     ]
 
+     const  beltOptions=[
+        "noir","jaune"
+      ]
+     const heightOptions=[
+        "1.75 cm",
+        "1.76 cm",
+        "1.77 cm"
+      ]
+     const  weighttOptions=[
+       "75 kg",
+        "80 kg",
+        "10 kg"
+      ]
      const permissionsData = [
       {
         module: 'Admin',
@@ -510,14 +589,31 @@ data.forEach(element => { clubs.value.push({label:element.name, value:element.id
   console.log(clubs)
 });
  })
+    const feds=ref([])
+
+  axios.get("http://localhost:3001/allFederations").then(
+   response=>{
+const data = response.data.feds
+data.forEach(element => { feds.value.push({label:element.name, value:element.id})
+  console.log(feds)
+});
+})
     // Edit user function 
     const onSubmit = () => {
-      user.value.IdClub= selectedItem.value.value
-      store.dispatch('app-user/editUser', user.value )
+
+      data.value.belt=selectedBelt.value,
+      data.value.height=selectedHeight.value,
+      data.value.weight=selectedWeight.value,
+      data.value.ClubId=selectedItem.value,
+      data.value.FederationId=selectedFed.FederationId
+      data.value.sexe=selectedSexe.value
+      console.log(data.value.sexe)
+            console.log(data.value.height)
+
+      store.dispatch('app-user/editUser', data.value )
         .then(
           response => {
-          user.value = response.data.user ,location.reload() ,console.log("ok"),
-
+          user.value = response.data.user ,
               toast({
             component: ToastificationContent,
             props: {
@@ -526,11 +622,10 @@ data.forEach(element => { clubs.value.push({label:element.name, value:element.id
               icon: 'AlertTriangleIcon',
               variant: 'success',
             },
-          })
-            }) .catch(error)({error:error.message})
-          
-       
-    }
+          }),
+                  router.replace({path: '/apps/athletes/list'}) 
+
+            }) .catch(error)({error:error.message})}
 
 
     // Register module
@@ -556,6 +651,7 @@ data.forEach(element => { clubs.value.push({label:element.name, value:element.id
         }
       })
 
+      
       return {
       onSubmit,
       userData,
@@ -571,7 +667,18 @@ data.forEach(element => { clubs.value.push({label:element.name, value:element.id
       previewEl,
       inputImageRenderer,
       clubs,
-      selectedItem
+      selectedItem,
+      data,
+      beltOptions,
+      weighttOptions,
+      heightOptions,
+       selectedWeight ,
+    selectedHeight ,
+selectedBelt ,
+ selectedItem,
+        selectedFed, 
+        feds,
+        selectedSexe
     }
   },
 }

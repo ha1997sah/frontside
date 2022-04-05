@@ -36,12 +36,28 @@ export default {
     fetchCompetitionById(ctx) {
       return new Promise((resolve, reject) => {
         authentication
+           
           .findCometitionById(router.currentRoute.params.id )
           .then(response => resolve(response))
           .catch(error => reject(error))
       })
     },
- 
+    fetchCategoryById(ctx) {
+      return new Promise((resolve, reject) => {
+        authentication
+          .findCategoryById(router.currentRoute.params.id )
+          .then(response => resolve(response))
+          .catch(error => reject(error))
+      })
+    },
+    fetchCatById(ctx) {
+      return new Promise((resolve, reject) => {
+        authentication
+          .findCatById(router.currentRoute.params.id )
+          .then(response => resolve(response))
+          .catch(error => reject(error))
+      })
+    },
    addCompetition(ctx, clubData) {
       return new Promise((resolve, reject) => {
         authentication.addCompetition(clubData)

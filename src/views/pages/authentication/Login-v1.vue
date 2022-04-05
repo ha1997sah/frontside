@@ -174,9 +174,6 @@ import ToastificationContent from '@core/components/toastification/Toastificatio
 import { getHomeRouteForLoggedInUser } from '@/auth/utils'
 import useJwt from '@/auth/jwt/useJwt'
 import store from '@/store/index'
-
-
-
 export default {
   components: {
     VuexyLogo,
@@ -235,34 +232,23 @@ export default {
   validateCaptcha() {
      this.$refs.recaptcha.execute()
       },
-    async onCaptchaVerified(recaptchaToken) {
-      try {
-      const response = await authentication.login ({
+     onCaptchaVerified(recaptchaToken) {
+
+    authentication.login ({
       email: this.email,
       password: this.password,
       token: recaptchaToken
-        })
-       useJwt.setToken(response.data.token)
-      useJwt.setRefreshToken(response.data.refreshToken)
-      localStorage.setItem('userData', JSON.stringify(response.data.user))
+        }).then(response =>{
+         useJwt.setToken(response.data.token),
+        useJwt.setRefreshToken(response.data.refreshToken)
+       localStorage.setItem('userData', JSON.stringify(response.data.user))
       this.$ability.update(this.ability)
+      console.log(this.$ability)
       localStorage.setItem("loggedInUser",JSON.stringify(response.data.user))
       this.$store.commit('app-ecommerce/UPDATE_CART_ITEMS_COUNT', 5)
-
-     this.$router.replace(getHomeRouteForLoggedInUser(response.data.user.role))
-                .then(() => {
-                  this.$toast({
-                    component: ToastificationContent,
-                    position: 'top-right',
-                    props: {
-                      title: `Welcome ${response.data.user.name || response.data.user.lastname}`,
-                      icon: 'CoffeeIcon',
-                      variant: 'success',
-                      text: 'You have successfully logged in as. Now you can start to explore!',
-                    },
-                  })
-                })
-      } catch (error) {
+      this.$router.replace(getHomeRouteForLoggedInUser(response.data.user.role))
+                  
+                }).catch (error => {
         this.error = error.response.data.error
          this.$toast({
                     component: ToastificationContent,
@@ -274,7 +260,7 @@ export default {
                       text:this.error
                     },
                   })
-      }
+      })
     },
     onCaptchaExpired() {
    this.$refs.recaptcha.reset()
