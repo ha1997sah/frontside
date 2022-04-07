@@ -52,18 +52,15 @@
             </b-link>
           </b-media>
         </template>
-            <template #cell(Matricule)="data">
-          <b-media vertical-align="center">
-            
-            <b-link
-              :to="{ name: 'apps-users-view', params: { id: data.item.id } }"
-              class="font-weight-bold d-block text-nowrap"
-            >
-              {{ data.item.matricule }}
-            </b-link>
-          </b-media>
+         <template #cell(Matricule)="data">
+          <b-badge
+            pill
+            :variant="`light-${resolveUserStatusVariant(data.item.matricule)}`"
+            class="text-capitalize"
+          >
+            {{ data.item.matricule }}
+          </b-badge>
         </template>
-
                <template #cell(Prénom)="data">
           <b-media vertical-align="center">
             

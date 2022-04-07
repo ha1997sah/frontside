@@ -293,7 +293,6 @@ export default {
     const isAddNewUserSidebarActive = ref(false)
     const clubs=ref([])
     const feds=ref([])
-    const levels=ref([])
       const usersItems = ref(null)
       const roleOptions = [
        { label:"femme", value:"femme"},
@@ -309,6 +308,12 @@ export default {
       { label: 'Pending', value: 'pending' },
       { label: 'Active', value: 'active' },
       { label: 'Inactive', value: 'inactive' },
+    ]
+
+      const levels = [
+      { label: 'Cadests', value: 'Cadests' },
+      { label: 'Minimes', value: 'Minimes' },
+      { label: 'Benjamins', value: 'Benjamins' },
     ]
     const selectedItem1 = ref('')
     const selectedItem2 = ref('')
@@ -366,6 +371,8 @@ export default {
      selectedItem4.value = "",
      store.dispatch('app-user/fetchAthletesBysexe',selectedItem1.value.value)
        .then(response => {
+                      usersItems.value=null
+
 usersItems.value=response.data.users
          console.log(usersItems)
        
@@ -387,12 +394,14 @@ usersItems.value=response.data.users
      selectedItem4.value = "",
      store.dispatch('app-user/fetchAthletesByLevel',selectedItem2.value.value)
        .then(response => {
-         usersItems=null
+             usersItems.value=null
+
          usersItems.value=response.data.users
          console.log(usersItems)
        
       })
-      .catch(() => {
+      .catch((error) => {
+        console.log(error.message)
         toast({
           component: ToastificationContent,
           props: {
@@ -454,14 +463,7 @@ data.forEach(element => { feds.value.push({label:element.name, value:element.id}
   console.log(feds)
 });
 })
- axios.get("http://localhost:3001/getCategorie").then(
-   response=>{
-     console.log("hh",response.data.cat)
-const data = response.data.cat
-data.forEach(element => { levels.value.push({label:element.nameCat, value:element.id})
-  console.log(feds)
-});
-})
+
 
 
 

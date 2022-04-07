@@ -43,7 +43,7 @@
           <validation-provider
             #default="validationContext"
             name="Federation"
-            rules="required|alpha"
+            rules="required"
           >
             <b-form-group
               label="Nom Federation"
@@ -67,7 +67,7 @@
           <validation-provider
             #default="validationContext"
             name="Pays"
-            rules="required|alpha"
+            rules="required"
           >
             <b-form-group
               label="Pays"
@@ -111,7 +111,7 @@
             <validation-provider
             #default="validationContext"
             name="Nom Responsable"
-            rules="required|alpha"
+            rules="required"
           >
             <b-form-group
               label="Nom Responsable"
@@ -133,7 +133,7 @@
           <validation-provider
             #default="validationContext"
             name="E-mail"
-            rules="unique"
+            rules="unique|email|required"
           >
             <b-form-group
               label="E-mail"

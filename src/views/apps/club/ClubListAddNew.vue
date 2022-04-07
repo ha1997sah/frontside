@@ -136,7 +136,7 @@
           <validation-provider
             #default="validationContext"
             name="E-mail"
-            rules="unique"
+            rules="unique|email|required"
           >
             <b-form-group
               label="E-mail"

@@ -45,26 +45,13 @@
                 </small>
               </b-media-body>
             </b-media>
-            <div class="my-1 py-25">
-              <b-link
-                v-for="(tag,index) in blog.tags"
-                :key="index"
-              >
-                <b-badge
-                  pill
-                  class="mr-75"
-                  :variant="tagsColor(tag)"
-                >
-                  {{ tag }}
-                </b-badge>
-              </b-link>
-            </div>
+          
             <b-card-text class="blog-content-truncate">
-              {{ blog.excerpt }}
+              Deadline:  {{ new Date(blog.deadline).getDate()+'-'+new Date(blog.deadline).getMonth()+'-'+new Date(blog.deadline).getFullYear()}}
             </b-card-text>
             <hr>
             <div class="d-flex justify-content-between align-items-center">
-               <b-button
+               <b-button  :disabled="new Date()>new Date(blog.deadline)"
         v-ripple.400="'rgba(113, 102, 240, 0.15)'"
         v-b-modal.modal-select2
         variant="outline-primary"
@@ -72,6 +59,7 @@
       >
        Participer
       </b-button>
+      
           
               <b-link
                 :to="{ name: 'apps-competition-detail', params: { id: blog.id } }"
@@ -335,7 +323,8 @@ export default {
       latestComp:null,
       query:'',
       show:true,
-      idComp:''
+      idComp:'',
+      allowParticip:true
 
     }
   },
@@ -382,13 +371,23 @@ export default {
             {this.show=true}
            if(response.status===200) {
               this.show=false}
-          
-             
              console.log(this.show)
 
-
  })
-    } ,
+    },
+         testDate(deadline){
+           const today = new Date()
+           console.log(today)
+           if(today<new Date(deadline))
+           {
+             this.allowParticip=true
+           }
+           else{this.allowParticip=false
+
+           }
+          
+    }
+    ,
     inscrit(){
  authentication.inscrit({
             compId:this.idComp,

@@ -88,18 +88,18 @@
             </b-form-group>
           </validation-provider>
 
-             <validation-provider
+            <validation-provider
             #default="validationContext"
             name="Description"
+            rules="required"
+
           >
             <b-form-group
-              label="Description"
+              label="description"
               label-for="description"
-               rules="required"
-
             >
               <b-form-input
-                id="description"
+                id="descrption"
                 v-model="clubData.description"
                 :state="getValidationState(validationContext)"
                 trim
@@ -110,6 +110,8 @@
               </b-form-invalid-feedback>
             </b-form-group>
           </validation-provider>
+
+         
     
           <!-- User Role -->
            <validation-provider
@@ -200,6 +202,27 @@
 <b-form-datepicker
       id="end-datepicker"
       v-model="clubData.end"
+      class="mb-1"
+    />
+    <b-form-invalid-feedback>
+                {{ validationContext.errors[0] }}
+              </b-form-invalid-feedback>
+            </b-form-group>
+          </validation-provider>
+              <validation-provider
+            #default="validationContext"
+            name="Deadline"
+            rules="required"
+          >
+            <b-form-group
+              label="Deadline inscription"
+              label-for="deadline"
+              rules="required"
+
+            >
+<b-form-datepicker
+      id="deadline-datepicker"
+      v-model="clubData.deadline"
       class="mb-1"
     />
     <b-form-invalid-feedback>
@@ -352,6 +375,7 @@ export default {
       formData.append('description',clubData.value.description)
       formData.append('compImage',file.value)
       formData.append('categories',ch.value)
+      formData.append('deadline',clubData.value.deadline)
     
 
       store.dispatch('app-competition/addCompetition',formData)

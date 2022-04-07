@@ -34,28 +34,29 @@
         </b-col>
      
       </b-row>  
-    
-
        <b-row>
-           <b-col
+        <b-col
           cols="12"
           xl="12"
           lg="12"
           md="12"
         >
         <club-list :club-data="clubs" />
-                </b-col>
-                   <b-col
+      </b-col>
+      </b-row> 
+<hr>
+       <b-row>
+        <b-col
           cols="12"
           xl="12"
           lg="12"
           md="12"
         >
-        <users-with-matricule />
-                </b-col>
+          <users-with-matricule />
+   </b-col>
+      </b-row> 
 
 
-      </b-row>
     </template>
 
   </div>

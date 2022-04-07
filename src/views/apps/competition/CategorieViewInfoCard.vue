@@ -110,6 +110,33 @@
               {{ catData.weight }}
             </td>
           </tr>
+          <tr>
+             <th>
+              <feather-icon
+                icon="PhoneIcon"
+                class="mr-75"
+              />
+              <span class="font-weight-bold">Date</span>
+            </th>
+            <td>
+             <b-media no-body>
+             
+              <b-media-body>
+                <small>
+                  <b-link class="text-body">           
+                       {{ new Date(catData.start).getDate()+'-'+new Date(catData.start).getMonth()+'-'+new Date(catData.start).getFullYear()}}
+                       </b-link>
+                </small>
+                <span class="text-muted ml-75 mr-50">|</span>
+                <small class="text-muted">
+                   <b-link class="text-body">           
+                       {{ new Date(catData.end).getDate()+'-'+new Date(catData.end).getMonth()+'-'+new Date(catData.end).getFullYear()}}
+                </b-link>
+                </small>
+              </b-media-body>
+            </b-media>
+            </td>
+            </tr>
         </table>
       </b-col>
     </b-row>
@@ -124,13 +151,13 @@
 
 <script>
 import {
-  BCard, BButton, BAvatar, BRow, BCol,
+  BCard, BButton, BAvatar, BRow, BCol,BMedia,BMediaBody,
 } from 'bootstrap-vue'
 import { avatarText } from '@core/utils/filter'
 import useCompetitionsList from './useCompetitionsList'
 export default {
   components: {
-    BCard, BButton, BRow, BCol, BAvatar,
+    BCard, BButton, BRow, BCol, BAvatar,BMedia,BMediaBody,
   },
   props: {
     catData: {

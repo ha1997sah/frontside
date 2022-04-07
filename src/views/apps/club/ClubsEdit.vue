@@ -1,10 +1,10 @@
 <template>
-  <component :is="federationData === undefined ? 'div' : 'b-card'">
+  <component :is="club === undefined ? 'div' : 'b-card'">
 
     <!-- Alert: No item found -->
     <b-alert
       variant="danger"
-      :show="federationData === undefined"
+      :show="club === undefined"
     >
       <h4 class="alert-heading">
         Error fetching user data
@@ -22,7 +22,7 @@
     </b-alert>
 
     <b-tabs
-      v-if="federationData"
+      v-if="club"
       pills
     >
 
@@ -43,15 +43,15 @@
       <template #aside>
         <b-avatar
           ref="previewEl"
-          :src="federationData.avatar"
-          :text="avatarText(federationData.name)"
-          :variant="`light-${resolveUserRoleVariant(federationData.role)}`"
+          :src="club.avatar"
+          :text="avatarText(club.name)"
+          :variant="`light-${resolveUserRoleVariant(club.role)}`"
           size="90px"
           rounded
         />
       </template>
       <h4 class="mb-1">
-        {{ federationData.name }}
+        {{ club.name }}
       </h4>
       <div class="d-flex flex-wrap">
         <b-button
@@ -100,12 +100,11 @@
           <validation-provider
                 #default="{ errors }"
                 name="name"
-                rules="min:1"
+                rules="min:1|required"
               >
             <b-form-input
               id="username"
               v-model="club.name"
-              :placeholder="federationData.name"
             />
               <small class="text-danger">{{ errors[0] }}</small>
               </validation-provider>
@@ -125,12 +124,11 @@
          <validation-provider
                 #default="{ errors }"
                 name="name"
-                rules="min:3"
+                rules="min:3|required"
               >
             <b-form-input
               id="full-name"
               v-model="club.country"
-              :placeholder="federationData.country"
             />
               <small class="text-danger">{{ errors[0] }}</small>
               </validation-provider>
@@ -149,12 +147,11 @@
            <validation-provider
                 #default="{ errors }"
                 name="name"
-                rules="min:3"
+                rules="min:3|required"
               >
             <b-form-input
               id="adress"
                v-model="club.adress"
-              :placeholder="federationData.adress"
               type="text"
             />
               <small class="text-danger">{{ errors[0] }}</small>
@@ -173,12 +170,11 @@
            <validation-provider
                 #default="{ errors }"
                 name="name"
-                rules="num"
+                rules="num|required"
               >
             <b-form-input
               id="phone"
                v-model="club.phone"
-              :placeholder="federationData.phone"
             />
               <small class="text-danger">{{ errors[0] }}</small>
               </validation-provider>
@@ -197,12 +193,11 @@
            <validation-provider
                 #default="{ errors }"
                 name="email"
-                rules="unique"
+                rules="unique|required"
               >
             <b-form-input
               id="email"
               v-model="club.email"
-              :placeholder="federationData.email"
             />
               <small class="text-danger">{{ errors[0] }}</small>
               </validation-provider>
@@ -220,12 +215,11 @@
            <validation-provider
                 #default="{ errors }"
                 name="responsable"
-                rules="min:2"
+                rules="min:2|required"
               >
             <b-form-input
               id="responsable"
                v-model="club.managerfullName"
-              :placeholder="federationData.managerfullName"
             />
               <small class="text-danger">{{ errors[0] }}</small>
               </validation-provider>
@@ -328,6 +322,17 @@ export default {
   message: 'This field must be an odd number'
 })
   },
+     created() {
+      
+    this.$store.dispatch('app-club/fetchClubById')
+      .then(response => { this.club = response.data.club,console.log(this.club)})
+      .catch(error => {
+        if (error.response.status === 404) {
+          this.club = undefined
+        }
+      })
+    },
+
       methods :{
           async isUsernameUnique() {
       try {
@@ -341,7 +346,7 @@ export default {
         }
       }
     },
-
+ 
           onSubmit  () {
           store.dispatch('app-club/editClub', this.club )
           .then(
@@ -386,7 +391,6 @@ export default {
       // eslint-disable-next-line no-param-reassign
       props.federationData.avatar = base64
     })
-    const federationData = ref(null)
   
     const CLUB_APP_STORE_MODULE_NAME = 'app-club'
    
@@ -400,16 +404,8 @@ export default {
     })
 
    
-     store.dispatch('app-club/fetchClubById')
-      .then(response => { federationData.value = response.data.club,console.log(federationData.value)})
-      .catch(error => {
-        if (error.response.status === 404) {
-          federationData.value = undefined
-        }
-      })
 
       return {
-      federationData,
       resolveUserRoleVariant,
       avatarText,
       roleOptions,

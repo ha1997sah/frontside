@@ -245,7 +245,7 @@ export default {
     ClubListAddNew,
   },
 
-  setup() {
+  setup(props, { emit }) {
           const toast = useToast()
 
     const CLUB_APP_STORE_MODULE_NAME = 'app-club'
@@ -285,8 +285,8 @@ data.forEach(element => { roleOptions.value.push({label:element.name, value:elem
             icon: 'AlertTriangleIcon',
             variant: 'success',
           },
-        })
-        router.replace({path: '/apps/clubs/list'}) 
+        }),
+window.location.reload()
     }).catch(error=>{console.log(error),
        toast({
       component: ToastificationContent,

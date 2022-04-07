@@ -1,10 +1,10 @@
 <template>
-  <component :is="federationData === undefined ? 'div' : 'b-card'">
+  <component :is="fed === undefined ? 'div' : 'b-card'">
 
     <!-- Alert: No item found -->
     <b-alert
       variant="danger"
-      :show="federationData === undefined"
+      :show="fed === undefined"
     >
       <h4 class="alert-heading">
         Error fetching user data
@@ -22,7 +22,7 @@
     </b-alert>
 
     <b-tabs
-      v-if="federationData"
+      v-if="fed"
       pills
     >
 
@@ -43,15 +43,15 @@
       <template #aside>
         <b-avatar
           ref="previewEl"
-          :src="federationData.avatar"
-          :text="avatarText(federationData.name)"
-          :variant="`light-${resolveUserRoleVariant(federationData.role)}`"
+          :src="fed.avatar"
+          :text="avatarText(fed.name)"
+          :variant="`light-${resolveUserRoleVariant(fed.role)}`"
           size="90px"
           rounded
         />
       </template>
       <h4 class="mb-1">
-        {{ federationData.name }}
+        {{ fed.name }}
       </h4>
       <div class="d-flex flex-wrap">
         <b-button
@@ -100,12 +100,11 @@
           <validation-provider
                 #default="{ errors }"
                 name="name"
-                rules="min:3"
+                rules="min:3|required"
               >
             <b-form-input
               id="username"
               v-model="fed.name"
-              :placeholder="federationData.name"
             />
               <small class="text-danger">{{ errors[0] }}</small>
               </validation-provider>
@@ -125,12 +124,11 @@
          <validation-provider
                 #default="{ errors }"
                 name="name"
-                rules="min:3"
+                rules="min:3|required"
               >
             <b-form-input
               id="full-name"
               v-model="fed.country"
-              :placeholder="federationData.country"
             />
               <small class="text-danger">{{ errors[0] }}</small>
               </validation-provider>
@@ -149,12 +147,11 @@
            <validation-provider
                 #default="{ errors }"
                 name="adress"
-                rules="min:3"
+                rules="min:3|required"
               >
             <b-form-input
               id="adress"
                v-model="fed.adress"
-              :placeholder="federationData.adress"
               type="text"
             />
               <small class="text-danger">{{ errors[0] }}</small>
@@ -173,12 +170,11 @@
            <validation-provider
                 #default="{ errors }"
                 name="phone"
-                rules="num"
+                rules="num|required"
               >
             <b-form-input
               id="phone"
                v-model="fed.phone"
-              :placeholder="federationData.phone"
             />
               <small class="text-danger">{{ errors[0] }}</small>
               </validation-provider>
@@ -197,12 +193,11 @@
            <validation-provider
                 #default="{ errors }"
                 name="email"
-                rules="unique"
+                rules="unique|required"
               >
             <b-form-input
               id="email"
               v-model="fed.email"
-              :placeholder="federationData.email"
             />
               <small class="text-danger">{{ errors[0] }}</small>
               </validation-provider>
@@ -220,12 +215,11 @@
            <validation-provider
                 #default="{ errors }"
                 name="responsable"
-                rules="min:3"
+                rules="min:3|required"
               >
             <b-form-input
               id="responsable"
                v-model="fed.managerfullName"
-              :placeholder="federationData.managerfullName"
             />
               <small class="text-danger">{{ errors[0] }}</small>
               </validation-provider>
@@ -328,6 +322,17 @@ export default {
   message: 'This field must be an odd number'
 })
   },
+    created() {
+      
+    this.$store.dispatch('app-federation/fetchFederationById')
+      .then(response => { this.fed = response.data.fed,console.log(this.fed)})
+      .catch(error => {
+        if (error.response.status === 404) {
+          this.fed = undefined
+        }
+      })
+    },
+
       methods :{
           async isUsernameUnique() {
       try {
@@ -400,14 +405,6 @@ export default {
       if (store.hasModule(FED_APP_STORE_MODULE_NAME)) store.unregisterModule(FED_APP_STORE_MODULE_NAME)
     })
 
-   
-     store.dispatch('app-federation/fetchFederationById')
-      .then(response => { federationData.value = response.data.fed,console.log(federationData.value)})
-      .catch(error => {
-        if (error.response.status === 404) {
-          federationData.value = undefined
-        }
-      })
 
       return {
       federationData,

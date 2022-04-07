@@ -310,7 +310,7 @@ export default {
             variant: 'success',
           },
         })
-        router.replace({path: '/apps/federations/list'}) 
+window.location.reload()
     }).catch(error=>{console.log(error),
        toast({
       component: ToastificationContent,

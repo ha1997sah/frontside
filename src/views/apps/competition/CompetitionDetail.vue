@@ -32,14 +32,14 @@
             </b-media>
             <b-row >
               <b-col
-              md="6"
+              md="12"
               v-for="(cat) in blogDetail.Categories" :key="cat.id" >
             <!-- user commnets -->
         <table class="mt-2 mt-xl-0 w-100" >
             <tr>
             <th class="pb-50">
               <feather-icon
-                icon="BookmarkIcon"
+                icon="Edit3Icon"
                 class="mr-75"
               />
               <span class="font-weight-bold">Titre</span>
@@ -51,24 +51,34 @@
            <tr>
             <th class="pb-50">
               <feather-icon
-                icon="BookmarkIcon"
+                icon="CalendarIcon"
                 class="mr-75"
               />
               <span class="font-weight-bold">Dates</span>
             </th>
             <td class="pb-50 text-capitalize">
-         {{ new Date(cat.start).getDate()+'-'+new Date(cat.start).getMonth()+'-'+new Date(cat.start).getFullYear()+'\/'+new Date(cat.start).getHours()+":"+new Date(cat.start).getMinutes()}}
-
-            </td>
-            <td class="pb-50 text-capitalize">
-         {{ new Date(cat.end).getDate()+'-'+new Date(cat.end).getMonth()+'-'+new Date(cat.end).getFullYear()+'\/'+new Date(cat.end).getHours()+":"+new Date(cat.end).getMinutes()}}
-
+                <b-media no-body>
+             
+              <b-media-body>
+                <small>
+                  <b-link class="text-body">           
+                       {{ new Date(cat.start).getDate()+'-'+new Date(cat.start).getMonth()+'-'+new Date(cat.start).getFullYear()}}
+                       </b-link>
+                </small>
+                <span class="text-muted ml-75 mr-50">|</span>
+                <small class="text-muted">
+                   <b-link class="text-body">           
+                       {{ new Date(cat.end).getDate()+'-'+new Date(cat.end).getMonth()+'-'+new Date(cat.end).getFullYear()}}
+                </b-link>
+                </small>
+              </b-media-body>
+            </b-media>
             </td>
           </tr>
             <tr>
             <th class="pb-50">
               <feather-icon
-                icon="BookmarkIcon"
+                icon="CheckIcon"
                 class="mr-75"
               />
               <span class="font-weight-bold">Type</span>
@@ -95,16 +105,23 @@
                 icon="UsersIcon"
                 class="mr-75"
               />
+
               <span class="font-weight-bold">Poids</span>
             </th>
-            <td>
-              <b-row v-for="(w,index) in cat.weight.split('/')" :key="index">
-                <b-col md="6">
-                 {{ w }}
-              </b-col>          
-              </b-row>
-            
-            </td>
+             <td class="pb-50 text-capitalize">
+              <b-link
+               v-for="(w,index) in cat.weight.split('/')" :key="index"
+              >
+                <b-badge
+                  pill
+                  class="mr-75"
+                  :variant="light-info"
+                >
+                  {{ w }}
+                </b-badge>
+              </b-link>
+            </td> 
+          
           </tr>
              <tr>
             <th>
@@ -115,14 +132,23 @@
 
               <span class="font-weight-bold">Age</span>
             </th>
-             <b-row v-for="(w,index) in cat.age.split('/')" :key="index">
-                <b-col md="6">
-                 {{ w }}
-              </b-col>          
-              </b-row>
-           
+             <td class="pb-50 text-capitalize">
+              <b-link
+               v-for="(w,index) in cat.age.split('/')" :key="index"
+              >
+                <b-badge
+                  pill
+                  class="mr-75"
+                  :variant="light-info"
+                >
+                  {{ w }}
+                </b-badge>
+              </b-link>
+            </td> 
           </tr>
         </table>
+
+       
                     <hr class="my-2">
 
                   </b-col>

@@ -186,6 +186,8 @@
             :config="{ enableTime: true,dateFormat: 'Y-m-d H:i'}"
           />
         </b-form-group>
+
+     
     
           <!-- User Role -->
 
@@ -293,7 +295,7 @@ export default {
   },
   setup(props, { emit }) {
     const toast = useToast()
-    const selected  = ref(null)
+    const selected  = ref("homme")
     const selectedDate= ref(null)
     const selectedWeight=ref(null)
     const dateStart=ref(null)
@@ -334,7 +336,7 @@ export default {
         age:ch.value,
         weight:strWeight.value,
         start:dateStart.value,
-        end:dateEnd.value
+        end:dateEnd.value,
       })
         .then(() => {
             toast({
@@ -374,7 +376,7 @@ export default {
       strWeight,
       selectedWeight,
       dateStart,
-      dateEnd
+      dateEnd,
     }
   },
 }

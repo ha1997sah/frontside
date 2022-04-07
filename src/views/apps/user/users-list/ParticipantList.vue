@@ -104,6 +104,15 @@
           </b-media>
         </template>
 
+         <template #cell(Matricule)="data">
+          <b-badge
+            pill
+            :variant="`light-${resolveUserStatusVariant(data.item.matricule)}`"
+            class="text-capitalize"
+          >
+            {{ data.item.matricule }}
+          </b-badge>
+        </template>
         <!-- Column: Role -->
     
 
