@@ -16,7 +16,15 @@ export default {
           .catch(error => reject(error))
       })
     },
-
+    
+    uersWithMatricule(ctx, queryParams) {
+      return new Promise((resolve, reject) => {
+        authentication
+          .usersWithMatricule(router.currentRoute.params.id )
+          .then(response => resolve(response))
+          .catch(error => reject(error))
+      })
+    },
     fetchAthletes(ctx, queryParams) {
     
       return new Promise((resolve, reject) => {

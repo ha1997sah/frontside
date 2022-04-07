@@ -49,7 +49,6 @@ import {
 import competitionStoreModule from './competitionStoreModule'
 import CategorieViewInfoCard from './CategorieViewInfoCard.vue'
 import CompetitionViewPlanCard from './CompetitionViewPlanCard.vue'
-
 export default {
   components: {
     BRow,
@@ -60,22 +59,16 @@ export default {
     // Local Componentss
     CategorieViewInfoCard,
     CompetitionViewPlanCard,
-
   },
   setup() {
     const catData = ref(null)
-
-
     const COMPETITION_APP_STORE_MODULE_NAME = 'app-competition'
-
     // Register module
     if (!store.hasModule(COMPETITION_APP_STORE_MODULE_NAME)) store.registerModule(COMPETITION_APP_STORE_MODULE_NAME, competitionStoreModule)
-
     // UnRegister on leave
     onUnmounted(() => {
       if (store.hasModule(COMPETITION_APP_STORE_MODULE_NAME)) store.unregisterModule(COMPETITION_APP_STORE_MODULE_NAME)
     })
-
     store.dispatch('app-competition/fetchCatById', { id: router.currentRoute.params.id })
       .then(response => { catData.value = response.data.cat ,
       catData.value.start= (response.data.competition.start).getFullYear()
@@ -85,7 +78,6 @@ export default {
           catData.value = undefined
         }
       })
-
     return {
       catData,
     }
@@ -94,5 +86,4 @@ export default {
 </script>
 
 <style>
-
 </style>

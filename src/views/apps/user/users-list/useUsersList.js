@@ -18,7 +18,7 @@ export default function useUsersList() {
     { key: 'Nom', sortable: true },
     { key: 'Prénom', sortable: true },
     { key: 'email', sortable: true },
-    { key: 'role', sortable: true },
+    { key: 'Matricule', sortable: true },
     { key: 'actions' },
   ]
   const perPage = ref(10)
@@ -241,11 +241,9 @@ export default function useUsersList() {
     return 'UserIcon'
   }
 
-  const resolveUserStatusVariant = status => {
-    if (status === 'pending') return 'warning'
-    if (status === 'active') return 'success'
-    if (status === 'inactive') return 'secondary'
-    return 'primary'
+  const resolveUserStatusVariant = matricule => {
+    if (matricule == 'Non disponible') return 'warning'
+    return 'success'
   }
 
 

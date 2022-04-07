@@ -100,11 +100,11 @@
           <validation-provider
                 #default="{ errors }"
                 name="name"
-                rules="min:3"
+                rules="min:1"
               >
             <b-form-input
               id="username"
-              v-model="fed.name"
+              v-model="club.name"
               :placeholder="federationData.name"
             />
               <small class="text-danger">{{ errors[0] }}</small>
@@ -129,7 +129,7 @@
               >
             <b-form-input
               id="full-name"
-              v-model="fed.country"
+              v-model="club.country"
               :placeholder="federationData.country"
             />
               <small class="text-danger">{{ errors[0] }}</small>
@@ -144,7 +144,7 @@
         >
           <b-form-group
             label="Adresse"
-            label-for="email"
+            label-for="adress"
           >
            <validation-provider
                 #default="{ errors }"
@@ -152,10 +152,10 @@
                 rules="min:3"
               >
             <b-form-input
-              id="email"
-               v-model="fed.adress"
+              id="adress"
+               v-model="club.adress"
               :placeholder="federationData.adress"
-              type="email"
+              type="text"
             />
               <small class="text-danger">{{ errors[0] }}</small>
               </validation-provider>
@@ -173,11 +173,11 @@
            <validation-provider
                 #default="{ errors }"
                 name="name"
-                rules="min:3"
+                rules="num"
               >
             <b-form-input
               id="phone"
-               v-model="fed.phone"
+               v-model="club.phone"
               :placeholder="federationData.phone"
             />
               <small class="text-danger">{{ errors[0] }}</small>
@@ -192,16 +192,16 @@
         >
           <b-form-group
             label="E-mail"
-            label-for="company"
+            label-for="email"
           >
            <validation-provider
                 #default="{ errors }"
-                name="name"
+                name="email"
                 rules="unique"
               >
             <b-form-input
-              id="company"
-              v-model="email"
+              id="email"
+              v-model="club.email"
               :placeholder="federationData.email"
             />
               <small class="text-danger">{{ errors[0] }}</small>
@@ -215,16 +215,16 @@
         >
           <b-form-group
             label="Responsable"
-            label-for="company"
+            label-for="responsable"
           >
            <validation-provider
                 #default="{ errors }"
-                name="name"
-                rules="min:3"
+                name="responsable"
+                rules="min:2"
               >
             <b-form-input
-              id="company"
-               v-model="fed.managerfullName"
+              id="responsable"
+               v-model="club.managerfullName"
               :placeholder="federationData.managerfullName"
             />
               <small class="text-danger">{{ errors[0] }}</small>
@@ -311,19 +311,28 @@ export default {
       required,
       email: '',
       email,
-
-      }},
+      club:{},
+      error:''
+      }
+      
+      },
        mounted() {
     extend("unique", {
       validate: this.isUsernameUnique,
       message: "Username already taken"
     });
+              extend('num', {
+  validate: value => {
+    return value >0;
+  },
+  message: 'This field must be an odd number'
+})
   },
       methods :{
           async isUsernameUnique() {
       try {
         const response = await authentication.isUniqueEmail ({
-         email: this.email
+         email: this.club.email
         })
         return false;
       } catch (err) {
@@ -331,6 +340,23 @@ export default {
           return true;
         }
       }
+    },
+
+          onSubmit  () {
+          store.dispatch('app-club/editClub', this.club )
+          .then(
+          response => {
+              this.$toast({
+            component: ToastificationContent,
+            props: {
+              title: 'Operation réussi',
+              text:"les informations ont été modifiées avec succès",
+              icon: 'AlertTriangleIcon',
+              variant: 'success',
+            },
+          }),  router.replace({path: '/apps/clubs/list'}) 
+
+            }) .catch(this.error)(console.log("vv"))
     }
       },
   setup() {
@@ -352,43 +378,6 @@ export default {
       { label: 'Inactive', value: 'inactive' },
     ]
 
-     const permissionsData = [
-      {
-        module: 'Admin',
-        read: true,
-        write: false,
-        create: false,
-        delete: false,
-      },
-      {
-        module: 'Staff',
-        read: false,
-        write: true,
-        create: false,
-        delete: false,
-      },
-      {
-        module: 'Author',
-        read: true,
-        write: false,
-        create: true,
-        delete: false,
-      },
-      {
-        module: 'Contributor',
-        read: false,
-        write: false,
-        create: false,
-        delete: false,
-      },
-      {
-        module: 'User',
-        read: false,
-        write: false,
-        create: false,
-        delete: true,
-      },
-    ]
       // ? Demo Purpose => Update image on click of update
     const refInputEl = ref(null)
     const previewEl = ref(null)
@@ -398,29 +387,9 @@ export default {
       props.federationData.avatar = base64
     })
     const federationData = ref(null)
-    const blankFed = {}
-    const fed = ref(JSON.parse(JSON.stringify(blankFed)))
-
-
-
+  
     const CLUB_APP_STORE_MODULE_NAME = 'app-club'
-        const onSubmit = () => {
-          store.dispatch('app-club/editClub', fed.value )
-          .then(
-          response => {
-            fed.value = response.data.club,
-              toast({
-            component: ToastificationContent,
-            props: {
-              title: 'Operation réussi',
-              text:"les informations ont été modifiées avec succès",
-              icon: 'AlertTriangleIcon',
-              variant: 'success',
-            },
-          }),  router.replace({path: '/apps/clubs/list'}) 
-
-            }) .catch(error)(console.log("vv"))
-    }
+   
 
     // Register module
     if (!store.hasModule(CLUB_APP_STORE_MODULE_NAME)) store.registerModule(CLUB_APP_STORE_MODULE_NAME, clubStoreModule)
@@ -440,14 +409,11 @@ export default {
       })
 
       return {
-      onSubmit,
       federationData,
-      fed,
       resolveUserRoleVariant,
       avatarText,
       roleOptions,
       statusOptions,
-      permissionsData,
 
       //  ? Demo - Update Image on click of update button
       refInputEl,

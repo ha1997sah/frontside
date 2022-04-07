@@ -233,11 +233,6 @@ export default [
     component: () => import('@/views/apps/competition/CategoriesEdit.vue'),
   },
   {
-    path: '/apps/competitions/view/:id',
-    name: 'apps-competitions-view',
-    component: () => import('@/views/apps/competition/CompetitionsView.vue'),
-  },
-  {
     path: '/apps/categories/list',
     name: 'apps-categories-list',
     component: () => import('@/views/apps/competition/CategorieList.vue'),

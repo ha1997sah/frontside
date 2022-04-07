@@ -166,6 +166,26 @@
               </b-form-invalid-feedback>
             </b-form-group>
           </validation-provider>    
+
+
+
+                <b-form-group>
+          <h5>Date Début</h5>
+          <flat-pickr
+            v-model="dateStart"
+            class="form-control"
+            :config="{ enableTime: true,dateFormat: 'Y-m-d H:i'}"
+          />
+        </b-form-group>
+
+               <b-form-group>
+          <h5>Date Fin</h5>
+          <flat-pickr
+            v-model="dateEnd"
+            class="form-control"
+            :config="{ enableTime: true,dateFormat: 'Y-m-d H:i'}"
+          />
+        </b-form-group>
     
           <!-- User Role -->
 
@@ -214,10 +234,13 @@ import { useToast } from 'vue-toastification/composition'
 import Multiselect from 'vue-multiselect'
 import authentication from '@/services/authentication.js'
 import 'vue-multiselect/dist/vue-multiselect.min.css'
+import flatPickr from 'vue-flatpickr-component'
+
 
 export default {
 
   components: {
+    flatPickr,
     BSidebar,
     BFormRadio,
     Multiselect ,
@@ -273,7 +296,8 @@ export default {
     const selected  = ref(null)
     const selectedDate= ref(null)
     const selectedWeight=ref(null)
-    
+    const dateStart=ref(null)
+    const dateEnd=ref(null)
 
     const yearOptions= ref(['2000', '2001', '2002'])
     const weightOptions= ref(['75 kg', '50 kg', '54 kg'])
@@ -308,7 +332,9 @@ export default {
         sexe:selected.value,
         type:clubData.value.type,
         age:ch.value,
-        weight:strWeight.value
+        weight:strWeight.value,
+        start:dateStart.value,
+        end:dateEnd.value
       })
         .then(() => {
             toast({
@@ -346,7 +372,9 @@ export default {
       weightOptions,
       ch,
       strWeight,
-      selectedWeight
+      selectedWeight,
+      dateStart,
+      dateEnd
     }
   },
 }
@@ -354,6 +382,7 @@ export default {
 
 <style lang="scss">
 @import '@core/scss/vue/libs/vue-select.scss';
+@import'@core/scss/vue/libs/vue-flatpicker.scss';
 
 #add-new-user-sidebar {
   .vs__dropdown-menu {

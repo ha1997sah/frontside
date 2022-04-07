@@ -314,8 +314,8 @@ export default {
           },
         })
 
-          emit('refetch-data')
-          emit('update:is-add-new-user-sidebar-active', false)
+          this.$emit('refetch-data')
+          this.$emit('update:is-add-new-user-sidebar-active', false)
         }).catch({message:error.message})
     }
   },
@@ -348,8 +348,6 @@ export default {
 
     return {
       federationData,
-      
-
       refFormObserver,
       getValidationState,
       resetForm,

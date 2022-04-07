@@ -63,7 +63,7 @@
       <b-table
         ref="refUserListTable"
         class="position-relative"
-        :items="fetchUsersTest"
+        :items="usersItems"
         responsive
         :fields="tableColumns"
         primary-key="id"
@@ -105,7 +105,16 @@
           </b-media>
         </template>
 
-        <!-- Column: Role -->
+         <template #cell(Matricule)="data">
+          <b-badge
+            pill
+            :variant="`light-${resolveUserStatusVariant(data.item.matricule)}`"
+            class="text-capitalize"
+          >
+            {{ data.item.matricule }}
+          </b-badge>
+        </template>
+
     
 
         <!-- Column: Actions -->
@@ -244,8 +253,28 @@ export default {
       { label: 'Active', value: 'active' },
       { label: 'Inactive', value: 'inactive' },
     ]
+  const usersItems = ref(null)
+  const mat=ref(false)
+
+  store.dispatch('app-user/fetchUsersUnderClub')
+      .then(response => {
+        
+         usersItems.value=response.data.users
+      
+       
+      })
+      .catch(() => {
+        toast({
+          component: ToastificationContent,
+          props: {
+            title: 'Error fetching users list',
+            icon: 'AlertTriangleIcon',
+            variant: 'danger',
+          },
+        })
+      })
+
     const {
-      fetchUsersTest,
       fetchUsers,
       tableColumns,
       perPage,
@@ -269,9 +298,10 @@ export default {
     } = useUsersList()
   
     return {
+      mat,
+      usersItems,
       // Sidebar
       isAddNewUserSidebarActive,
-      fetchUsersTest,
       fetchUsers,
       tableColumns,
       perPage,

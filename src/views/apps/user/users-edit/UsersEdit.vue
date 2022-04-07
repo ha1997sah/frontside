@@ -57,6 +57,7 @@
         <b-button
           variant="primary"
           @click="$refs.refInputEl.click()"
+           :disabled="invalid"
         >
           <input
             ref="refInputEl"
@@ -100,6 +101,7 @@
               <validation-provider
                 #default="{ errors }"
                 name="name"
+                rules="min:2"
               >
                 <b-form-input
                   id="name"
@@ -126,6 +128,8 @@
               <validation-provider
                 #default="{ errors }"
                 name="lastname"
+                                rules="min:2"
+
               >
                 <b-form-input
                   id="lastname"
@@ -179,7 +183,7 @@
               <validation-provider
                 #default="{ errors }"
                 name="phone"
-                rules="min:8"
+                rules="num"
               >
                 <b-form-input
                   id="phone"
@@ -239,9 +243,6 @@
           cols="12"
           md="4"
         >
-                 <validation-provider
-            name="Club"
-          >
             <b-form-group
               label="Club"
               label-for="club"
@@ -254,17 +255,11 @@
                 input-id="club-fed"
               />
             </b-form-group>
-          </validation-provider>
           </b-col>
              <b-col
           cols="12"
           md="4"
         >
-        
-            <validation-provider
-            #default="validationContext"
-            name="Sexe"
-          >
             <b-form-group
               label="Sexe"
               label-for="sexe">
@@ -286,11 +281,8 @@
         Homme
       </b-form-radio>
     </div>
-              <b-form-invalid-feedback>
-                {{ validationContext.errors[0] }}
-              </b-form-invalid-feedback>
+              
             </b-form-group>
-          </validation-provider>
 
            <!-- -->
         </b-col>
@@ -305,10 +297,7 @@
               label="Poids"
               label-for="weight"
             >
-              <validation-provider
-                #default="{ errors }"
-                name="weight"
-              >
+              
                       <v-select
               v-model="selectedWeight"
                 :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
@@ -316,8 +305,7 @@
                 :clearable="false"
                 input-id="club-fed"
               />
-        <small class="text-danger">{{ errors[0] }}</small>
-              </validation-provider>
+
             </b-form-group>
         </b-col>
     <b-col
@@ -328,10 +316,7 @@
               label="Taille"
               label-for="height"
             >
-              <validation-provider
-                #default="{ errors }"
-                name="height"
-              >
+             
                    <v-select
               v-model="selectedHeight"
                 :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
@@ -339,8 +324,6 @@
                 :clearable="false"
                 input-id="club-fed"
               />
-                <small class="text-danger">{{ errors[0] }}</small>
-              </validation-provider>
             </b-form-group>
 
         </b-col>
@@ -352,10 +335,7 @@
               label="Ceinture"
               label-for="belt"
             >
-              <validation-provider
-                #default="{ errors }"
-                name="belt"
-              >
+             
                 <v-select
               v-model="selectedBelt"
                 :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
@@ -363,8 +343,7 @@
                 :clearable="false"
                 input-id="club-fed"
               />
-                <small class="text-danger">{{ errors[0] }}</small>
-              </validation-provider>
+              
             </b-form-group>
         </b-col>
 
@@ -463,6 +442,12 @@ export default {
       validate: this.isUsernameUnique,
       message: "Username already taken"
     });
+            extend('num', {
+  validate: value => {
+    return value >0;
+  },
+  message: 'This field must be an odd number'
+})
   },
       methods :{
           async isUsernameUnique() {
@@ -604,8 +589,8 @@ data.forEach(element => { feds.value.push({label:element.name, value:element.id}
       data.value.belt=selectedBelt.value,
       data.value.height=selectedHeight.value,
       data.value.weight=selectedWeight.value,
-      data.value.ClubId=selectedItem.value,
-      data.value.FederationId=selectedFed.FederationId
+      data.value.ClubId=selectedItem.value.value,
+      data.value.FederationId=selectedFed.value.value,
       data.value.sexe=selectedSexe.value
       console.log(data.value.sexe)
             console.log(data.value.height)

@@ -144,18 +144,18 @@
         >
           <b-form-group
             label="Adresse"
-            label-for="email"
+            label-for="adress"
           >
            <validation-provider
                 #default="{ errors }"
-                name="name"
+                name="adress"
                 rules="min:3"
               >
             <b-form-input
-              id="email"
+              id="adress"
                v-model="fed.adress"
               :placeholder="federationData.adress"
-              type="email"
+              type="text"
             />
               <small class="text-danger">{{ errors[0] }}</small>
               </validation-provider>
@@ -172,8 +172,8 @@
           >
            <validation-provider
                 #default="{ errors }"
-                name="name"
-                rules="min:3"
+                name="phone"
+                rules="num"
               >
             <b-form-input
               id="phone"
@@ -192,16 +192,16 @@
         >
           <b-form-group
             label="E-mail"
-            label-for="company"
+            label-for="email"
           >
            <validation-provider
                 #default="{ errors }"
-                name="name"
+                name="email"
                 rules="unique"
               >
             <b-form-input
-              id="company"
-              v-model="email"
+              id="email"
+              v-model="fed.email"
               :placeholder="federationData.email"
             />
               <small class="text-danger">{{ errors[0] }}</small>
@@ -215,15 +215,15 @@
         >
           <b-form-group
             label="Responsable"
-            label-for="company"
+            label-for="responsable"
           >
            <validation-provider
                 #default="{ errors }"
-                name="name"
+                name="responsable"
                 rules="min:3"
               >
             <b-form-input
-              id="company"
+              id="responsable"
                v-model="fed.managerfullName"
               :placeholder="federationData.managerfullName"
             />
@@ -274,11 +274,11 @@ import useFederationsList from './useFederationsList'
 import { useInputImageRenderer } from '@core/comp-functions/forms/form-utils'
 import { avatarText } from '@core/utils/filter'
 import vSelect from 'vue-select'
-import { useToast } from 'vue-toastification/composition'
-import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 import { required, email } from '@validations'
 import { ValidationProvider, ValidationObserver, extend } from 'vee-validate'
 import authentication from '@/services/authentication.js'
+import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
+import { useToast } from 'vue-toastification/composition'
 
 
 
@@ -310,20 +310,29 @@ export default {
       required,
       email: '',
       email,
+      fed:{
+        
+      },
+      error:''
 
       }},
-       mounted() {
+         mounted() {
     extend("unique", {
       validate: this.isUsernameUnique,
       message: "Username already taken"
     });
+              extend('num', {
+  validate: value => {
+    return value >0;
+  },
+  message: 'This field must be an odd number'
+})
   },
       methods :{
           async isUsernameUnique() {
       try {
         const response = await authentication.isUniqueEmail ({
-         email: fed.value.email
-     
+         email: this.fed.email
         })
         return false;
       } catch (err) {
@@ -331,8 +340,26 @@ export default {
           return true;
         }
       }
+    },
+            onSubmit  ()  {
+          store.dispatch('app-federation/editFederation', this.fed )
+          .then(
+          response => {
+            console.log(this.fed),
+              this.$toast({
+            component: ToastificationContent,
+            props: {
+              title: 'Operation réussi',
+              text:"les informations ont été modifiées avec succès",
+              icon: 'AlertTriangleIcon',
+              variant: 'success',
+            },
+          }),        router.replace({path: '/apps/federations/list'}) 
+
+            }) .catch(this.error)(console.log(this.error.message))
     }
       },
+      
   setup() {
     const toast = useToast()
 
@@ -352,43 +379,6 @@ export default {
       { label: 'Inactive', value: 'inactive' },
     ]
 
-     const permissionsData = [
-      {
-        module: 'Admin',
-        read: true,
-        write: false,
-        create: false,
-        delete: false,
-      },
-      {
-        module: 'Staff',
-        read: false,
-        write: true,
-        create: false,
-        delete: false,
-      },
-      {
-        module: 'Author',
-        read: true,
-        write: false,
-        create: true,
-        delete: false,
-      },
-      {
-        module: 'Contributor',
-        read: false,
-        write: false,
-        create: false,
-        delete: false,
-      },
-      {
-        module: 'User',
-        read: false,
-        write: false,
-        create: false,
-        delete: true,
-      },
-    ]
       // ? Demo Purpose => Update image on click of update
     const refInputEl = ref(null)
     const previewEl = ref(null)
@@ -398,29 +388,9 @@ export default {
       props.federationData.avatar = base64
     })
     const federationData = ref(null)
-    const blankFed = {}
-    const fed = ref(JSON.parse(JSON.stringify(blankFed)))
-
-
 
     const FED_APP_STORE_MODULE_NAME = 'app-federation'
-        const onSubmit = () => {
-          store.dispatch('app-federation/editFederation', fed.value )
-          .then(
-          response => {
-            fed.value = response.data.fed,console.log(fed.value),
-              toast({
-            component: ToastificationContent,
-            props: {
-              title: 'Operation réussi',
-              text:"les informations ont été modifiées avec succès",
-              icon: 'AlertTriangleIcon',
-              variant: 'success',
-            },
-          }),        router.replace({path: '/apps/federations/list'}) 
-
-            }) .catch(error)(console.log("vv"))
-    }
+ 
 
     // Register module
     if (!store.hasModule(FED_APP_STORE_MODULE_NAME)) store.registerModule(FED_APP_STORE_MODULE_NAME, federationStoreModule)
@@ -440,14 +410,11 @@ export default {
       })
 
       return {
-      onSubmit,
       federationData,
-      fed,
       resolveUserRoleVariant,
       avatarText,
       roleOptions,
       statusOptions,
-      permissionsData,
 
       //  ? Demo - Update Image on click of update button
       refInputEl,

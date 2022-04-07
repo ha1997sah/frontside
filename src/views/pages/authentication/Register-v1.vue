@@ -137,7 +137,7 @@
               <validation-provider
                 #default="{ errors }"
                 name="phone"
-                rules="required|num"
+                rules="num"
               >
                 <b-form-input
                   id="phone"
@@ -148,44 +148,77 @@
                 <small class="text-danger">{{ errors[0] }}</small>
               </validation-provider>
             </b-form-group>
-
-               <validation-provider
-            name="Federation"
-          >
-            <b-form-group
-              label="Federation"
-              label-for="federation"
+              <b-form-group
+              label="Matricule"
+              label-for="matricule"
             >
-              <v-select
-              v-model="selectedFed"
-                :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-                :options="fedOptions"
-                :clearable="false"
-                 @input="clubUnderFed"
+              <validation-provider
+                #default="{ errors }"
+                name="matricule"
+                rules="num"
+              >
+                <b-form-input
+                  id="matricule"
+                  v-model="matricule"
+                  :state="errors.length > 0 ? false:null"
+                  name="matricule"
+                  :label="matricule_label"
+                />
+                <small class="text-danger">{{ errors[0] }}</small>
+              </validation-provider>
+            </b-form-group>
+<validation-provider
+      #default="{ errors }"
+      name="Fédération"
+      rules="required"
+    >
+      <b-form-group
+        label="federation"
+        label-for="fed"
+         :state="errors.length > 0 ? false:null"
+    
+      >
+        <v-select
+        
+          id="fed"
+          name="fed"
 
-               
-              />
-            
-            </b-form-group>
-          </validation-provider>
-           <!-- club -->
-                 <validation-provider
-            name="Club"
-          >
-            <b-form-group
-              label="Club"
-              label-for="club"
-            >
-              <v-select
-              v-model="selectedItem"
-                :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-                :options="roleOptions"
-                :clearable="false"
-                input-id="club-fed"
-              />
-            
-            </b-form-group>
-          </validation-provider>
+          v-model="selectedFed"
+          :options="fedOptions"
+          :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
+                    @input="clubUnderFed()"
+
+
+          label="label"
+        />
+      
+      </b-form-group>
+                      <small class="text-danger">{{ errors[0] }}</small>
+
+    </validation-provider>
+
+    <validation-provider
+      #default="{ errors }"
+      name="Club"
+      rules="required"
+    >
+      <b-form-group
+        label="club"
+        label-for="club"
+        :state="errors.length > 0 ? false:null"
+      >
+        <v-select
+          id="club"
+          v-model="selectedItem"
+          :options="roleOptions"
+          :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
+
+        />
+        <b-form-invalid-feedback :state="errors.length > 0 ? false:null">
+          {{ errors[0] }}
+        </b-form-invalid-feedback>
+      </b-form-group>
+    </validation-provider>
            <!-- -->
                <b-form-group
               label="Date de naissance"
@@ -562,6 +595,8 @@ export default {
       selectedFed:'',
       selectedSexe:'',
       file:"",
+      matricule:"",
+      matricule_label:"Non disponible",
      roleOptions :[],
        fedOptions :[],
       currentTab: 0,
@@ -673,6 +708,7 @@ data.forEach(element => { this.roleOptions.push({label:element.name, value:eleme
 
 
         formData.append('birthDate',this.birthDate)
+        formData.append('matricule',this.matricule)
         formData.append('records',JSON.stringify(this.inputs))
         
        const response = await authentication.register(formData)

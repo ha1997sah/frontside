@@ -30,9 +30,41 @@
                   <b-link class="text-body">{{ blogDetail.end }}</b-link>
               </b-media-body>
             </b-media>
-            
+            <b-row >
+              <b-col
+              md="6"
+              v-for="(cat) in blogDetail.Categories" :key="cat.id" >
             <!-- user commnets -->
-        <table class="mt-2 mt-xl-0 w-100" v-for="(cat) in blogDetail.Categories" :key="cat.id">
+        <table class="mt-2 mt-xl-0 w-100" >
+            <tr>
+            <th class="pb-50">
+              <feather-icon
+                icon="BookmarkIcon"
+                class="mr-75"
+              />
+              <span class="font-weight-bold">Titre</span>
+            </th>
+            <td class="pb-50 text-capitalize">
+              {{cat.nameCat}}
+            </td>
+          </tr>
+           <tr>
+            <th class="pb-50">
+              <feather-icon
+                icon="BookmarkIcon"
+                class="mr-75"
+              />
+              <span class="font-weight-bold">Dates</span>
+            </th>
+            <td class="pb-50 text-capitalize">
+         {{ new Date(cat.start).getDate()+'-'+new Date(cat.start).getMonth()+'-'+new Date(cat.start).getFullYear()+'\/'+new Date(cat.start).getHours()+":"+new Date(cat.start).getMinutes()}}
+
+            </td>
+            <td class="pb-50 text-capitalize">
+         {{ new Date(cat.end).getDate()+'-'+new Date(cat.end).getMonth()+'-'+new Date(cat.end).getFullYear()+'\/'+new Date(cat.end).getHours()+":"+new Date(cat.end).getMinutes()}}
+
+            </td>
+          </tr>
             <tr>
             <th class="pb-50">
               <feather-icon
@@ -66,7 +98,12 @@
               <span class="font-weight-bold">Poids</span>
             </th>
             <td>
-              {{ cat.weight }}
+              <b-row v-for="(w,index) in cat.weight.split('/')" :key="index">
+                <b-col md="6">
+                 {{ w }}
+              </b-col>          
+              </b-row>
+            
             </td>
           </tr>
              <tr>
@@ -75,14 +112,24 @@
                 icon="UsersIcon"
                 class="mr-75"
               />
+
               <span class="font-weight-bold">Age</span>
             </th>
-            <td>
-              {{ cat.age }}
-            </td>
+             <b-row v-for="(w,index) in cat.age.split('/')" :key="index">
+                <b-col md="6">
+                 {{ w }}
+              </b-col>          
+              </b-row>
+           
           </tr>
         </table>
-        
+                    <hr class="my-2">
+
+                  </b-col>
+
+           </b-row>
+                     <h3>Description</h3>
+
           <div
               class="blog-content"
               v-html="blogDetail.description"
@@ -255,7 +302,7 @@ export default {
     const COMPETITION_APP_STORE_MODULE_NAME = 'app-competition'
     const date=ref(null)
     const end=ref(null)
-
+    const categories=ref([])
     // Register module
     if (!store.hasModule(COMPETITION_APP_STORE_MODULE_NAME)) store.registerModule(COMPETITION_APP_STORE_MODULE_NAME, competitionStoreModule)
 
@@ -270,6 +317,7 @@ export default {
             date.value = new Date(response.data.competition.start),
             end.value = new Date(response.data.competition.end),
 
+
            blogDetail.value.start= date.value.getDate()+'-'+date.value.getMonth()+'-'+date.value.getFullYear(),
            blogDetail.value.end= end.value.getDate()+'-'+end.value.getMonth()+'-'+end.value.getFullYear()})
       .catch(error => {
@@ -278,7 +326,7 @@ export default {
         }
       }),
 
-         authentication.participantList({ id: router.currentRoute.params.id }).then(response => {
+         authentication.participantList({ id: "1"}).then(response => {
       participantList.value= response.data.users,
       console.log(participantList.value)
     }),
@@ -291,7 +339,8 @@ export default {
       blogDetail,
       image,
       participantList,
-      latestComp
+      latestComp,
+      categories
     }}
 }
 </script>

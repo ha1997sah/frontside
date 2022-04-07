@@ -45,6 +45,15 @@
         >
         <club-list :club-data="clubs" />
                 </b-col>
+                   <b-col
+          cols="12"
+          xl="12"
+          lg="12"
+          md="12"
+        >
+        <users-with-matricule />
+                </b-col>
+
 
       </b-row>
     </template>
@@ -64,13 +73,14 @@ import FederationViewInfoCard from './FederationViewInfoCard.vue'
 import FederationViewPlanCard from './FederationViewPlanCard.vue'
 import FederationsEdit from './FederationsEdit.vue'
 import ClubList from './ClubList.vue'
+import usersWithMatricule from '../user/users-list/usersWithMatricule.vue'
 export default {
   components: {
     BRow,
     BCol,
     BAlert,
     BLink,
- 
+    usersWithMatricule,
     // Local Componentss
     FederationViewInfoCard,
     FederationViewPlanCard,
@@ -100,12 +110,14 @@ export default {
           federationData.value = undefined
         }
       })
+
+    
       
 
 
     return {
       federationData,
-      clubs
+      clubs,
     }
   },
 }

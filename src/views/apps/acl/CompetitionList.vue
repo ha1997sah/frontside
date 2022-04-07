@@ -284,10 +284,10 @@ import vSelect from 'vue-select'
 
 import { kFormatter } from '@core/utils/filter'
 import ContentWithSidebar from '@core/layouts/components/content-with-sidebar/ContentWithSidebar.vue'
-import authentication from '@/services/authentication.js'
 import Ripple from 'vue-ripple-directive'
 import { useToast } from 'vue-toastification/composition'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
+import authentication from '@/services/authentication.js'
 
 
 export default {
@@ -348,7 +348,8 @@ export default {
             })
           .catch(error => error.message),
 
-          authentication.findUserById(JSON.parse(localStorage.getItem("userData")).id).then(response => { this.userData = response.data.user
+          authentication.findUserById(JSON.parse(localStorage.getItem("userData")).id).then(response => { this.userData = response.data.user,
+          console.log(this.userData)
 
           }),
 
@@ -373,10 +374,9 @@ export default {
 
            elig(info){
              this.idComp=info
-             console.log(this.idComp)
           authentication.elig({
             compId:this.idComp,
-            userId:"28"
+            userId:JSON.parse(localStorage.getItem("userData")).id
           }).then(response=>{
              if(response.status===201)
             {this.show=true}
@@ -391,8 +391,8 @@ export default {
     } ,
     inscrit(){
  authentication.inscrit({
-            compId:"1",
-            userId:"28"
+            compId:this.idComp,
+            userId:JSON.parse(localStorage.getItem("userData")).id
           }).then(response=>{
                this.$toast({
                     component: ToastificationContent,

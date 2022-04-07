@@ -2,13 +2,7 @@
 
   <div>
 
-    <user-list-add-new
-      :is-add-new-user-sidebar-active.sync="isAddNewUserSidebarActive"
-      :role-options="roleOptions"
-      :plan-options="planOptions"
-      @refetch-data="refetchData"
-    />
-
+  
     <!-- Filters -->
 <!--     <users-list-filters
       :role-filter.sync="roleFilter"
@@ -133,9 +127,9 @@
               <span class="align-middle ml-50">Détailes</span>
             </b-dropdown-item>
 
-            <b-dropdown-item :to="{ name: 'apps-users-edit', params: { id: data.item.id } }">
-              <feather-icon icon="EditIcon" />
-              <span class="align-middle ml-50">Modifier</span>
+              <b-dropdown-item  v-b-modal.modal-1  @click="sendInfo(data.item.id )">               
+              <feather-icon icon="TrashIcon" />
+              <span class="align-middle ml-50" >Eliminer</span>
             </b-dropdown-item>
           </b-dropdown>
         </template>
@@ -186,7 +180,12 @@
 
         </b-row>
       </div>
-    
+      <b-modal id="modal-1" title="BootstrapVue"
+     
+          @ok="eliminer">
+             <p class="my-4">Cette action ne peut pas être annulée!</p>
+  
+             </b-modal>
     </b-card>
   </div>
 </template>
@@ -204,6 +203,10 @@ import UsersListFilters from './UsersListFilters.vue'
 import useUsersList from './useUsersList'
 import userStoreModule from '../userStoreModule'
 import UserListAddNew from './UserListAddNew.vue'
+import router from '@/router'
+import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
+import authentication from '@/services/authentication.js'
+
 export default {
   components: {
     UsersListFilters,
@@ -230,6 +233,44 @@ export default {
     },
   
   },
+    data() {
+    return {
+     userId:""
+
+    }
+  },
+  methods:{
+      sendInfo(info){
+     
+       this.userId=info },
+        eliminer() {
+      
+          authentication.eliminer ({
+         compId: router.currentRoute.params.id ,
+         userId:this.userId
+     
+        }) .then(() => {
+        this.$toast({
+          component: ToastificationContent,
+          props: {
+            title: 'Elimination effectué avec succces',
+            icon: 'AlertTriangleIcon',
+            variant: 'success',
+          },
+        })
+        this.$emit('refetch-data') 
+    }).catch(error=>{console.log(error),
+      this.$toast({
+      component: ToastificationContent,
+      props: {
+        title: 'problem',
+        icon: 'AlertTriangleIcon',
+        variant: 'danger',
+      },
+    })
+      
+    })},
+       },
   setup() {
     const USER_APP_STORE_MODULE_NAME = 'app-user'
     // Register module
@@ -271,7 +312,6 @@ export default {
       sortBy,
       isSortDirDesc,
       refUserListTable,
-      refetchData,
       // UI
       resolveUserRoleVariant,
       resolveUserRoleIcon,
@@ -297,7 +337,6 @@ export default {
       sortBy,
       isSortDirDesc,
       refUserListTable,
-      refetchData,
       // Filter
       avatarText,
       // UI

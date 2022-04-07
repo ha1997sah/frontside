@@ -350,7 +350,8 @@ this.club.FederationId=this.selectedItem.value
           },
         })
 
-           router.replace({path: '/apps/clubs/list'}) 
+          this.$emit('refetch-data')
+          this.$emit('update:is-add-new-user-sidebar-active', false)
         }).catch({message:error.message})
     }
   },

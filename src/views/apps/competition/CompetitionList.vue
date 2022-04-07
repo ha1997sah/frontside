@@ -162,7 +162,7 @@
                 class="align-middle text-body"
               />
             </template>
-            <b-dropdown-item :to="{ name: 'apps-competitions-view', params: { id: data.item.id } }">
+            <b-dropdown-item :to="{ name: 'apps-competition-detail', params: { id: data.item.id } }">
               <feather-icon icon="FileTextIcon" />
               <span class="align-middle ml-50">Détailes</span>
             </b-dropdown-item>

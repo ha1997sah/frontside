@@ -165,16 +165,22 @@ export default {
     participantList(credentials){
         return Api().post('participantList',credentials)
     },
+    usersWithMatricule(id){
+        return Api().get(`usersWithMatricule/${id}`)
+    },
     latestCompetitions(){
         return Api().get('recentCompetition')
     },
     inscrit(credentials){
         return Api().post('inscri',credentials)
     },
+    eliminer(credentials){
+        return Api().post('eliminer',credentials)
+    },
     elig(credentials){
         return Api().post('elig',credentials)
     },
     getRecords(credentials){
         return Api().post('userRecords',credentials)
-    }
+    },
 }

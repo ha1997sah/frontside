@@ -1,3 +1,4 @@
+
 <template>
   <b-card>
 
@@ -127,7 +128,6 @@ import {
 } from 'bootstrap-vue'
 import { avatarText } from '@core/utils/filter'
 import useCompetitionsList from './useCompetitionsList'
-
 export default {
   components: {
     BCard, BButton, BRow, BCol, BAvatar,
@@ -151,5 +151,4 @@ export default {
 </script>
 
 <style>
-
 </style>
