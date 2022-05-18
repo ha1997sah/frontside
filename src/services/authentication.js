@@ -63,11 +63,15 @@ export default {
      allCategories(){
         return Api().get('allCategories')
     },
+    //by event
+    allCategoriesByEvent(id){
+        return Api().post(`allCategoriesByEvent/${id}`)
+    },
 
     //competitions
 
     allCompetitions(){
-        return Api().get('allCompetitions')
+        return Api().get('allEvents')
     },
 
     addCompetition(credentials){
@@ -77,11 +81,11 @@ export default {
         return Api().post('addCategory',credentials)
     },
     findCometitionById(id){
-        return Api().get(`competition/${id}`)
+        return Api().get(`event/${id}`)
 
     },
     findCategoryById(id){
-        return Api().get(`category/${id}`)
+        return Api().get(`event/${id}`)
 
     },
     findCatById(id){
@@ -141,11 +145,11 @@ export default {
       },
 
       editCompetition(credentials,id){
-        return Api().put(`editCompetition/${id}`,credentials)
+        return Api().put(`editEvent/${id}`,credentials)
     },
 
     deleteCompetition(id){
-        return Api().delete(`deleteCompetition/${id}`)
+        return Api().delete(`deleteEvent/${id}`)
        }, 
 
     // athlete
@@ -165,11 +169,12 @@ export default {
     participantList(credentials){
         return Api().post('participantList',credentials)
     },
+
     usersWithMatricule(id){
         return Api().get(`usersWithMatricule/${id}`)
     },
     latestCompetitions(){
-        return Api().get('recentCompetition')
+        return Api().get('recentEvent')
     },
     inscrit(credentials){
         return Api().post('inscri',credentials)
@@ -183,4 +188,13 @@ export default {
     getRecords(credentials){
         return Api().post('userRecords',credentials)
     },
+    generate(credentials){
+        return Api().post('generate',credentials)
+    },
+    hasRound(credentials){
+        return Api().post('hasRound',credentials)
+    },
+    stat(){
+        return Api().get('stat')
+    }
 }

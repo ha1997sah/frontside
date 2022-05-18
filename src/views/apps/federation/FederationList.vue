@@ -54,9 +54,11 @@
           >
             <div class="d-flex align-items-center justify-content-end">
               <b-form-input
-                v-model="searchQuery"
                 class="d-inline-block mr-1"
                 placeholder="Rechercher..."
+                 v-model="query"
+                 @keyup="search"
+
               />
               <b-button
                 variant="primary"
@@ -73,7 +75,7 @@
       <b-table
         ref="refUserListTable"
         class="position-relative"
-        :items="fetchFederations"
+        :items="fedList"
         responsive
         :fields="tableColumns"
         primary-key="id"
@@ -230,7 +232,7 @@
 </template>
 <script>
 import router from '@/router'
-
+import authentication from '@/services/authentication.js'
 import { useToast } from 'vue-toastification/composition'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 
@@ -264,6 +266,35 @@ export default {
     vSelect,
     FederationListAddNew,
   },
+    data() {
+    return {
+      fedList: [],
+      query:'',
+    }
+  },
+    created() {
+      
+      authentication
+          .allFederations()
+          .then(response =>  { 
+                this.fedList = response.data.feds ,console.log(this.fedList)
+            })
+          .catch(error => error.message)
+          
+          },
+  methods:{
+      search () {
+
+      authentication
+          .allFederations()
+          .then(response =>{
+             if (this.query) {
+           this.fedList = response.data.feds.filter(fed =>
+              fed.name.toLowerCase().includes(this.query.toLowerCase()))
+          } else {
+           this.fedList =response.data.feds
+          }}) }
+  },
   setup() {
               const toast = useToast()
 
@@ -288,11 +319,7 @@ export default {
       { label: 'Enterprise', value: 'enterprise' },
       { label: 'Team', value: 'team' },
     ]
-    const statusOptions = [
-      { label: 'Pending', value: 'pending' },
-      { label: 'Active', value: 'active' },
-      { label: 'Inactive', value: 'inactive' },
-    ]
+   
     const idSelected=ref('')
 
       const sendInfo = (info) =>{
@@ -370,7 +397,6 @@ window.location.reload()
       resolveUserStatusVariant,
       roleOptions,
       planOptions,
-      statusOptions,
       // Extra Filters
       roleFilter,
       planFilter,

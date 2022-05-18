@@ -9,6 +9,8 @@ import dashboard from './routes/dashboard'
 import pages from './routes/pages'
 import formsTable from './routes/forms-tables'
 import others from './routes/others'
+import chartsMaps from './routes/charts-maps'
+import uiElements from './routes/ui-elements/index'
 
 Vue.use(VueRouter)
 
@@ -24,6 +26,9 @@ const router = new VueRouter({
     ...dashboard,
     ...pages,
     ...formsTable,
+    ...chartsMaps,
+    ...uiElements,
+
     ...others,
     {
       path: '*',

@@ -310,14 +310,15 @@ export default {
    mounted() {
     extend("unique", {
       validate: this.isUsernameUnique,
-      message: "Username already taken"
+      message: "Le champ email est déja utilisé"
     });
 
-             extend('num', {
+                      extend('num', {
   validate: value => {
     return value >0;
-  }})
-    
+  },
+  message:"Le champ numéro de téléphone ne peut contenir que des chiffres"
+})
     
   },
   methods: {

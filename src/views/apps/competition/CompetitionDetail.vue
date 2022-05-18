@@ -1,36 +1,95 @@
 <template>
-  <content-with-sidebar
-    v-if="Object.keys(blogDetail).length"
-    class="cws-container cws-sidebar-right blog-wrapper"
-  >
+  <section class="app-ecommerce-details">
 
-    <!-- content -->
-    <div class="blog-detail-wrapper">
-      <b-row>
-        <!-- blogs -->
-        <b-col cols="12">
-          <b-card
-            :img-src="blogDetail.image"
-            img-top
-            img-alt="Blog Detail Pic"
-            :title="blogDetail.name"
-            img-height="200"
+    <!-- Alert: No item found -->
+    <b-alert
+      variant="danger"
+      :show="blogDetail === undefined"
+    >
+      <h4 class="alert-heading">
+        Error fetching product data
+      </h4>
+      <div class="alert-body">
+        No item found with this item slug. Check
+        <b-link
+          class="alert-link"
+          :to="{ name: 'apps-e-commerce-shop'}"
+        >
+          Shop
+        </b-link>
+        for other items.
+      </div>
+    </b-alert>
+
+    <!-- Content -->
+    <b-card v-if="blogDetail"
+      no-body
+    >
+      <b-card-body>
+         <swiper
+    class="swiper-parallax"
+    :options="swiperOptions"
+    :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
+  >
+    <div
+      slot="parallax-bg"
+      class="parallax-bg"
+      data-swiper-parallax="-23%"
+    >
+      <b-img
+        class="img-fluid"
+        :src="require('@/assets/images/banner/img.jpg')"
+        alt="banner"
+      />
+    </div>
+
+    <swiper-slide
+      v-for="(data,index) in swiperData"
+      :key="index"
+    >
+      <div
+        class="title"
+        data-swiper-parallax="-300"
+      >
+        {{ blogDetail.name }}
+      </div>
+      <div
+        class="subtitle"
+        data-swiper-parallax="-200"
+      >
+        {{ blogDetail.start }} | {{blogDetail.end}}
+      </div>
+      <div
+        class="text"
+        data-swiper-parallax="-100"
+      >
+        <b-card-text>
+          {{ blogDetail.description }}
+        </b-card-text>
+      </div>
+    </swiper-slide>
+
+    <div
+      slot="pagination"
+      class="swiper-pagination"
+    />
+    <div
+      slot="button-next"
+      class="swiper-button-next"
+    />
+    <div
+      slot="button-prev"
+      class="swiper-button-prev"
+    />
+  </swiper>
+
+       <b-row class="my-2" >
+         <b-col
+            cols="12"
+            md="7"
           >
-            <b-media no-body>
-              <b-media-aside
-                vertical-align="center"
-                class="mr-50"
-              > 
-              
-              </b-media-aside>
-              <b-media-body> 
-                <small class="text-muted mr-50">Date</small>
-                  <b-link class="text-body">{{ blogDetail.start }}</b-link>
-                <span class="text-muted ml-75 mr-50">|</span>
-                  <b-link class="text-body">{{ blogDetail.end }}</b-link>
-              </b-media-body>
-            </b-media>
-            <b-row >
+          <h4>{{ blogDetail.name }}</h4>
+          </b-col>
               <b-col
               md="12"
               v-for="(cat) in blogDetail.Categories" :key="cat.id" >
@@ -109,17 +168,11 @@
               <span class="font-weight-bold">Poids</span>
             </th>
              <td class="pb-50 text-capitalize">
-              <b-link
-               v-for="(w,index) in cat.weight.split('/')" :key="index"
-              >
-                <b-badge
-                  pill
-                  class="mr-75"
-                  :variant="light-info"
-                >
-                  {{ w }}
-                </b-badge>
-              </b-link>
+            <b-row v-for="(w,index) in cat.weight.split('/')" :key="index">
+    <b-col>{{ w }}</b-col>
+    
+  </b-row>
+              
             </td> 
           
           </tr>
@@ -133,17 +186,11 @@
               <span class="font-weight-bold">Age</span>
             </th>
              <td class="pb-50 text-capitalize">
-              <b-link
-               v-for="(w,index) in cat.age.split('/')" :key="index"
-              >
-                <b-badge
-                  pill
-                  class="mr-75"
-                  :variant="light-info"
-                >
-                  {{ w }}
-                </b-badge>
-              </b-link>
+                       <b-row  v-for="(w,index) in cat.age.split('/')" :key="index">
+    <b-col>{{ w }}</b-col>
+    
+  </b-row>
+            
             </td> 
           </tr>
         </table>
@@ -154,146 +201,108 @@
                   </b-col>
 
            </b-row>
-                     <h3>Description</h3>
 
-          <div
-              class="blog-content"
-              v-html="blogDetail.description"
-            />
-     
-            <!-- eslint-enable -->
-            <hr class="my-2">
+      </b-card-body>
 
-            <div class="d-flex align-items-center justify-content-between">
-             
-            
-            </div>
-          </b-card>
-        </b-col>
-        <!--/ Leave a Blog Comment -->
-      </b-row>
-      <!--/ blogs -->
-    </div>
-    <!--/ content -->
+      <!-- Static Content -->
+  <e-commerce-product-details-item-features/>
+      <!-- Static Content -->
+      <!-- Slider: Related Products -->
+<participant :user-data="participantList"/> 
+        <b-row class="my-2">
 
-    <!-- sidebar -->
-    <div
-      slot="sidebar"
-      class="blog-sidebar py-2 py-lg-0"
-    >
-      <!-- input search -->
-      <b-form-group class="blog-search">
-        <b-input-group class="input-group-merge">
-          <b-form-input
-            id="search-input"
-            v-model="search_query"
-            placeholder="Search here"
-          />
-          <b-input-group-append
-            class="cursor-pointer"
-            is-text
+ <b-col
+            cols="12"
+            md="7"
           >
-            <feather-icon
-              icon="SearchIcon"
-            />
-          </b-input-group-append>
-        </b-input-group>
-      </b-form-group>
-      <!--/ input search -->
+            <div class="d-flex flex-column flex-sm-row pt-1">
+              <b-button
+                v-ripple.400="'rgba(255, 255, 255, 0.15)'"
+                variant="primary"
+                class="btn-cart mr-0 mr-sm-1 mb-1 mb-sm-0"
+               :to="{ name: 'apps-competitions-division', params: { id: blogDetail.id } }"
 
-      <!-- recent posts -->
-      <div class="blog-recent-posts mt-3">
-        <h6 class="section-label mb-75">
-          Recent Posts
-        </h6>
-        <b-media
-          v-for="(recentpost,index) in latestComp"
-          :key="`http://localhost:3001/${recentpost.image}`"
-          no-body
-          :class="index? 'mt-2':''"
-        >
-          <b-media-aside class="mr-2">
-            <b-link>
-              <b-img
-                :src="`http://localhost:3001/${recentpost.image}`"
-                :alt="`http://localhost:3001/${recentpost.image}`.slice(6)"
-                width="100"
-                rounded
-                height="70"
-              />
-            </b-link>
-          </b-media-aside>
-          <b-media-body>
-            <h6 class="blog-recent-post-title">
-              <b-link class="text-body-heading">
-                {{ recentpost.name }}
-              </b-link>
-            </h6>
-            <span class="text-muted mb-0">
-              {{ new Date(recentpost.start).getDate()+'-'+new Date(recentpost.start).getMonth()+'-'+new Date(recentpost.start).getFullYear()}}
-            </span>
-          </b-media-body>
-        </b-media>
-      </div>
-      <!--/ recent posts -->
-
-    </div>
-<participant-list :user-data="participantList"/> 
-   </content-with-sidebar>
-
+              >
+                <feather-icon
+                  icon="UserIcon"
+                  class="mr-50"
+                />
+                <span>Voir joueurs par division</span>
+              </b-button>
+            </div>
+          </b-col>
+        </b-row>
+   </b-card>
+  </section>
 </template>
 
 <script>
-import {
-  BFormInput, BMedia, BAvatar, BMediaAside, BMediaBody, BImg, BLink, BFormGroup, BInputGroup, BInputGroupAppend,
-  BCard, BRow, BCol, BBadge, BCardText, BDropdown, BDropdownItem, BForm, BFormTextarea, BFormCheckbox, BButton,
-} from 'bootstrap-vue'
-import { ref, onUnmounted } from '@vue/composition-api'
+import { useRouter } from '@core/utils/utils'
 import store from '@/store'
+
+import ECommerceProductDetailsItemFeatures from './ECommerceProductDetailsItemFeatures.vue'
+import ECommerceProductDetailsRelatedProducts from './ECommerceProductDetailsRelatedProducts.vue'
+
+import {
+  BCard, BCardBody, BRow, BCol, BImg, BCardText, BLink, BButton, BDropdown, BDropdownItem, BAlert,BBadge,
+BAvatar, BMedia,BMediaBody,BAvatarGroup
+} from 'bootstrap-vue'
+import Ripple from 'vue-ripple-directive'
+import { ref, onUnmounted } from '@vue/composition-api'
 import router from '@/router'
 import competitionStoreModule from './competitionStoreModule'
 
-import Ripple from 'vue-ripple-directive'
-import { kFormatter } from '@core/utils/filter'
-import ContentWithSidebar from '@core/layouts/components/content-with-sidebar/ContentWithSidebar.vue'
-import ParticipantList from '../user/users-list/ParticipantList.vue'
+import participant from '../user/users-list/Participant.vue'
 import authentication from '@/services/authentication.js'
+import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
+import 'swiper/css/swiper.css'
+import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
 
 export default {
-  components: {
-    ParticipantList,
-    competitionStoreModule,
-    BFormInput,
-    BMedia,
-    BAvatar,
-    BMediaAside,
-    BMediaBody,
-    BLink,
-    BCard,
-    BRow,
-    BCol,
-    BFormGroup,
-    BInputGroup,
-    BInputGroupAppend,
-    BImg,
-    BBadge,
-    BCardText,
-    BDropdown,
-    BForm,
-    BDropdownItem,
-    BFormTextarea,
-    BFormCheckbox,
-    BButton,
-    ContentWithSidebar,
-  },
   directives: {
     Ripple,
   },
-  data() {
+  components: {
+    // BSV
+    BAvatarGroup,
+    Swiper,
+    BBadge,
+    SwiperSlide,
+    BCard,
+    participant,
+    BCardBody,
+    BRow,
+    BCol,
+    BImg,
+    BCardText,
+    BLink,
+    BButton,
+    BDropdown,
+    BDropdownItem,
+    BAlert,
+    BAvatar, BMedia,BMediaBody,
+        ECommerceProductDetailsItemFeatures,
+    ECommerceProductDetailsRelatedProducts,
+  },
+    data() {
     return {
       search_query: '',
       commentCheckmark: '',
       blogSidebar: {},
+       search_query: '',
+      blogList: [],
+      blogSidebar: {},
+      currentPage: 1,
+      perPage: 1,
+      rows: 140,
+      img: require('@/assets/images/karate.jpg'),
+      userData:null,
+      latestComp:null,
+      query:'',
+      show:true,
+      idComp:'',
+      idCat:'',
+      allowParticip:true,
       socialShareIcons: [
         'GithubIcon',
         'GitlabIcon',
@@ -301,25 +310,76 @@ export default {
         'TwitterIcon',
         'LinkedinIcon',
       ],
+
+        swiperData: [
+        { title: 'Slide 1', subtitle: 'Subtitle', text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam dictum mattis velit, sit amet faucibus felis iaculis nec. Nulla laoreet Lorem, ipsum dolor sit amet consectetur..' },
+        { title: 'Slide 2', subtitle: 'Subtitle', text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam dictum mattis velit, sit amet faucibus felis iaculis nec. Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam reiciendis provident atque quod obcaecati voluptatibus ex qui repudiandae sunt dolores. Nulla laoreet justo vitae porttitor porttitor. Suspendisse in sem justo. Integeo. Aenean feugiat non eros quis feugiat.' },
+        { title: 'Slide 3', subtitle: 'Subtitle', text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam dictum mattis velit, sit amet faucibus felis iaculis nec. Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam reiciendis provident atque quod obcaecati voluptatibus ex qui repudiandae sunt dolores. Nulla laoreet justo vitae porttitor porttitor. Suspendisse in sem justo. Integer laoreet magna nec elit suscipit, ac laoreet nibh euismod. Aliquam hendrerit lnt ut libero. Aenean feugiat non eros quis feugiat.' },
+      ],
+      swiperOptions: {
+        speed: 600,
+        parallax: true,
+        pagination: {
+          el: '.swiper-pagination',
+          clickable: true,
+        },
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev',
+        },
+      },
     }
   },
-  created() {
+    created() {
     this.$http.get('/blog/list/data/detail').then(res => { this.blogDetail = res.data })
     this.$http.get('/blog/list/data/sidebar').then(res => { this.blogSidebar = res.data })
-  },
-    methods: {
-    kFormatter,
-    tagsColor(tag) {
-      if (tag === 'Quote') return 'light-info'
-      if (tag === 'Gaming') return 'light-danger'
-      if (tag === 'Fashion') return 'light-primary'
-      if (tag === 'Video') return 'light-warning'
-      if (tag === 'Food') return 'light-success'
-      return 'light-primary'
-    },
-  },
+      authentication.findUserById(JSON.parse(localStorage.getItem("userData")).id).then(response => { this.userData = response.data.user,
+          console.log("userrr",this.userData)
 
-    setup() {
+          })
+  },
+     methods: {
+
+          inscrit(){
+ authentication.inscrit({
+            compId:this.idComp,
+            userId:JSON.parse(localStorage.getItem("userData")).id
+          }).then(response=>{
+               this.$toast({
+                    component: ToastificationContent,
+                    position: 'top-right',
+                    props: {
+                      title: 'Participation Ok',
+                      icon: 'CoffeeIcon',
+                      variant: 'success',
+                      text: 'Votre demande d\'inscription a été bien enregistrer nous traitons votre demande dans le bref délais',
+                    },
+                  })
+
+ })
+    } ,
+       elig(info,cat){
+          this.idComp=info,
+          this.idCat=cat,
+          authentication.elig({
+            compId:"2",
+            idCat:this.idCat,
+            userId:JSON.parse(localStorage.getItem("userData")).id
+          }).then(response=>{
+             if(response.status===201)
+            {this.show=true}
+           if(response.status===200) {
+              this.show=false}
+             console.log(this.show)
+
+ })
+    },
+  
+  
+  },
+    // SFC
+  
+ setup() {
     const blogDetail= ref(null)
     const image=ref(null)
     const latestComp=ref(null)
@@ -329,7 +389,11 @@ export default {
     const date=ref(null)
     const end=ref(null)
     const categories=ref([])
-    // Register module
+ const p = [
+      { name: 'Pending' },
+      { name: 'Active' },
+      { name: 'Inactive' },
+    ]    // Register module
     if (!store.hasModule(COMPETITION_APP_STORE_MODULE_NAME)) store.registerModule(COMPETITION_APP_STORE_MODULE_NAME, competitionStoreModule)
 
     // UnRegister on leave
@@ -352,9 +416,9 @@ export default {
         }
       }),
 
-         authentication.participantList({ id: "1"}).then(response => {
+         authentication.participantList({ id: "2"}).then(response => {
       participantList.value= response.data.users,
-      console.log(participantList.value)
+      console.log("ppp",participantList.value)
     }),
     authentication.latestCompetitions().then(response =>{
       latestComp.value= response.data.competitions
@@ -365,12 +429,13 @@ export default {
       blogDetail,
       image,
       participantList,
+      p,
       latestComp,
       categories
-    }}
-}
-</script>
+    }}}
+    </script>
 
 <style lang="scss">
-@import '@core/scss/vue/pages/page-blog.scss';
+@import "~@core/scss/base/pages/app-ecommerce-details.scss";
+
 </style>

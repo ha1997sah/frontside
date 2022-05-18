@@ -27,9 +27,18 @@
       <app-timeline-item variant="warning">
 
         <div class="d-flex flex-sm-row flex-column flex-wrap justify-content-between mb-1 mb-sm-0">
-          <h6>Taille</h6>
+          <h6>Niveau</h6>
         </div>
         <p>{{userData.level}}</p>
+     
+      </app-timeline-item>
+
+      <app-timeline-item variant="warning">
+
+        <div class="d-flex flex-sm-row flex-column flex-wrap justify-content-between mb-1 mb-sm-0">
+          <h6>Sexe</h6>
+        </div>
+        <p>{{userData.sexe}}</p>
      
       </app-timeline-item>
       <app-timeline-item variant="warning">

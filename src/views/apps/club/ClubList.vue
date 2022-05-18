@@ -53,7 +53,8 @@
           >
             <div class="d-flex align-items-center justify-content-end">
               <b-form-input
-                v-model="searchQuery"
+                  v-model="query"
+                 @keyup="search"
                 class="d-inline-block mr-1"
                 placeholder="Rechercher..."
               />
@@ -72,7 +73,7 @@
       <b-table
         ref="refUserListTable"
         class="position-relative"
-        :items="fetchClubs"
+        :items="clubList"
         responsive
         :fields="tableColumns"
         primary-key="id"
@@ -209,7 +210,7 @@
 </template>
 <script>
 import router from '@/router'
-
+import authentication from '@/services/authentication.js'
 import {
   BCard, BRow, BCol, BFormInput, BButton, BTable, BMedia, BAvatar, BLink,
   BBadge, BDropdown, BDropdownItem, BPagination,
@@ -243,6 +244,32 @@ export default {
     BPagination,
     vSelect,
     ClubListAddNew,
+  },
+    data() {
+    return {
+      clubList: [],
+      query:'',
+    }
+  },
+        created() {
+      authentication
+          .allClubs()
+          .then(response =>  { 
+                this.clubList = response.data.clubs ,console.log(this.clubList)
+            })
+          .catch(error => error.message)
+          },
+  methods:{
+      search () {
+      authentication
+          .allClubs()
+          .then(response =>{
+             if (this.query) {
+           this.clubList = response.data.clubs.filter(club =>
+              club.name.toLowerCase().includes(this.query.toLowerCase()))
+          } else {
+           this.clubList =response.data.clubs
+          }}) }
   },
 
   setup(props, { emit }) {
@@ -281,7 +308,7 @@ data.forEach(element => { roleOptions.value.push({label:element.name, value:elem
         toast({
           component: ToastificationContent,
           props: {
-            title: 'user deleted',
+            title: 'Club supprimé',
             icon: 'AlertTriangleIcon',
             variant: 'success',
           },

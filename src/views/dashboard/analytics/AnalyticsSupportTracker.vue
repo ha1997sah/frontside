@@ -4,25 +4,7 @@
     no-body
   >
     <!-- title and dropdown -->
-    <b-card-header class="pb-0">
-      <b-card-title>{{ data.title }}</b-card-title>
-      <b-dropdown
-        no-caret
-        right
-        text="Last 7 Days"
-        variant="transparent"
-        class="chart-dropdown"
-        toggle-class="p-50"
-        size="sm"
-      >
-        <b-dropdown-item
-          v-for="day in data.lastDays"
-          :key="day"
-        >
-          {{ day }}
-        </b-dropdown-item>
-      </b-dropdown>
-    </b-card-header>
+ 
     <!--/ title and dropdown -->
 
     <b-card-body>
@@ -32,9 +14,10 @@
           class="d-flex flex-column flex-wrap text-center"
         >
           <h1 class="font-large-2 font-weight-bolder mt-2 mb-0">
-            {{ data.totalTicket }}
+            {{data.nbEventTotal[0].nbEv}}
           </h1>
-          <small>Tickets</small>
+          <small>Evènements
+</small>
         </b-col>
 
         <!-- chart -->
@@ -44,12 +27,15 @@
         >
 
           <!-- apex chart -->
-          <vue-apex-charts
-            type="radialBar"
-            height="270"
-            :options="supportTrackerRadialBar.chartOptions"
-            :series="data.supportTrackerRadialBar.series"
-          />
+    
+             <vue-apex-charts
+        type="donut"
+        height="200"
+        class="my-1"
+        :options="sessionsByDeviceDonut.chartOptions"
+        :series="data.series.data"
+      />
+
         </b-col>
         <!--/ chart -->
       </b-row>
@@ -58,21 +44,21 @@
       <div class="d-flex justify-content-between">
         <div class="text-center">
           <b-card-text class="mb-50">
-            New Tickets
+            Evénements passés
           </b-card-text>
-          <span class="font-large-1 font-weight-bold">{{ data.newTicket }}</span>
+          <span class="font-large-1 font-weight-bold">{{ data.pastEvent }}</span>
         </div>
         <div class="text-center">
           <b-card-text class="mb-50">
-            Open Tickets
+            Evénements d'aujourd'hui
           </b-card-text>
-          <span class="font-large-1 font-weight-bold">{{ data.openTicket }}</span>
+          <span class="font-large-1 font-weight-bold">{{ data.todaysEvent }}</span>
         </div>
         <div class="text-center">
           <b-card-text class="mb-50">
-            Response Time
+            Evènements à venir
           </b-card-text>
-          <span class="font-large-1 font-weight-bold">{{ data.responseTime }}d</span>
+          <span class="font-large-1 font-weight-bold">{{ data.upcomingEvent }}d</span>
         </div>
       </div>
     </b-card-body>
@@ -85,7 +71,9 @@ import {
 } from 'bootstrap-vue'
 import VueApexCharts from 'vue-apexcharts'
 import { $themeColors } from '@themeConfig'
-
+const color1="#A0BCC2"
+const color2="#DAE5D0"
+const color3='#FEFBE7'
 export default {
   components: {
     VueApexCharts,
@@ -107,6 +95,24 @@ export default {
   },
   data() {
     return {
+             sessionsByDeviceDonut: {
+        series: [58.6, 34.9, 6.5],
+        chartOptions: {
+          chart: {
+            toolbar: {
+              show: false,
+            },
+          },
+          labels: ['événements passés', "événements d'aujourd'hui", 'évènements à venir'],
+          dataLabels: {
+            enabled: false,
+          },
+          legend: { show: false },
+          comparedResult: [2, -3, 8],
+          stroke: { width: 0 },
+          colors: [color1,color2,color3],
+        },
+      },
       supportTrackerRadialBar: {
         chartOptions: {
           plotOptions: {

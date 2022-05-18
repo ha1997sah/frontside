@@ -30,7 +30,7 @@
           lg="12"
           md="12"
         >
-          <user-view-user-info-card :user-data="userData" />
+          <user-view-user-info-card :user-data="userData"  :user-club="userClub" :user-fed="userFed"  />
         </b-col>
         
       </b-row>
@@ -39,7 +39,7 @@
           cols="12"
           lg="6"
         >
-          <user-view-user-timeline-card :user-data="userData" />
+          <user-view-user-timeline-card :user-data="userData"/>
         </b-col>
          <b-col
           cols="12"
@@ -88,6 +88,8 @@ export default {
   setup() {
     const userData = ref(null)
     const userRecord=ref(null)
+    const userClub=ref(null)
+    const userFed=ref(null)
 
     const USER_APP_STORE_MODULE_NAME = 'app-user'
 
@@ -100,7 +102,8 @@ export default {
     })
 
     store.dispatch('app-user/fetchUserById', { id: router.currentRoute.params.id })
-      .then(response => { userData.value = response.data.user })
+      .then(response => { userData.value = response.data.user,console.log(userData.value),userClub.value=response.data.user.Club,console.log("club",userClub.value),userFed.value=response.data.user.Federation,console.log("fed",userFed.value) })
+
       .catch(error => {
         if (error.response.status === 404) {
           userData.value = undefined
@@ -115,6 +118,8 @@ export default {
     return {
       userData,
       userRecord,
+      userClub,
+      userFed
     }
   },
 }

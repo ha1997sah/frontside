@@ -146,9 +146,15 @@
       </b-table>
       <div class="mx-2 mb-2">
         <b-row>
-
+           <b-col
+            cols="6"
+            sm="6"
+            class="d-flex align-items-center justify-content-center justify-content-sm-start"
+          >
+          <b-button @click="tirage">tirage</b-button>
+          </b-col>
           <b-col
-            cols="12"
+            cols="6"
             sm="6"
             class="d-flex align-items-center justify-content-center justify-content-sm-start"
           >
@@ -244,11 +250,16 @@ export default {
   },
     data() {
     return {
-     userId:""
+     userId:"",
+
 
     }
   },
   methods:{
+    tirage(){
+      this.$router.push({ name: 'apps-competitions-bracket', params: {players: this.userData}})
+
+    },
       sendInfo(info){
      
        this.userId=info },

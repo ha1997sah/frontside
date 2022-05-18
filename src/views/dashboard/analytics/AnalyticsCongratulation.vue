@@ -1,6 +1,5 @@
 <template>
   <b-card
-    v-if="data"
     text-variant="center"
     class="card card-congratulations"
   >
@@ -26,10 +25,11 @@
       />
     </b-avatar>
     <h1 class="mb-1 mt-50 text-white">
-      Congratulations {{ data.name }},
+      Les joueurs gagnants
+
     </h1>
     <b-card-text class="m-auto w-75">
-      You have done <strong>{{ data.saleToday }}%</strong> more sales today. Check your new badge in your profile.
+      Les 10 <strong>derniers gagnants</strong> joueurs gagnants.
     </b-card-text>
   </b-card>
 </template>

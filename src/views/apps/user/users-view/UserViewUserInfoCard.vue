@@ -82,18 +82,6 @@
           <tr>
             <th class="pb-50">
               <feather-icon
-                icon="StarIcon"
-                class="mr-75"
-              />
-              <span class="font-weight-bold">Role</span>
-            </th>
-            <td class="pb-50 text-capitalize">
-              {{ userData.position }}
-            </td>
-          </tr>
-          <tr>
-            <th class="pb-50">
-              <feather-icon
                 icon="FlagIcon"
                 class="mr-75"
               />
@@ -113,6 +101,30 @@
             </th>
             <td>
               {{ userData.phone }}
+            </td>
+          </tr>
+             <tr>
+            <th>
+              <feather-icon
+                icon="GlobeIcon"
+                class="mr-75"
+              />
+              <span class="font-weight-bold">Federation</span>
+            </th>
+            <td>
+              {{ userFed.name}}
+            </td>
+          </tr>
+             <tr>
+            <th>
+              <feather-icon
+                icon="OctagonIcon"
+                class="mr-75"
+              />
+              <span class="font-weight-bold">Club</span>
+            </th>
+            <td>
+              {{ userClub.name}}
             </td>
           </tr>
         </table>
@@ -145,8 +157,21 @@ export default {
       type: Object,
       required: true,
     },
+      userClub: {
+      type: Object,
+      required: true,
+    },
+      userFed: {
+      type: Object,
+      required: true,
+    },
   
   },
+ data() {
+    return {
+    }
+  },
+
   setup() {
 
     const { resolveUserRoleVariant,handleOk } = useUsersList()

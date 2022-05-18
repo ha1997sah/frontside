@@ -151,13 +151,15 @@
 
 <script>
 import {
-  BCard, BButton, BAvatar, BRow, BCol,BMedia,BMediaBody,
+  BCard, BButton, BAvatar, BRow, BCol,BMedia,BMediaBody, BCardBody, BImg, BCardText, BLink, BDropdown, BDropdownItem, BAlert,
+
 } from 'bootstrap-vue'
 import { avatarText } from '@core/utils/filter'
 import useCompetitionsList from './useCompetitionsList'
 export default {
   components: {
-    BCard, BButton, BRow, BCol, BAvatar,BMedia,BMediaBody,
+    BCard, BButton, BRow, BCol, BAvatar,BMedia,BMediaBody,BCardBody, BImg, BCardText, BLink, BDropdown, BDropdownItem, BAlert,
+
   },
   props: {
     catData: {

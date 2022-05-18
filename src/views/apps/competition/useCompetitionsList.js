@@ -132,6 +132,7 @@ const fetchCategories = (ctx, callback) => {
 
         callback(competitions)
         totalUsers.value = total
+
       })
       .catch(() => {
         toast({

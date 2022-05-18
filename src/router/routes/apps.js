@@ -222,6 +222,17 @@ export default [
     name: 'apps-competitions-list',
     component: () => import('@/views/apps/competition/CompetitionList.vue'),
   },
+  
+  {
+    path: '/apps/competitions/bracket',
+    name: 'apps-competitions-bracket',
+    component: () => import('@/views/apps/competition/Bracket.vue'),
+  },
+  {
+    path: '/apps/competitions/division/:id',
+    name: 'apps-competitions-division',
+    component: () => import('@/views/apps/competition/Divison.vue'),
+  },
   {
     path: '/apps/competitions/edit/:id',
     name: 'apps-competitions-edit',

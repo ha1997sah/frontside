@@ -60,24 +60,6 @@
           class="chat-user-list-wrapper list-group scroll-area"
         >
 
-          <!-- Chats Title -->
-          <h4 class="chat-list-title">
-            Chats
-          </h4>
-
-          <!-- Chats -->
-          <ul class="chat-users-list chat-list media-list">
-            <chat-contact
-              v-for="contact in filteredChatsContacts"
-              :key="contact.id"
-              :user="contact"
-              tag="li"
-              :class="{'active': activeChatContactId === contact.id}"
-              is-chat-contact
-              @click="$emit('open-chat', contact.id)"
-            />
-          </ul>
-
           <!-- Contacts Title -->
           <h4 class="chat-list-title">
             Contacts

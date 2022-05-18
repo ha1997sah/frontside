@@ -7,6 +7,9 @@ import router from './router'
 import store from './store'
 import App from './App.vue'
 
+/* Establish Connection */
+
+
 // Global Components
 import './global-components'
 
@@ -26,7 +29,7 @@ import '@/@fake-db/db'
 // BSV Plugin Registration
 Vue.use(ToastPlugin)
 Vue.use(ModalPlugin)
-
+ 
 // Composition API
 Vue.use(VueCompositionAPI)
 

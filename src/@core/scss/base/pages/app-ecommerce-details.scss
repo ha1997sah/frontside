@@ -11,8 +11,6 @@
 @import '../components/include'; // Components includes
 
 // App e-commerce detail style
-.ecommerce-application {
-  .app-ecommerce-details {
     .product-img {
       width: 600px;
     }
@@ -101,7 +99,6 @@
         color: $primary;
       }
     }
-  }
 
   // centered slides option-1
   .swiper-responsive-breakpoints {
@@ -264,7 +261,7 @@
       box-shadow: 0 2px 4px 0 rgba($info, 0.4);
     }
   }
-}
+
 
 @include media-breakpoint-down(sm) {
   .ecommerce-application .swiper-responsive-breakpoints.swiper-container .swiper-slide {

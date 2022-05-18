@@ -66,21 +66,8 @@
 
             <!-- Contact Actions -->
             <div class="d-flex align-items-center">
-              <feather-icon
-                icon="PhoneCallIcon"
-                size="17"
-                class="cursor-pointer d-sm-block d-none mr-1"
-              />
-              <feather-icon
-                icon="VideoIcon"
-                size="17"
-                class="cursor-pointer d-sm-block d-none mr-1"
-              />
-              <feather-icon
-                icon="SearchIcon"
-                size="17"
-                class="cursor-pointer d-sm-block d-none mr-50"
-              />
+            
+             
               <div class="dropdown">
                 <b-dropdown
                   variant="link"

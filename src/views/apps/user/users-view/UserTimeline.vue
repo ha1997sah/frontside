@@ -4,12 +4,14 @@
 <b-col
 cols="12"
         xl="6">  
-      <app-timeline-item 
-v-for="(record) in userData" :key="record.id">
+      <app-timeline-item
+      v-for="(record) in userData" :key="record.id">
         <div class="d-flex flex-sm-row flex-column flex-wrap justify-content-between mb-1 mb-sm-0">
           <h6>Date</h6>
         </div>
-        <p>{{record.recordDate}}</p>
+        <p>
+    {{ new Date(record.recordDate).getDate()+'-'+new Date(record.recordDate).getMonth()+'-'+new Date(record.recordDate).getFullYear()}}
+</p>
         <div class="d-flex flex-sm-row flex-column flex-wrap justify-content-between mb-1 mb-sm-0">
           <h6>Titre</h6>
         </div>
@@ -45,6 +47,7 @@ export default {
       type: Array,
       required: true,
     },
+    
   },
   methods:{
          openPdf () {
